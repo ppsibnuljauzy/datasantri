@@ -3705,54 +3705,85 @@
     [data-theme="dark"] .chart-fullscreen-modal .modal-header {
         background: var(--bg-card) !important;
     }
+
+
+/* Logo Login */
+.login-logo img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.login-logo {
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    border: 2px solid rgba(255,255,255,0.2);
+    position: relative;
+    z-index: 1;
+    transition: all var(--transition-speed);
+    overflow: hidden;
+}
+
+.login-logo i {
+    font-size: 38px;
+    color: white;
+}
 </style>
 </head>
 <body>
-    <!-- ===== LOGIN MODAL ===== -->
-    <div class="modal fade login-modal" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
-            <div class="modal-content">
-                <div class="login-header">
-                    <div class="login-logo">
-                        <i class="bi bi-shield-lock-fill"></i>
-                    </div>
-                    <h4>Database Santri</h4>
-                    <p>PPS. Ibnul Jauzy</p>
-                    <span class="badge bg-light text-dark"><i class="bi bi-lock-fill me-1"></i> Secure Access</span>
+<!-- ===== LOGIN MODAL ===== -->
+<div class="modal fade login-modal" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+        <div class="modal-content">
+            <div class="login-header">
+                <div class="login-logo" id="loginLogoContainer">
+                    <!-- Logo akan dimuat secara dinamis -->
+                    <i class="bi bi-shield-lock-fill" id="defaultLoginIcon"></i>
                 </div>
-                <div class="modal-body">
-                    <div id="loginAlert" class="login-alert alert alert-danger">
-                        <i class="bi bi-exclamation-circle-fill me-2"></i>
-                        <span id="loginAlertText">Email atau password salah.</span>
-                    </div>
-                    <form class="login-form" id="loginForm" autocomplete="off">
-                        <div class="form-group">
-                            <label for="loginEmail">Alamat Email</label>
-                            <input type="email" id="loginEmail" class="form-control" placeholder="admin@example.com" required autofocus>
-                            <i class="bi bi-envelope input-icon"></i>
-                        </div>
-                        <div class="form-group">
-                            <label for="loginPassword">Kata Sandi</label>
-                            <input type="password" id="loginPassword" class="form-control" placeholder="Masukkan password" required>
-                            <i class="bi bi-lock input-icon"></i>
-                        </div>
-                    </form>
-                    <div class="login-footer-text text-center text-muted small">
-                        <i class="bi bi-shield-check me-1"></i> Aman & Terenkripsi
-                    </div>
+                <h4>Database Santri</h4>
+                <p>PPS. Ibnul Jauzy</p>
+                <span class="badge bg-light text-dark"><i class="bi bi-lock-fill me-1"></i> Secure Access</span>
+            </div>
+            <div class="modal-body">
+                <div id="loginAlert" class="login-alert alert alert-danger">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    <span id="loginAlertText">Email atau password salah.</span>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" id="btnLogin" class="login-btn">
-                        <span class="btn-content">
-                            <span class="btn-text">Masuk ke Dashboard</span>
-                            <span class="btn-spinner spinner-border spinner-border-sm text-light" role="status"></span>
-                            <i class="bi bi-arrow-right-circle btn-text"></i>
-                        </span>
-                    </button>
+                <form class="login-form" id="loginForm" autocomplete="off">
+                    <div class="form-group">
+                        <label for="loginEmail">Alamat Email</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="admin@example.com" required autofocus>
+                        <i class="bi bi-envelope input-icon"></i>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Kata Sandi</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Masukkan password" required>
+                        <i class="bi bi-lock input-icon"></i>
+                    </div>
+                </form>
+                <div class="login-footer-text text-center text-muted small">
+                    <i class="bi bi-shield-check me-1"></i> Aman & Terenkripsi
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnLogin" class="login-btn">
+                    <span class="btn-content">
+                        <span class="btn-text">Masuk ke Dashboard</span>
+                        <span class="btn-spinner spinner-border spinner-border-sm text-light" role="status"></span>
+                        <i class="bi bi-arrow-right-circle btn-text"></i>
+                    </span>
+                </button>
             </div>
         </div>
     </div>
+</div>
 
     <!-- ===== TOAST NOTIFICATION CONTAINER ===== -->
     <div class="toast-container-premium" id="toastContainer"></div>
@@ -4749,92 +4780,122 @@
                     </div>
                 </div>
 
-                <!-- TAB STRUKTUR -->
-                <div class="tab-pane fade" id="tab-struktur" role="tabpanel">
-                    <div class="container bg-white p-4 rounded-4 shadow-sm" style="max-width: 800px; margin-top: 20px;">
-                        <h5 class="fw-bold mb-3 text-uppercase text-primary"><i class="bi bi-person-badge me-2"></i> Pengaturan Penandatangan PDF</h5>
-                        <hr>
-                        <form id="formStruktur" onsubmit="saveStrukturLembaga(event)">
-                            <div class="row g-4">
-                                <div class="col-12 border-bottom pb-4">
-                                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-image me-2"></i> KOP SURAT LEMBAGA</h6>
-                                    <div class="row align-items-center">
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Upload Gambar Kop Surat</label>
-                                            <input type="file" id="kopSuratInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewKopSurat')">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="text-center border p-2 rounded-3" style="background: #fafafa; min-height: 80px;">
-                                                <span class="small text-muted d-block mb-1">Pratinjau Kop Surat:</span>
-                                                <img id="previewKopSurat" src="" alt="Belum ada Kop Surat" style="max-height: 70px; max-width: 100%; object-fit: contain;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 border-end">
-                                    <h6 class="fw-bold text-dark mb-3">KEPALA LEMBAGA</h6>
-                                    <div class="mb-3">
-                                        <label class="form-label small fw-bold">Nama Lengkap & Gelar</label>
-                                        <input type="text" id="namaKepala" class="form-control form-control-sm" placeholder="Dr. H. Ahmad, M.Pd" required>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label class="form-label small fw-bold">Jabatan</label>
-                                        <input type="text" id="jabatanKepala" class="form-control form-control-sm" placeholder="Kepala PPS. Ibnul Jauzy">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label small fw-bold">NIK / NIP</label>
-                                        <input type="text" id="nikKepala" class="form-control form-control-sm" placeholder="1207xxxxxxxxxxxx">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label small fw-bold">Upload Tanda Tangan (PNG)</label>
-                                        <input type="file" id="ttdKepalaInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewTtdKepala')">
-                                        <div class="mt-2 text-center border p-2 rounded-3" style="background: #fafafa; position: relative;">
-                                            <span class="small text-muted d-block mb-1">Pratinjau TTD Kepala:</span>
-                                            <div class="ttd-preview-wrapper">
-                                                <img id="previewTtdKepala" src="" alt="Belum ada TTD" style="max-height: 80px; object-fit: contain;">
-                                                <button type="button" class="btn-hapus-ttd" onclick="hapusTandaTangan('kepala')" title="Hapus Tanda Tangan">
-                                                    <i class="bi bi-x-circle-fill"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <h6 class="fw-bold text-dark mb-3">STAFF / TATA USAHA</h6>
-                                    <div class="mb-3">
-                                        <label class="form-label small fw-bold">Nama Lengkap & Gelar</label>
-                                        <input type="text" id="namaStaff" class="form-control form-control-sm" placeholder="Muhammad Rafli, S.Kom" required>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label class="form-label small fw-bold">Jabatan</label>
-                                        <input type="text" id="jabatanStaff" class="form-control form-control-sm" placeholder="Sekretaris Lembaga">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label small fw-bold">NIK / NIP</label>
-                                        <input type="text" id="nikStaff" class="form-control form-control-sm" placeholder="1207xxxxxxxxxxxx">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label small fw-bold">Upload Tanda Tangan (PNG)</label>
-                                        <input type="file" id="ttdStaffInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewTtdStaff')">
-                                        <div class="mt-2 text-center border p-2 rounded-3" style="background: #fafafa; position: relative;">
-                                            <span class="small text-muted d-block mb-1">Pratinjau TTD Staff:</span>
-                                            <div class="ttd-preview-wrapper">
-                                                <img id="previewTtdStaff" src="" alt="Belum ada TTD" style="max-height: 80px; object-fit: contain;">
-                                                <button type="button" class="btn-hapus-ttd" onclick="hapusTandaTangan('staff')" title="Hapus Tanda Tangan">
-                                                    <i class="bi bi-x-circle-fill"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!-- TAB STRUKTUR -->
+<div class="tab-pane fade" id="tab-struktur" role="tabpanel">
+    <div class="container bg-white p-4 rounded-4 shadow-sm" style="max-width: 800px; margin-top: 20px;">
+        <h5 class="fw-bold mb-3 text-uppercase text-primary"><i class="bi bi-person-badge me-2"></i> Pengaturan Penandatangan PDF</h5>
+        <hr>
+        <form id="formStruktur" onsubmit="saveStrukturLembaga(event)">
+            <div class="row g-4">
+                <div class="col-12 border-bottom pb-4">
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-image me-2"></i> KOP SURAT LEMBAGA</h6>
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Upload Gambar Kop Surat</label>
+                            <input type="file" id="kopSuratInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewKopSurat')">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center border p-2 rounded-3" style="background: #fafafa; min-height: 80px;">
+                                <span class="small text-muted d-block mb-1">Pratinjau Kop Surat:</span>
+                                <img id="previewKopSurat" src="" alt="Belum ada Kop Surat" style="max-height: 70px; max-width: 100%; object-fit: contain;">
                             </div>
-                            <hr>
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Simpan Struktur</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
+                <div class="col-md-6 border-end">
+                    <h6 class="fw-bold text-dark mb-3">KEPALA LEMBAGA</h6>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Nama Lengkap & Gelar</label>
+                        <input type="text" id="namaKepala" class="form-control form-control-sm" placeholder="Dr. H. Ahmad, M.Pd" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold">Jabatan</label>
+                        <input type="text" id="jabatanKepala" class="form-control form-control-sm" placeholder="Kepala PPS. Ibnul Jauzy">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">NIK / NIP</label>
+                        <input type="text" id="nikKepala" class="form-control form-control-sm" placeholder="1207xxxxxxxxxxxx">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Upload Tanda Tangan (PNG)</label>
+                        <input type="file" id="ttdKepalaInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewTtdKepala')">
+                        <div class="mt-2 text-center border p-2 rounded-3" style="background: #fafafa; position: relative;">
+                            <span class="small text-muted d-block mb-1">Pratinjau TTD Kepala:</span>
+                            <div class="ttd-preview-wrapper">
+                                <img id="previewTtdKepala" src="" alt="Belum ada TTD" style="max-height: 80px; object-fit: contain;">
+                                <button type="button" class="btn-hapus-ttd" onclick="hapusTandaTangan('kepala')" title="Hapus Tanda Tangan">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-dark mb-3">STAFF / TATA USAHA</h6>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Nama Lengkap & Gelar</label>
+                        <input type="text" id="namaStaff" class="form-control form-control-sm" placeholder="Muhammad Rafli, S.Kom" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold">Jabatan</label>
+                        <input type="text" id="jabatanStaff" class="form-control form-control-sm" placeholder="Sekretaris Lembaga">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">NIK / NIP</label>
+                        <input type="text" id="nikStaff" class="form-control form-control-sm" placeholder="1207xxxxxxxxxxxx">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Upload Tanda Tangan (PNG)</label>
+                        <input type="file" id="ttdStaffInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewTtdStaff')">
+                        <div class="mt-2 text-center border p-2 rounded-3" style="background: #fafafa; position: relative;">
+                            <span class="small text-muted d-block mb-1">Pratinjau TTD Staff:</span>
+                            <div class="ttd-preview-wrapper">
+                                <img id="previewTtdStaff" src="" alt="Belum ada TTD" style="max-height: 80px; object-fit: contain;">
+                                <button type="button" class="btn-hapus-ttd" onclick="hapusTandaTangan('staff')" title="Hapus Tanda Tangan">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Simpan Struktur</button>
+            </div>
+        </form>
+        
+        <!-- ===== LOGO LOGIN SECTION ===== -->
+        <div class="mt-4 pt-3 border-top">
+            <h5 class="fw-bold mb-3 text-uppercase text-primary">
+                <i class="bi bi-image me-2"></i> Logo Halaman Login
+            </h5>
+            <hr>
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold">Upload Logo Login</label>
+                    <input type="file" id="logoLoginInput" class="form-control form-control-sm" accept="image/*" 
+                           onchange="uploadLogoLogin(event)">
+                    <small class="text-muted">Format: JPG, PNG, SVG | Maks: 500KB</small>
+                </div>
+                <div class="col-md-6">
+                    <div class="text-center border p-2 rounded-3" style="background: #fafafa; min-height: 80px;">
+                        <span class="small text-muted d-block mb-1">Pratinjau Logo Login:</span>
+                        <img id="previewLogoLogin" src="" alt="Belum ada logo" 
+                             style="max-height: 70px; max-width: 100%; object-fit: contain; display: none;">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ===== TOMBOL HAPUS LOGO ===== -->
+            <div class="mt-2">
+                <button class="btn btn-sm btn-danger" onclick="hapusLogoLogin()">
+                    <i class="bi bi-trash me-1"></i> Hapus Logo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
                 <!-- TAB CETAK SURAT -->
                 <div class="tab-pane fade" id="tab-surat" role="tabpanel">
@@ -6824,16 +6885,19 @@
             }
         };
 
+
         // ===== SHOW APP =====
-        function showApp() {
-            appWrapper.classList.add('visible');
-            loginModal.hide();
-            logoutBtn.classList.remove('d-none');
-            loadAllData();
-            loadStrukturLembaga();
-            loadLogoFromFirestore();
-            populateKTSSelect();
-        }
+function showApp() {
+    appWrapper.classList.add('visible');
+    loginModal.hide();
+    logoutBtn.classList.remove('d-none');
+    loadAllData();
+    loadStrukturLembaga();
+    loadLogoFromFirestore();
+    loadLogoLogin();  // <-- Tambahkan ini
+    populateKTSSelect();
+}
+
 
         // ===== DASHBOARD =====
         window.toggleDashboardView = (isDashboard) => {
@@ -6942,138 +7006,142 @@
             tbody.innerHTML = html;
         }
 
-        window.renderDashboard = async () => {
-            const loader = document.getElementById('loader');
-            loader.style.display = 'flex';
+window.renderDashboard = async () => {
+    const loader = document.getElementById('loader');
+    loader.style.display = 'flex';
 
-            try {
-                const now = new Date();
-                const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-                document.getElementById('dashboardDate').innerText = now.toLocaleDateString('id-ID', options);
+    try {
+        // ===== LOAD LOGO LOGIN =====
+        await loadLogoLogin();
 
-                const q = query(collection(db, "data_santri"));
-                const snapshot = await getDocs(q);
+        const now = new Date();
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        document.getElementById('dashboardDate').innerText = now.toLocaleDateString('id-ID', options);
 
-                let stats = {
-                    total: 0, L: 0, P: 0,
-                    w: { total: 0, L: 0, P: 0 },
-                    u: { total: 0, L: 0, P: 0 },
-                    prog: { reguler: 0, tahfidz: 0, arab: 0 },
-                    kelas: {},
-                    emis: { masuk: 0, tidak: 0 }
-                };
+        const q = query(collection(db, "data_santri"));
+        const snapshot = await getDocs(q);
 
-                snapshot.forEach(docSnap => {
-                    const d = docSnap.data();
-                    stats.total++;
-                    if (d.jk === 'Laki-laki') stats.L++; else stats.P++;
-
-                    if (d.jenjang === 'Wustha') {
-                        stats.w.total++;
-                        if (d.jk === 'Laki-laki') stats.w.L++; else stats.w.P++;
-                    } else if (d.jenjang === 'Ulya') {
-                        stats.u.total++;
-                        if (d.jk === 'Laki-laki') stats.u.L++; else stats.u.P++;
-                    }
-
-                    const p = (d.program || '').toLowerCase();
-                    if (p.includes('tahfidz')) stats.prog.tahfidz++;
-                    else if (p.includes('arab')) stats.prog.arab++;
-                    else stats.prog.reguler++;
-
-                    const kls = d.kls_now || 'N/A';
-                    stats.kelas[kls] = (stats.kelas[kls] || 0) + 1;
-
-                    const ket = (d.ket || '').toString().toLowerCase().trim();
-                    if (ket.includes('tidak') && ket.includes('emis')) stats.emis.tidak++;
-                    else if (ket.includes('masuk') && ket.includes('emis')) stats.emis.masuk++;
-                    else if (ket.includes('tidak masuk') || ket === 'tidak' || ket === 'belum') stats.emis.tidak++;
-                    else if (ket.includes('masuk') && !ket.includes('tidak')) stats.emis.masuk++;
-                    else if (ket === '') stats.emis.tidak++;
-                    else if (ket.includes('masuk')) stats.emis.masuk++;
-                    else stats.emis.tidak++;
-                });
-
-                document.getElementById('stat-total').innerText = stats.total;
-                document.getElementById('stat-l-total').innerText = stats.L;
-                document.getElementById('stat-p-total').innerText = stats.P;
-                document.getElementById('total-wustha').innerText = stats.w.total;
-                document.getElementById('w-l').innerText = stats.w.L;
-                document.getElementById('w-p').innerText = stats.w.P;
-                document.getElementById('total-ulya').innerText = stats.u.total;
-                document.getElementById('u-l').innerText = stats.u.L;
-                document.getElementById('u-p').innerText = stats.u.P;
-                document.getElementById('p-reguler').innerText = stats.prog.reguler;
-                document.getElementById('p-tahfidz').innerText = stats.prog.tahfidz;
-                document.getElementById('p-arab').innerText = stats.prog.arab;
-
-                const snapLulus = await getCountFromServer(collection(db, "data_santri_lulus"));
-                const snapMutasi = await getCountFromServer(collection(db, "data_santri_mutasi"));
-                document.getElementById('stat-lulus').innerText = snapLulus.data().count;
-                document.getElementById('stat-mutasi').innerText = snapMutasi.data().count;
-
-                document.getElementById('stat-emis-masuk').innerText = stats.emis.masuk;
-                document.getElementById('stat-emis-tidak').innerText = stats.emis.tidak;
-                const totalEmis = stats.emis.masuk + stats.emis.tidak;
-                const persenEmis = totalEmis > 0 ? ((stats.emis.masuk / totalEmis) * 100).toFixed(1) : 0;
-                document.getElementById('stat-emis-persen').innerText = `${persenEmis}%`;
-                
-                const progressBar = document.getElementById('emis-progress-bar');
-                progressBar.style.width = `${persenEmis}%`;
-                if (persenEmis >= 80) {
-                    progressBar.style.background = 'linear-gradient(90deg, #2ecc71, #27ae60)';
-                } else if (persenEmis >= 50) {
-                    progressBar.style.background = 'linear-gradient(90deg, #f1c40f, #f39c12)';
-                } else {
-                    progressBar.style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
-                }
-
-                const tbodyKelas = document.querySelector('#table-stat-kelas tbody');
-                tbodyKelas.innerHTML = '';
-                
-                const colors = [
-                    'linear-gradient(90deg, #3498db, #2980b9)',
-                    'linear-gradient(90deg, #2ecc71, #27ae60)',
-                    'linear-gradient(90deg, #f39c12, #e67e22)',
-                    'linear-gradient(90deg, #9b59b6, #8e44ad)',
-                    'linear-gradient(90deg, #1abc9c, #16a085)',
-                    'linear-gradient(90deg, #e74c3c, #c0392b)',
-                    'linear-gradient(90deg, #c9a84c, #a8893a)'
-                ];
-                let colorIndex = 0;
-
-                Object.keys(stats.kelas)
-                    .sort((a, b) => {
-                        const numA = parseInt(a), numB = parseInt(b);
-                        if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
-                        return a.localeCompare(b);
-                    })
-                    .forEach(kls => {
-                        const pct = ((stats.kelas[kls] / stats.total) * 100).toFixed(1);
-                        const color = colors[colorIndex % colors.length];
-                        colorIndex++;
-                        
-                        tbodyKelas.innerHTML += `
-                            <tr>
-                                <td class="class-name">${kls}</td>
-                                <td class="class-count">${stats.kelas[kls]}</td>
-                                <td class="progress-container">
-                                    <div class="progress-thin-custom">
-                                        <div class="bar" style="width: ${pct}%; background: ${color};"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
-                    });
-
-                renderGenderPerKelas(snapshot.docs);
-
-            } catch (error) {
-                console.error("Dashboard Error:", error);
-            } finally {
-                loader.style.display = 'none';
-            }
+        let stats = {
+            total: 0, L: 0, P: 0,
+            w: { total: 0, L: 0, P: 0 },
+            u: { total: 0, L: 0, P: 0 },
+            prog: { reguler: 0, tahfidz: 0, arab: 0 },
+            kelas: {},
+            emis: { masuk: 0, tidak: 0 }
         };
+
+        snapshot.forEach(docSnap => {
+            const d = docSnap.data();
+            stats.total++;
+            if (d.jk === 'Laki-laki') stats.L++; else stats.P++;
+
+            if (d.jenjang === 'Wustha') {
+                stats.w.total++;
+                if (d.jk === 'Laki-laki') stats.w.L++; else stats.w.P++;
+            } else if (d.jenjang === 'Ulya') {
+                stats.u.total++;
+                if (d.jk === 'Laki-laki') stats.u.L++; else stats.u.P++;
+            }
+
+            const p = (d.program || '').toLowerCase();
+            if (p.includes('tahfidz')) stats.prog.tahfidz++;
+            else if (p.includes('arab')) stats.prog.arab++;
+            else stats.prog.reguler++;
+
+            const kls = d.kls_now || 'N/A';
+            stats.kelas[kls] = (stats.kelas[kls] || 0) + 1;
+
+            const ket = (d.ket || '').toString().toLowerCase().trim();
+            if (ket.includes('tidak') && ket.includes('emis')) stats.emis.tidak++;
+            else if (ket.includes('masuk') && ket.includes('emis')) stats.emis.masuk++;
+            else if (ket.includes('tidak masuk') || ket === 'tidak' || ket === 'belum') stats.emis.tidak++;
+            else if (ket.includes('masuk') && !ket.includes('tidak')) stats.emis.masuk++;
+            else if (ket === '') stats.emis.tidak++;
+            else if (ket.includes('masuk')) stats.emis.masuk++;
+            else stats.emis.tidak++;
+        });
+
+        document.getElementById('stat-total').innerText = stats.total;
+        document.getElementById('stat-l-total').innerText = stats.L;
+        document.getElementById('stat-p-total').innerText = stats.P;
+        document.getElementById('total-wustha').innerText = stats.w.total;
+        document.getElementById('w-l').innerText = stats.w.L;
+        document.getElementById('w-p').innerText = stats.w.P;
+        document.getElementById('total-ulya').innerText = stats.u.total;
+        document.getElementById('u-l').innerText = stats.u.L;
+        document.getElementById('u-p').innerText = stats.u.P;
+        document.getElementById('p-reguler').innerText = stats.prog.reguler;
+        document.getElementById('p-tahfidz').innerText = stats.prog.tahfidz;
+        document.getElementById('p-arab').innerText = stats.prog.arab;
+
+        const snapLulus = await getCountFromServer(collection(db, "data_santri_lulus"));
+        const snapMutasi = await getCountFromServer(collection(db, "data_santri_mutasi"));
+        document.getElementById('stat-lulus').innerText = snapLulus.data().count;
+        document.getElementById('stat-mutasi').innerText = snapMutasi.data().count;
+
+        document.getElementById('stat-emis-masuk').innerText = stats.emis.masuk;
+        document.getElementById('stat-emis-tidak').innerText = stats.emis.tidak;
+        const totalEmis = stats.emis.masuk + stats.emis.tidak;
+        const persenEmis = totalEmis > 0 ? ((stats.emis.masuk / totalEmis) * 100).toFixed(1) : 0;
+        document.getElementById('stat-emis-persen').innerText = `${persenEmis}%`;
+        
+        const progressBar = document.getElementById('emis-progress-bar');
+        progressBar.style.width = `${persenEmis}%`;
+        if (persenEmis >= 80) {
+            progressBar.style.background = 'linear-gradient(90deg, #2ecc71, #27ae60)';
+        } else if (persenEmis >= 50) {
+            progressBar.style.background = 'linear-gradient(90deg, #f1c40f, #f39c12)';
+        } else {
+            progressBar.style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
+        }
+
+        const tbodyKelas = document.querySelector('#table-stat-kelas tbody');
+        tbodyKelas.innerHTML = '';
+        
+        const colors = [
+            'linear-gradient(90deg, #3498db, #2980b9)',
+            'linear-gradient(90deg, #2ecc71, #27ae60)',
+            'linear-gradient(90deg, #f39c12, #e67e22)',
+            'linear-gradient(90deg, #9b59b6, #8e44ad)',
+            'linear-gradient(90deg, #1abc9c, #16a085)',
+            'linear-gradient(90deg, #e74c3c, #c0392b)',
+            'linear-gradient(90deg, #c9a84c, #a8893a)'
+        ];
+        let colorIndex = 0;
+
+        Object.keys(stats.kelas)
+            .sort((a, b) => {
+                const numA = parseInt(a), numB = parseInt(b);
+                if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+                return a.localeCompare(b);
+            })
+            .forEach(kls => {
+                const pct = ((stats.kelas[kls] / stats.total) * 100).toFixed(1);
+                const color = colors[colorIndex % colors.length];
+                colorIndex++;
+                
+                tbodyKelas.innerHTML += `
+                    <tr>
+                        <td class="class-name">${kls}</td>
+                        <td class="class-count">${stats.kelas[kls]}</td>
+                        <td class="progress-container">
+                            <div class="progress-thin-custom">
+                                <div class="bar" style="width: ${pct}%; background: ${color};"></div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+        renderGenderPerKelas(snapshot.docs);
+
+    } catch (error) {
+        console.error("Dashboard Error:", error);
+    } finally {
+        loader.style.display = 'none';
+    }
+};
+
 
         // ===== DATA LOADING =====
         const columnMapping = [
@@ -10601,6 +10669,111 @@ window.exportExcel = (tableId, fileName) => {
             }
         };
 
+
+// Fungsi untuk upload logo login
+window.uploadLogoLogin = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { 
+        alert('Upload file gambar!'); 
+        return; 
+    }
+    if (file.size > 500 * 1024) { 
+        alert('Ukuran maksimal 500KB.'); 
+        return; 
+    }
+
+    const loader = document.getElementById('loader');
+    loader.style.display = 'flex';
+
+    try {
+        const base64String = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+
+        await setDoc(doc(db, "konfigurasi", "logo_login"), {
+            logo: base64String,
+            fileName: file.name,
+            fileType: file.type,
+            updated_at: serverTimestamp()
+        });
+
+        // Update preview
+        document.getElementById('previewLogoLogin').src = base64String;
+        document.getElementById('previewLogoLogin').style.display = 'block';
+        
+        // Update login modal logo
+        const loginLogo = document.querySelector('.login-logo');
+        if (loginLogo) {
+            loginLogo.innerHTML = `<img src="${base64String}" style="width: 60px; height: 60px; object-fit: contain; border-radius: 12px;">`;
+        }
+        
+        alert('✅ Logo login berhasil disimpan!');
+    } catch (error) {
+        alert('❌ Gagal menyimpan logo: ' + error.message);
+    } finally {
+        loader.style.display = 'none';
+        event.target.value = '';
+    }
+};
+
+
+// Fungsi untuk load logo login
+window.loadLogoLogin = async () => {
+    try {
+        const logoDoc = await getDoc(doc(db, "konfigurasi", "logo_login"));
+        if (logoDoc.exists()) {
+            const logoData = logoDoc.data();
+            if (logoData.logo) {
+                // Update login modal logo
+                const loginLogo = document.querySelector('.login-logo');
+                if (loginLogo) {
+                    loginLogo.innerHTML = `<img src="${logoData.logo}" style="width: 60px; height: 60px; object-fit: contain; border-radius: 12px;">`;
+                }
+                
+                // Update preview jika ada
+                const preview = document.getElementById('previewLogoLogin');
+                if (preview) {
+                    preview.src = logoData.logo;
+                    preview.style.display = 'block';
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Gagal memuat logo login:", error);
+    }
+};
+
+
+window.hapusLogoLogin = async () => {
+    if (!confirm("Yakin ingin menghapus logo login?")) return;
+    
+    const loader = document.getElementById('loader');
+    loader.style.display = 'flex';
+    
+    try {
+        await deleteDoc(doc(db, "konfigurasi", "logo_login"));
+        
+        // Reset ke default
+        const loginLogo = document.querySelector('.login-logo');
+        if (loginLogo) {
+            loginLogo.innerHTML = `<i class="bi bi-shield-lock-fill"></i>`;
+        }
+        document.getElementById('previewLogoLogin').style.display = 'none';
+        document.getElementById('previewLogoLogin').src = '';
+        
+        alert('✅ Logo login berhasil dihapus!');
+    } catch (error) {
+        alert('❌ Gagal menghapus logo: ' + error.message);
+    } finally {
+        loader.style.display = 'none';
+    }
+};
+
+
         window.loadLogoFromFirestore = async () => {
             try {
                 const logoDoc = await getDoc(doc(db, "konfigurasi", "logo_lembaga"));
@@ -11042,7 +11215,7 @@ window.exportExcel = (tableId, fileName) => {
         };
 
 
-// ===== GENERATE SURAT (DIPERBAIKI UNTUK SKBB) =====
+// ===== GENERATE SURAT (DIPERBAIKI UNTUK RATA KANAN-KIRI & PARAGRAF TERPISAH) =====
 window.generateSurat = (jenis) => {
     let selectId, noSurat;
     if (jenis === 'SKBB') {
@@ -11093,6 +11266,7 @@ window.generateSurat = (jenis) => {
     const logoImg = document.getElementById('logoPreview') ? document.getElementById('logoPreview').src : '';
     let contentStartY = 48;
 
+    // --- KOP SURAT ---
     if (kopSuratImg && (kopSuratImg.startsWith('data:image') || kopSuratImg.includes('http')) && !kopSuratImg.endsWith('alt="Belum ada Kop Surat"')) {
         doc.addImage(kopSuratImg, 'PNG', MARGIN_LEFT, 10, MAX_TEXT_WIDTH, 28);
         contentStartY = 51;
@@ -11115,6 +11289,7 @@ window.generateSurat = (jenis) => {
         contentStartY = 48;
     }
 
+    // --- WATERMARK LOGO ---
     if (logoImg && (logoImg.startsWith('data:image') || logoImg.includes('http'))) {
         doc.saveGraphicsState();
         doc.setGState(new doc.GState({ opacity: 0.08 }));
@@ -11122,6 +11297,7 @@ window.generateSurat = (jenis) => {
         doc.restoreGraphicsState();
     }
 
+    // --- JUDUL SURAT ---
     doc.setFont("times", "bold");
     doc.setFontSize(12);
     let judulTeks = "";
@@ -11179,99 +11355,84 @@ window.generateSurat = (jenis) => {
     currentY += 3;
     doc.setFont("times", "normal");
 
-    // --- ISI SURAT SKBB (RATA KANAN-KIRI / JUSTIFY) ---
+    // --- FUNGSI JUSTIFY TEXT (RATA KANAN-KIRI) ---
+    const justifyText = (lines, x, y, maxWidth, lineHeight) => {
+        lines.forEach((line, index) => {
+            const currentYPos = y + (index * lineHeight);
+            // Jika line bukan baris terakhir dan panjang teks mendekati maxWidth
+            if (index < lines.length - 1 && line.length > 0) {
+                const textWidth = doc.getTextWidth(line);
+                const spaceCount = (line.match(/ /g) || []).length;
+                if (spaceCount > 0 && textWidth < maxWidth - 2) {
+                    // Hitung spasi tambahan untuk rata kanan-kiri
+                    const extraSpace = (maxWidth - textWidth) / spaceCount;
+                    const words = line.split(' ');
+                    let justifiedLine = '';
+                    words.forEach((word, wordIndex) => {
+                        justifiedLine += word;
+                        if (wordIndex < words.length - 1) {
+                            justifiedLine += ' '.repeat(Math.floor(extraSpace) + 1);
+                        }
+                    });
+                    doc.text(justifiedLine, x, currentYPos);
+                } else {
+                    doc.text(line, x, currentYPos);
+                }
+            } else {
+                // Baris terakhir (rata kiri)
+                doc.text(line, x, currentYPos);
+            }
+        });
+    };
+
+    // --- ISI SURAT DENGAN RATA KANAN-KIRI ---
     if (jenis === 'SKBB') {
         const keperluan = (document.getElementById('keperluanSkbb')?.value) || "Melanjutkan Pendidikan";
         
-        // --- TEKS SKBB DENGAN RATA KANAN-KIRI ---
+        // Paragraf 1: Teks SKBB
         const skbbTextLines = doc.splitTextToSize(teksSKBB, MAX_TEXT_WIDTH);
-        
-        // Fungsi untuk justify text (rata kanan-kiri)
-        const justifyText = (lines, x, y, maxWidth, lineHeight) => {
-            lines.forEach((line, index) => {
-                const currentYPos = y + (index * lineHeight);
-                // Jika line bukan baris terakhir dan panjang teks mendekati maxWidth
-                if (index < lines.length - 1 && line.length > 0) {
-                    const textWidth = doc.getTextWidth(line);
-                    const spaceCount = (line.match(/ /g) || []).length;
-                    if (spaceCount > 0 && textWidth < maxWidth - 2) {
-                        // Hitung spasi tambahan untuk rata kanan-kiri
-                        const extraSpace = (maxWidth - textWidth) / spaceCount;
-                        const words = line.split(' ');
-                        let justifiedLine = '';
-                        words.forEach((word, wordIndex) => {
-                            justifiedLine += word;
-                            if (wordIndex < words.length - 1) {
-                                justifiedLine += ' '.repeat(Math.floor(extraSpace) + 1);
-                            }
-                        });
-                        doc.text(justifiedLine, x, currentYPos);
-                    } else {
-                        doc.text(line, x, currentYPos);
-                    }
-                } else {
-                    // Baris terakhir (rata kiri)
-                    doc.text(line, x, currentYPos);
-                }
-            });
-        };
-
-        // Tampilkan teks SKBB dengan justify
         justifyText(skbbTextLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
         currentY += skbbTextLines.length * 5.5 + 4;
 
-        // --- KEPERLUAN ---
+        // Paragraf 2: Keperluan
         const keperluanText = `Surat keterangan ini diberikan kepada yang bersangkutan untuk keperluan: ${keperluan}.`;
         const keperluanLines = doc.splitTextToSize(keperluanText, MAX_TEXT_WIDTH);
         justifyText(keperluanLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
         currentY += keperluanLines.length * 5.5 + 6;
 
-        // --- KALIMAT PENUTUP ---
+        // Paragraf 3: Penutup (paragraf terpisah)
         const penutup = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
         const penutupLines = doc.splitTextToSize(penutup, MAX_TEXT_WIDTH);
         justifyText(penutupLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
         currentY += penutupLines.length * 5.5 + 10;
 
     } else if (jenis === 'SKA') {
-        const skaText1 = "Adalah benar nama yang bersangkutan tercatat sebagai santri yang masih aktif mengikuti proses";
-        const skaText2 = "belajar-mengajar pada Tahun Ajaran berjalan di Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy.";
-        const skaText3 = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
-        
-        const lines1 = doc.splitTextToSize(skaText1, MAX_TEXT_WIDTH);
-        const lines2 = doc.splitTextToSize(skaText2, MAX_TEXT_WIDTH);
-        const lines3 = doc.splitTextToSize(skaText3, MAX_TEXT_WIDTH);
-        
-        doc.text(lines1, MARGIN_LEFT, currentY);
-        currentY += lines1.length * 5.5 + 1;
-        doc.text(lines2, MARGIN_LEFT, currentY);
-        currentY += lines2.length * 5.5 + 3;
-        doc.text(lines3, MARGIN_LEFT, currentY);
-        currentY += lines3.length * 5.5 + 10;
+        // Paragraf 1: Teks SKA
+        const skaText = "Adalah benar nama yang bersangkutan tercatat sebagai santri yang masih aktif mengikuti proses belajar-mengajar pada Tahun Ajaran berjalan di Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy.";
+        const skaLines = doc.splitTextToSize(skaText, MAX_TEXT_WIDTH);
+        justifyText(skaLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
+        currentY += skaLines.length * 5.5 + 6;
+
+        // Paragraf 2: Penutup (paragraf terpisah)
+        const penutup = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
+        const penutupLines = doc.splitTextToSize(penutup, MAX_TEXT_WIDTH);
+        justifyText(penutupLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
+        currentY += penutupLines.length * 5.5 + 10;
 
     } else if (jenis === 'MUTASI') {
         const tujuanLembaga = (document.getElementById('tujuanMutasi')?.value) || "lembaga pendidikan baru";
-        const mutasiText1 = `Adalah benar yang bersangkutan telah mengajukan permohonan pindah (mutasi) belajar dari`;
-        const mutasiText2 = `Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy menuju ke ${tujuanLembaga}.`;
-        const mutasiText3 = `Segala dokumen rekam akademik yang bersangkutan selama berada di lembaga ini telah diserahterimakan,`;
-        const mutasiText4 = `dan sejak surat ini diterbitkan, tanggung jawab pembinaan formal dialihkan sepenuhnya kepada lembaga tujuan.`;
-        const mutasiText5 = `Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.`;
         
-        const lines1 = doc.splitTextToSize(mutasiText1, MAX_TEXT_WIDTH);
-        const lines2 = doc.splitTextToSize(mutasiText2, MAX_TEXT_WIDTH);
-        const lines3 = doc.splitTextToSize(mutasiText3, MAX_TEXT_WIDTH);
-        const lines4 = doc.splitTextToSize(mutasiText4, MAX_TEXT_WIDTH);
-        const lines5 = doc.splitTextToSize(mutasiText5, MAX_TEXT_WIDTH);
-        
-        doc.text(lines1, MARGIN_LEFT, currentY);
-        currentY += lines1.length * 5.5 + 1;
-        doc.text(lines2, MARGIN_LEFT, currentY);
-        currentY += lines2.length * 5.5 + 1;
-        doc.text(lines3, MARGIN_LEFT, currentY);
-        currentY += lines3.length * 5.5 + 1;
-        doc.text(lines4, MARGIN_LEFT, currentY);
-        currentY += lines4.length * 5.5 + 3;
-        doc.text(lines5, MARGIN_LEFT, currentY);
-        currentY += lines5.length * 5.5 + 10;
+        // Paragraf 1: Teks Mutasi
+        const mutasiText = `Adalah benar yang bersangkutan telah mengajukan permohonan pindah (mutasi) belajar dari Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy menuju ke ${tujuanLembaga}. Segala dokumen rekam akademik yang bersangkutan selama berada di lembaga ini telah diserahterimakan, dan sejak surat ini diterbitkan, tanggung jawab pembinaan formal dialihkan sepenuhnya kepada lembaga tujuan.`;
+        const mutasiLines = doc.splitTextToSize(mutasiText, MAX_TEXT_WIDTH);
+        justifyText(mutasiLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
+        currentY += mutasiLines.length * 5.5 + 6;
+
+        // Paragraf 2: Penutup (paragraf terpisah)
+        const penutup = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
+        const penutupLines = doc.splitTextToSize(penutup, MAX_TEXT_WIDTH);
+        justifyText(penutupLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
+        currentY += penutupLines.length * 5.5 + 10;
     }
 
     // --- TANDA TANGAN ---
