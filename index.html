@@ -11215,7 +11215,7 @@ window.hapusLogoLogin = async () => {
         };
 
 
-// ===== GENERATE SURAT (DIPERBAIKI UNTUK RATA KANAN-KIRI & PARAGRAF TERPISAH) =====
+// ===== GENERATE SURAT (DIPERBAIKI - LEBAR TEKS 16CM & RATA KANAN-KIRI SEMPURNA) =====
 window.generateSurat = (jenis) => {
     let selectId, noSurat;
     if (jenis === 'SKBB') {
@@ -11255,11 +11255,14 @@ window.generateSurat = (jenis) => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
 
-    // --- MARGIN KIRI DAN KANAN YANG LEBIH LEBAR ---
-    const MARGIN_LEFT = 25;
-    const MARGIN_RIGHT = 25;
-    const PAGE_WIDTH = doc.internal.pageSize.width;
-    const MAX_TEXT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
+    // ===== KONFIGURASI LEBAR TEKS 16 CM (160 MM) =====
+    const PAGE_WIDTH = doc.internal.pageSize.width; // 210 mm untuk A4
+    const MARGIN_LEFT = 25;   // Margin kiri 25 mm
+    const MARGIN_RIGHT = 25;  // Margin kanan 25 mm
+    const TEXT_WIDTH = 160;   // LEBAR TEKS 16 CM (160 mm) - KONSISTEN UNTUK SEMUA TEKS
+    
+    // Posisi X untuk teks
+    const TEXT_X = MARGIN_LEFT;
 
     const kopSuratEl = document.getElementById('previewKopSurat');
     const kopSuratImg = kopSuratEl ? kopSuratEl.src : '';
@@ -11268,11 +11271,11 @@ window.generateSurat = (jenis) => {
 
     // --- KOP SURAT ---
     if (kopSuratImg && (kopSuratImg.startsWith('data:image') || kopSuratImg.includes('http')) && !kopSuratImg.endsWith('alt="Belum ada Kop Surat"')) {
-        doc.addImage(kopSuratImg, 'PNG', MARGIN_LEFT, 10, MAX_TEXT_WIDTH, 28);
+        doc.addImage(kopSuratImg, 'PNG', TEXT_X, 10, TEXT_WIDTH, 28);
         contentStartY = 51;
     } else {
         if (logoImg && (logoImg.startsWith('data:image') || logoImg.includes('http'))) {
-            doc.addImage(logoImg, 'PNG', MARGIN_LEFT + 2, 11, 20, 20);
+            doc.addImage(logoImg, 'PNG', TEXT_X + 2, 11, 20, 20);
         }
         doc.setFont("times", "bold");
         doc.setFontSize(14);
@@ -11283,9 +11286,9 @@ window.generateSurat = (jenis) => {
         doc.setFontSize(10);
         doc.text("Jln. Sudama, Dusun VII, Desa Perdamaian, Kec. Binjai, Kab. Langkat, Sumatera Utara", PAGE_WIDTH / 2, 29, { align: "center" });
         doc.setLineWidth(0.8);
-        doc.line(MARGIN_LEFT, 34, PAGE_WIDTH - MARGIN_RIGHT, 34);
+        doc.line(TEXT_X, 34, TEXT_X + TEXT_WIDTH, 34);
         doc.setLineWidth(0.2);
-        doc.line(MARGIN_LEFT, 35.5, PAGE_WIDTH - MARGIN_RIGHT, 35.5);
+        doc.line(TEXT_X, 35.5, TEXT_X + TEXT_WIDTH, 35.5);
         contentStartY = 48;
     }
 
@@ -11307,7 +11310,7 @@ window.generateSurat = (jenis) => {
 
     doc.text(judulTeks, PAGE_WIDTH / 2, contentStartY, { align: "center" });
     doc.setLineWidth(0.4);
-    doc.line(MARGIN_LEFT + 10, contentStartY + 1.5, PAGE_WIDTH - MARGIN_RIGHT - 10, contentStartY + 1.5);
+    doc.line(TEXT_X + 10, contentStartY + 1.5, TEXT_X + TEXT_WIDTH - 10, contentStartY + 1.5);
     doc.setFont("times", "normal");
     doc.setFontSize(11);
     doc.text("Nomor: " + noSurat, PAGE_WIDTH / 2, contentStartY + 6, { align: "center" });
@@ -11315,8 +11318,8 @@ window.generateSurat = (jenis) => {
     // --- KALIMAT PEMBUKA ---
     doc.setFontSize(11);
     const pembuka = "Yang bertanda tangan di bawah ini, Kepala Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy menerangkan bahwa:";
-    const pembukaLines = doc.splitTextToSize(pembuka, MAX_TEXT_WIDTH);
-    doc.text(pembukaLines, MARGIN_LEFT, contentStartY + 18);
+    const pembukaLines = doc.splitTextToSize(pembuka, TEXT_WIDTH);
+    doc.text(pembukaLines, TEXT_X, contentStartY + 18);
 
     let currentY = contentStartY + 18 + (pembukaLines.length * 5.5) + 4;
 
@@ -11330,11 +11333,11 @@ window.generateSurat = (jenis) => {
 
     const formatRow = (label, value) => {
         doc.setFont("times", "bold");
-        doc.text(label, MARGIN_LEFT, currentY);
+        doc.text(label, TEXT_X, currentY);
         doc.setFont("times", "normal");
-        doc.text(":", MARGIN_LEFT + 45, currentY);
-        const splitValue = doc.splitTextToSize(value || "-", MAX_TEXT_WIDTH - 48);
-        doc.text(splitValue, MARGIN_LEFT + 48, currentY);
+        doc.text(":", TEXT_X + 45, currentY);
+        const splitValue = doc.splitTextToSize(value || "-", TEXT_WIDTH - 48);
+        doc.text(splitValue, TEXT_X + 48, currentY);
         currentY += (splitValue.length * 5.5) + 1.5;
     };
 
@@ -11355,84 +11358,187 @@ window.generateSurat = (jenis) => {
     currentY += 3;
     doc.setFont("times", "normal");
 
-    // --- FUNGSI JUSTIFY TEXT (RATA KANAN-KIRI) ---
-    const justifyText = (lines, x, y, maxWidth, lineHeight) => {
-        lines.forEach((line, index) => {
-            const currentYPos = y + (index * lineHeight);
-            // Jika line bukan baris terakhir dan panjang teks mendekati maxWidth
-            if (index < lines.length - 1 && line.length > 0) {
-                const textWidth = doc.getTextWidth(line);
-                const spaceCount = (line.match(/ /g) || []).length;
-                if (spaceCount > 0 && textWidth < maxWidth - 2) {
-                    // Hitung spasi tambahan untuk rata kanan-kiri
-                    const extraSpace = (maxWidth - textWidth) / spaceCount;
-                    const words = line.split(' ');
+    // ===== FUNGSI JUSTIFY TEXT SEMPURNA (RATA KANAN-KIRI DENGAN SPASI MERATA) =====
+    const justifyTextPerfect = (text, x, y, maxWidth, lineHeight) => {
+        // Split teks menjadi kata-kata
+        const words = text.split(' ');
+        if (words.length === 0) return y;
+        
+        // Jika hanya satu kata, langsung cetak
+        if (words.length === 1) {
+            doc.text(text, x, y);
+            return y + lineHeight;
+        }
+
+        let lines = [];
+        let currentLine = [];
+        let currentWidth = 0;
+        const spaceWidth = doc.getTextWidth(' ');
+
+        // Bangun baris-baris dengan mempertimbangkan lebar maksimal
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            const wordWidth = doc.getTextWidth(word);
+            const testWidth = currentWidth + (currentLine.length > 0 ? spaceWidth : 0) + wordWidth;
+
+            if (testWidth <= maxWidth) {
+                currentLine.push(word);
+                currentWidth = testWidth;
+            } else {
+                // Jika kata tidak muat, simpan baris saat ini
+                if (currentLine.length > 0) {
+                    lines.push(currentLine);
+                }
+                // Mulai baris baru dengan kata ini
+                currentLine = [word];
+                currentWidth = wordWidth;
+                
+                // Jika satu kata saja sudah melebihi maxWidth, force split
+                if (wordWidth > maxWidth) {
+                    // Pecah kata panjang dengan tanda hubung
+                    const chars = word.split('');
+                    let tempLine = [];
+                    let tempWidth = 0;
+                    for (let j = 0; j < chars.length; j++) {
+                        const charWidth = doc.getTextWidth(chars[j]);
+                        if (tempWidth + charWidth <= maxWidth) {
+                            tempLine.push(chars[j]);
+                            tempWidth += charWidth;
+                        } else {
+                            if (tempLine.length > 0) {
+                                lines.push([tempLine.join('') + '-']);
+                            }
+                            tempLine = [chars[j]];
+                            tempWidth = charWidth;
+                        }
+                    }
+                    if (tempLine.length > 0) {
+                        lines.push([tempLine.join('')]);
+                    }
+                    currentLine = [];
+                    currentWidth = 0;
+                }
+            }
+        }
+
+        // Tambahkan sisa baris terakhir
+        if (currentLine.length > 0) {
+            lines.push(currentLine);
+        }
+
+        // Cetak setiap baris dengan rata kanan-kiri
+        lines.forEach((lineWords, index) => {
+            const isLastLine = (index === lines.length - 1);
+            const lineText = lineWords.join(' ');
+            
+            if (isLastLine || lineWords.length === 1) {
+                // Baris terakhir atau hanya satu kata: rata kiri
+                doc.text(lineText, x, y);
+            } else {
+                // Hitung lebar teks tanpa spasi
+                const totalWordWidth = lineWords.reduce((sum, w) => sum + doc.getTextWidth(w), 0);
+                const totalSpaces = lineWords.length - 1;
+                
+                if (totalSpaces > 0) {
+                    // Hitung spasi yang dibutuhkan untuk memenuhi maxWidth
+                    const extraSpace = (maxWidth - totalWordWidth) / totalSpaces;
+                    
+                    // Bangun string dengan spasi diperlebar
                     let justifiedLine = '';
-                    words.forEach((word, wordIndex) => {
+                    lineWords.forEach((word, idx) => {
                         justifiedLine += word;
-                        if (wordIndex < words.length - 1) {
-                            justifiedLine += ' '.repeat(Math.floor(extraSpace) + 1);
+                        if (idx < lineWords.length - 1) {
+                            // Tambahkan spasi dengan lebar yang diperbesar
+                            const spaceCount = Math.max(1, Math.round(extraSpace / spaceWidth));
+                            justifiedLine += ' '.repeat(spaceCount);
                         }
                     });
-                    doc.text(justifiedLine, x, currentYPos);
+                    
+                    // Pastikan teks tidak melewati batas
+                    let finalText = justifiedLine;
+                    let finalWidth = doc.getTextWidth(finalText);
+                    
+                    // Jika masih kurang, tambahkan spasi ekstra
+                    if (finalWidth < maxWidth - 1) {
+                        const remainingSpace = maxWidth - finalWidth;
+                        const additionalSpaces = Math.floor(remainingSpace / spaceWidth);
+                        if (additionalSpaces > 0 && totalSpaces > 0) {
+                            // Tambahkan spasi ekstra secara merata
+                            const extraPerSpace = Math.floor(additionalSpaces / totalSpaces);
+                            const extraRemainder = additionalSpaces % totalSpaces;
+                            let newLine = '';
+                            lineWords.forEach((word, idx) => {
+                                newLine += word;
+                                if (idx < lineWords.length - 1) {
+                                    const baseSpaces = Math.round(extraSpace / spaceWidth);
+                                    const extra = (idx < extraRemainder) ? extraPerSpace + 1 : extraPerSpace;
+                                    const totalSpacesCount = Math.max(1, baseSpaces + extra);
+                                    newLine += ' '.repeat(totalSpacesCount);
+                                }
+                            });
+                            finalText = newLine;
+                        }
+                    }
+                    
+                    doc.text(finalText, x, y);
                 } else {
-                    doc.text(line, x, currentYPos);
+                    doc.text(lineText, x, y);
                 }
-            } else {
-                // Baris terakhir (rata kiri)
-                doc.text(line, x, currentYPos);
             }
+            y += lineHeight;
         });
+
+        return y;
     };
 
-    // --- ISI SURAT DENGAN RATA KANAN-KIRI ---
+    // ===== FUNGSI UNTUK PARAGRAF DENGAN RATA KANAN-KIRI =====
+    const justifyParagraph = (text, x, y, maxWidth, lineHeight) => {
+        // Bersihkan teks dari spasi berlebih
+        const cleanText = text.replace(/\s+/g, ' ').trim();
+        return justifyTextPerfect(cleanText, x, y, maxWidth, lineHeight);
+    };
+
+    // --- ISI SURAT DENGAN RATA KANAN-KIRI (LEBAR 16CM) ---
     if (jenis === 'SKBB') {
         const keperluan = (document.getElementById('keperluanSkbb')?.value) || "Melanjutkan Pendidikan";
         
         // Paragraf 1: Teks SKBB
-        const skbbTextLines = doc.splitTextToSize(teksSKBB, MAX_TEXT_WIDTH);
-        justifyText(skbbTextLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
-        currentY += skbbTextLines.length * 5.5 + 4;
+        currentY = justifyParagraph(teksSKBB, TEXT_X, currentY, TEXT_WIDTH, 5.5);
+        currentY += 4;
 
         // Paragraf 2: Keperluan
         const keperluanText = `Surat keterangan ini diberikan kepada yang bersangkutan untuk keperluan: ${keperluan}.`;
-        const keperluanLines = doc.splitTextToSize(keperluanText, MAX_TEXT_WIDTH);
-        justifyText(keperluanLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
-        currentY += keperluanLines.length * 5.5 + 6;
+        currentY = justifyParagraph(keperluanText, TEXT_X, currentY, TEXT_WIDTH, 5.5);
+        currentY += 6;
 
-        // Paragraf 3: Penutup (paragraf terpisah)
+        // Paragraf 3: Penutup
         const penutup = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
-        const penutupLines = doc.splitTextToSize(penutup, MAX_TEXT_WIDTH);
-        justifyText(penutupLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
-        currentY += penutupLines.length * 5.5 + 10;
+        currentY = justifyParagraph(penutup, TEXT_X, currentY, TEXT_WIDTH, 5.5);
+        currentY += 10;
 
     } else if (jenis === 'SKA') {
         // Paragraf 1: Teks SKA
         const skaText = "Adalah benar nama yang bersangkutan tercatat sebagai santri yang masih aktif mengikuti proses belajar-mengajar pada Tahun Ajaran berjalan di Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy.";
-        const skaLines = doc.splitTextToSize(skaText, MAX_TEXT_WIDTH);
-        justifyText(skaLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
-        currentY += skaLines.length * 5.5 + 6;
+        currentY = justifyParagraph(skaText, TEXT_X, currentY, TEXT_WIDTH, 5.5);
+        currentY += 6;
 
-        // Paragraf 2: Penutup (paragraf terpisah)
+        // Paragraf 2: Penutup
         const penutup = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
-        const penutupLines = doc.splitTextToSize(penutup, MAX_TEXT_WIDTH);
-        justifyText(penutupLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
-        currentY += penutupLines.length * 5.5 + 10;
+        currentY = justifyParagraph(penutup, TEXT_X, currentY, TEXT_WIDTH, 5.5);
+        currentY += 10;
 
     } else if (jenis === 'MUTASI') {
         const tujuanLembaga = (document.getElementById('tujuanMutasi')?.value) || "lembaga pendidikan baru";
         
         // Paragraf 1: Teks Mutasi
         const mutasiText = `Adalah benar yang bersangkutan telah mengajukan permohonan pindah (mutasi) belajar dari Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy menuju ke ${tujuanLembaga}. Segala dokumen rekam akademik yang bersangkutan selama berada di lembaga ini telah diserahterimakan, dan sejak surat ini diterbitkan, tanggung jawab pembinaan formal dialihkan sepenuhnya kepada lembaga tujuan.`;
-        const mutasiLines = doc.splitTextToSize(mutasiText, MAX_TEXT_WIDTH);
-        justifyText(mutasiLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
-        currentY += mutasiLines.length * 5.5 + 6;
+        currentY = justifyParagraph(mutasiText, TEXT_X, currentY, TEXT_WIDTH, 5.5);
+        currentY += 6;
 
-        // Paragraf 2: Penutup (paragraf terpisah)
+        // Paragraf 2: Penutup
         const penutup = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
-        const penutupLines = doc.splitTextToSize(penutup, MAX_TEXT_WIDTH);
-        justifyText(penutupLines, MARGIN_LEFT, currentY, MAX_TEXT_WIDTH, 5.5);
-        currentY += penutupLines.length * 5.5 + 10;
+        currentY = justifyParagraph(penutup, TEXT_X, currentY, TEXT_WIDTH, 5.5);
+        currentY += 10;
     }
 
     // --- TANDA TANGAN ---
@@ -11441,25 +11547,27 @@ window.generateSurat = (jenis) => {
     const tanggalCetak = today.toLocaleDateString('id-ID', options);
     
     // Posisi tanda tangan (rata kanan)
-    const ttdX = PAGE_WIDTH - MARGIN_RIGHT - 50;
+    const ttdWidth = 50;
+    const ttdX = TEXT_X + TEXT_WIDTH - ttdWidth - 10;
     const ttdY = Math.max(currentY + 4, 195);
 
-    doc.text(`Langkat, ${tanggalCetak}`, ttdX + 25, ttdY, { align: "center" });
-    doc.text(kepalaJabatan, ttdX + 25, ttdY + 6, { align: "center" });
+    doc.text(`Langkat, ${tanggalCetak}`, ttdX + ttdWidth/2, ttdY, { align: "center" });
+    doc.text(kepalaJabatan, ttdX + ttdWidth/2, ttdY + 6, { align: "center" });
 
     if (ttdKepalaBase64 && ttdKepalaBase64.startsWith('data:image')) {
         doc.addImage(ttdKepalaBase64, 'PNG', ttdX + 8, ttdY + 10, 35, 18);
     }
 
     doc.setFont("times", "bold");
-    doc.text(kepalaNama, ttdX + 25, ttdY + 35, { align: "center" });
+    doc.text(kepalaNama, ttdX + ttdWidth/2, ttdY + 35, { align: "center" });
     doc.setLineWidth(0.3);
-    doc.line(ttdX, ttdY + 36.5, ttdX + 50, ttdY + 36.5);
+    doc.line(ttdX, ttdY + 36.5, ttdX + ttdWidth, ttdY + 36.5);
     doc.setFont("times", "normal");
-    doc.text("NIK. " + kepalaNik, ttdX + 25, ttdY + 41.5, { align: "center" });
+    doc.text("NIK. " + kepalaNik, ttdX + ttdWidth/2, ttdY + 41.5, { align: "center" });
 
     doc.save(`${jenis}_${santriData.nama}.pdf`);
 };
+
 
 
         // ===== PRINT BIODATA =====
