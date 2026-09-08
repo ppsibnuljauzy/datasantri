@@ -3735,6 +3735,48 @@
     font-size: 38px;
     color: white;
 }
+
+
+/* ===== TTD DI KTS - ASPEK RASIO TERJAGA ===== */
+.kts-card .kts-footer .kts-ttd .ttd-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-height: 24px;
+    overflow: hidden;
+}
+
+.kts-card .kts-footer .kts-ttd .ttd-wrapper img {
+    max-height: 24px;
+    max-width: 55px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 1px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.04));
+}
+
+/* Responsive untuk TTD di KTS */
+@media (max-width: 768px) {
+    .kts-card .kts-footer .kts-ttd .ttd-wrapper {
+        max-height: 18px;
+    }
+    .kts-card .kts-footer .kts-ttd .ttd-wrapper img {
+        max-height: 18px;
+        max-width: 40px;
+    }
+}
+
+@media print {
+    .kts-card .kts-footer .kts-ttd .ttd-wrapper {
+        max-height: 20px !important;
+    }
+    .kts-card .kts-footer .kts-ttd .ttd-wrapper img {
+        max-height: 20px !important;
+        max-width: 45px !important;
+    }
+}
 </style>
 </head>
 <body>
@@ -11215,8 +11257,8 @@ window.hapusLogoLogin = async () => {
         };
 
 
-// ===== GENERATE SURAT (DIPERBAIKI - LEBAR TEKS 16CM & RATA KANAN-KIRI SEMPURNA) =====
-window.generateSurat = (jenis) => {
+// ===== GENERATE SURAT (DIPERBAIKI - HANYA TTD YANG BERGERAK) =====
+window.generateSurat = async (jenis) => {
     let selectId, noSurat;
     if (jenis === 'SKBB') {
         selectId = 'pilihSantriSkbb';
@@ -11255,14 +11297,9 @@ window.generateSurat = (jenis) => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
 
-    // ===== KONFIGURASI LEBAR TEKS 16 CM (160 MM) =====
-    const PAGE_WIDTH = doc.internal.pageSize.width; // 210 mm untuk A4
-    const MARGIN_LEFT = 25;   // Margin kiri 25 mm
-    const MARGIN_RIGHT = 25;  // Margin kanan 25 mm
-    const TEXT_WIDTH = 160;   // LEBAR TEKS 16 CM (160 mm) - KONSISTEN UNTUK SEMUA TEKS
-    
-    // Posisi X untuk teks
-    const TEXT_X = MARGIN_LEFT;
+    const PAGE_WIDTH = doc.internal.pageSize.width;
+    const TEXT_X = 25;
+    const TEXT_WIDTH = 160;
 
     const kopSuratEl = document.getElementById('previewKopSurat');
     const kopSuratImg = kopSuratEl ? kopSuratEl.src : '';
@@ -11358,13 +11395,10 @@ window.generateSurat = (jenis) => {
     currentY += 3;
     doc.setFont("times", "normal");
 
-    // ===== FUNGSI JUSTIFY TEXT SEMPURNA (RATA KANAN-KIRI DENGAN SPASI MERATA) =====
+    // ===== FUNGSI JUSTIFY TEXT =====
     const justifyTextPerfect = (text, x, y, maxWidth, lineHeight) => {
-        // Split teks menjadi kata-kata
         const words = text.split(' ');
         if (words.length === 0) return y;
-        
-        // Jika hanya satu kata, langsung cetak
         if (words.length === 1) {
             doc.text(text, x, y);
             return y + lineHeight;
@@ -11375,7 +11409,6 @@ window.generateSurat = (jenis) => {
         let currentWidth = 0;
         const spaceWidth = doc.getTextWidth(' ');
 
-        // Bangun baris-baris dengan mempertimbangkan lebar maksimal
         for (let i = 0; i < words.length; i++) {
             const word = words[i];
             const wordWidth = doc.getTextWidth(word);
@@ -11385,17 +11418,13 @@ window.generateSurat = (jenis) => {
                 currentLine.push(word);
                 currentWidth = testWidth;
             } else {
-                // Jika kata tidak muat, simpan baris saat ini
                 if (currentLine.length > 0) {
                     lines.push(currentLine);
                 }
-                // Mulai baris baru dengan kata ini
                 currentLine = [word];
                 currentWidth = wordWidth;
                 
-                // Jika satu kata saja sudah melebihi maxWidth, force split
                 if (wordWidth > maxWidth) {
-                    // Pecah kata panjang dengan tanda hubung
                     const chars = word.split('');
                     let tempLine = [];
                     let tempWidth = 0;
@@ -11421,49 +11450,38 @@ window.generateSurat = (jenis) => {
             }
         }
 
-        // Tambahkan sisa baris terakhir
         if (currentLine.length > 0) {
             lines.push(currentLine);
         }
 
-        // Cetak setiap baris dengan rata kanan-kiri
         lines.forEach((lineWords, index) => {
             const isLastLine = (index === lines.length - 1);
             const lineText = lineWords.join(' ');
             
             if (isLastLine || lineWords.length === 1) {
-                // Baris terakhir atau hanya satu kata: rata kiri
                 doc.text(lineText, x, y);
             } else {
-                // Hitung lebar teks tanpa spasi
                 const totalWordWidth = lineWords.reduce((sum, w) => sum + doc.getTextWidth(w), 0);
                 const totalSpaces = lineWords.length - 1;
                 
                 if (totalSpaces > 0) {
-                    // Hitung spasi yang dibutuhkan untuk memenuhi maxWidth
                     const extraSpace = (maxWidth - totalWordWidth) / totalSpaces;
-                    
-                    // Bangun string dengan spasi diperlebar
                     let justifiedLine = '';
                     lineWords.forEach((word, idx) => {
                         justifiedLine += word;
                         if (idx < lineWords.length - 1) {
-                            // Tambahkan spasi dengan lebar yang diperbesar
                             const spaceCount = Math.max(1, Math.round(extraSpace / spaceWidth));
                             justifiedLine += ' '.repeat(spaceCount);
                         }
                     });
                     
-                    // Pastikan teks tidak melewati batas
                     let finalText = justifiedLine;
                     let finalWidth = doc.getTextWidth(finalText);
                     
-                    // Jika masih kurang, tambahkan spasi ekstra
                     if (finalWidth < maxWidth - 1) {
                         const remainingSpace = maxWidth - finalWidth;
                         const additionalSpaces = Math.floor(remainingSpace / spaceWidth);
                         if (additionalSpaces > 0 && totalSpaces > 0) {
-                            // Tambahkan spasi ekstra secara merata
                             const extraPerSpace = Math.floor(additionalSpaces / totalSpaces);
                             const extraRemainder = additionalSpaces % totalSpaces;
                             let newLine = '';
@@ -11491,38 +11509,31 @@ window.generateSurat = (jenis) => {
         return y;
     };
 
-    // ===== FUNGSI UNTUK PARAGRAF DENGAN RATA KANAN-KIRI =====
     const justifyParagraph = (text, x, y, maxWidth, lineHeight) => {
-        // Bersihkan teks dari spasi berlebih
         const cleanText = text.replace(/\s+/g, ' ').trim();
         return justifyTextPerfect(cleanText, x, y, maxWidth, lineHeight);
     };
 
-    // --- ISI SURAT DENGAN RATA KANAN-KIRI (LEBAR 16CM) ---
+    // --- ISI SURAT ---
     if (jenis === 'SKBB') {
         const keperluan = (document.getElementById('keperluanSkbb')?.value) || "Melanjutkan Pendidikan";
         
-        // Paragraf 1: Teks SKBB
         currentY = justifyParagraph(teksSKBB, TEXT_X, currentY, TEXT_WIDTH, 5.5);
         currentY += 4;
 
-        // Paragraf 2: Keperluan
         const keperluanText = `Surat keterangan ini diberikan kepada yang bersangkutan untuk keperluan: ${keperluan}.`;
         currentY = justifyParagraph(keperluanText, TEXT_X, currentY, TEXT_WIDTH, 5.5);
         currentY += 6;
 
-        // Paragraf 3: Penutup
         const penutup = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
         currentY = justifyParagraph(penutup, TEXT_X, currentY, TEXT_WIDTH, 5.5);
         currentY += 10;
 
     } else if (jenis === 'SKA') {
-        // Paragraf 1: Teks SKA
         const skaText = "Adalah benar nama yang bersangkutan tercatat sebagai santri yang masih aktif mengikuti proses belajar-mengajar pada Tahun Ajaran berjalan di Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy.";
         currentY = justifyParagraph(skaText, TEXT_X, currentY, TEXT_WIDTH, 5.5);
         currentY += 6;
 
-        // Paragraf 2: Penutup
         const penutup = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
         currentY = justifyParagraph(penutup, TEXT_X, currentY, TEXT_WIDTH, 5.5);
         currentY += 10;
@@ -11530,341 +11541,490 @@ window.generateSurat = (jenis) => {
     } else if (jenis === 'MUTASI') {
         const tujuanLembaga = (document.getElementById('tujuanMutasi')?.value) || "lembaga pendidikan baru";
         
-        // Paragraf 1: Teks Mutasi
         const mutasiText = `Adalah benar yang bersangkutan telah mengajukan permohonan pindah (mutasi) belajar dari Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy menuju ke ${tujuanLembaga}. Segala dokumen rekam akademik yang bersangkutan selama berada di lembaga ini telah diserahterimakan, dan sejak surat ini diterbitkan, tanggung jawab pembinaan formal dialihkan sepenuhnya kepada lembaga tujuan.`;
         currentY = justifyParagraph(mutasiText, TEXT_X, currentY, TEXT_WIDTH, 5.5);
         currentY += 6;
 
-        // Paragraf 2: Penutup
         const penutup = "Demikian surat keterangan ini diperbuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.";
         currentY = justifyParagraph(penutup, TEXT_X, currentY, TEXT_WIDTH, 5.5);
         currentY += 10;
     }
 
-    // --- TANDA TANGAN ---
+    // ============================================
+    // ===== TANDA TANGAN - HANYA TTD YANG BERGERAK =====
+    // ============================================
     const today = new Date();
     const options = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Jakarta' };
     const tanggalCetak = today.toLocaleDateString('id-ID', options);
     
-    // Posisi tanda tangan (rata kanan)
-    const ttdWidth = 50;
-    const ttdX = TEXT_X + TEXT_WIDTH - ttdWidth - 10;
-    const ttdY = Math.max(currentY + 4, 195);
+    // === POSISI ELEMEN TEKS TETAP ===
+    const ttdWidth = 65;
+    const ttdX = TEXT_X + TEXT_WIDTH - ttdWidth - 10; // POSISI TETAP UNTUK TEKS
+    
+    // === POSISI TTD DIGESER KE KIRI ===
+    const ttdImageOffset = 15; // Jarak pergeseran TTD ke kiri (dalam mm)
+    const ttdImageX = ttdX - ttdImageOffset; // Hanya gambar TTD yang digeser
+    
+    const ttdY = Math.max(currentY + 10, 195);
 
+    // CETAK TEKS TANDA TANGAN (TETAP DI POSISI SEMULA)
+    doc.setFont("times", "normal");
+    doc.setFontSize(10);
     doc.text(`Langkat, ${tanggalCetak}`, ttdX + ttdWidth/2, ttdY, { align: "center" });
     doc.text(kepalaJabatan, ttdX + ttdWidth/2, ttdY + 6, { align: "center" });
 
+    // CETAK TTD KEPALA (BERGERAK KE KIRI)
     if (ttdKepalaBase64 && ttdKepalaBase64.startsWith('data:image')) {
-        doc.addImage(ttdKepalaBase64, 'PNG', ttdX + 8, ttdY + 10, 35, 18);
+        try {
+            const img = new Image();
+            img.src = ttdKepalaBase64;
+            await new Promise((resolve) => {
+                img.onload = resolve;
+                img.onerror = resolve;
+            });
+            
+            let ttdImgWidth = 80;
+            let ttdImgHeight = 45;
+            
+            if (img.width && img.height && img.width > 0 && img.height > 0) {
+                const ratio = img.width / img.height;
+                if (ratio > 1.5) {
+                    ttdImgWidth = 80;
+                    ttdImgHeight = 80 / ratio;
+                } else if (ratio > 1) {
+                    ttdImgWidth = 75;
+                    ttdImgHeight = 75 / ratio;
+                } else if (ratio < 0.7) {
+                    ttdImgHeight = 45;
+                    ttdImgWidth = 45 * ratio;
+                } else {
+                    ttdImgWidth = 70;
+                    ttdImgHeight = 70 / ratio;
+                }
+            }
+            
+            ttdImgWidth = Math.min(ttdImgWidth, 85);
+            ttdImgHeight = Math.min(ttdImgHeight, 48);
+            
+            // Gunakan ttdImageX untuk posisi TTD (digeser ke kiri)
+            const ttdXPos = ttdImageX + (ttdWidth - ttdImgWidth) / 2;
+            const ttdYPos = ttdY + 6 + (14 - ttdImgHeight / 2);
+            doc.addImage(ttdKepalaBase64, 'PNG', ttdXPos, ttdYPos, ttdImgWidth, ttdImgHeight);
+        } catch (e) {
+            console.error('Error adding TTD:', e);
+        }
     }
 
+    // CETAK NAMA KEPALA (TETAP DI POSISI SEMULA)
     doc.setFont("times", "bold");
-    doc.text(kepalaNama, ttdX + ttdWidth/2, ttdY + 35, { align: "center" });
+    doc.setFontSize(10);
+    doc.text(kepalaNama, ttdX + ttdWidth/2, ttdY + 36, { align: "center" });
     doc.setLineWidth(0.3);
-    doc.line(ttdX, ttdY + 36.5, ttdX + ttdWidth, ttdY + 36.5);
+    doc.line(ttdX, ttdY + 37.5, ttdX + ttdWidth, ttdY + 37.5);
     doc.setFont("times", "normal");
-    doc.text("NIK. " + kepalaNik, ttdX + ttdWidth/2, ttdY + 41.5, { align: "center" });
+    doc.setFontSize(9);
+    doc.text("NIK. " + kepalaNik, ttdX + ttdWidth/2, ttdY + 43, { align: "center" });
 
-    doc.save(`${jenis}_${santriData.nama}.pdf`);
+    // ===== CETAK NOMOR HALAMAN (OVERLAY) =====
+    doc.setFont("times", "normal");
+    doc.setFontSize(8);
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.text(`Halaman ${i} dari ${totalPages}`, PAGE_WIDTH / 2, doc.internal.pageSize.height - 5, { align: "center" });
+    }
+
+    // Simpan PDF
+    const jenisSurat = jenis === 'SKBB' ? 'SKBB' : jenis === 'SKA' ? 'SKA' : 'Surat_Mutasi';
+    doc.save(`${jenisSurat}_${santriData.nama || 'santri'}.pdf`);
 };
 
 
 
-        // ===== PRINT BIODATA =====
-        window.printSelectedBiodata = async () => {
-            const { jsPDF } = window.jspdf;
-            const tbodyId = getCurrentTbodyId();
-            const selectedRows = document.querySelectorAll(`#${tbodyId} .row-check:checked`);
+// ===== PRINT BIODATA (DIPERBAIKI - TTD KEPALA & STAFF DINAIKKAN + TTD KEPALA DIPERBESAR) =====
+window.printSelectedBiodata = async () => {
+    const { jsPDF } = window.jspdf;
+    const tbodyId = getCurrentTbodyId();
+    const selectedRows = document.querySelectorAll(`#${tbodyId} .row-check:checked`);
 
-            if (selectedRows.length === 0) { alert("Pilih minimal satu santri!"); return; }
+    if (selectedRows.length === 0) { alert("Pilih minimal satu santri!"); return; }
 
-            const loader = document.getElementById('loader');
-            loader.style.display = 'flex';
+    const loader = document.getElementById('loader');
+    loader.style.display = 'flex';
 
-            const namaLembaga = document.querySelector('h4[contenteditable]')?.innerText || "PPS. IBNUL JAUZY";
-            const alamatLembaga = document.querySelector('p[contenteditable]')?.innerText || "";
-            const logoImg = document.getElementById('logoPreview');
+    const namaLembaga = document.querySelector('h4[contenteditable]')?.innerText || "PPS. IBNUL JAUZY";
+    const alamatLembaga = document.querySelector('p[contenteditable]')?.innerText || "";
+    const logoImg = document.getElementById('logoPreview');
 
-            const MARGIN_LEFT = 12;
-            const MARGIN_RIGHT = 12;
-            const MARGIN_TOP = 8;
-            const MARGIN_BOTTOM = 8;
+    const MARGIN_LEFT = 12;
+    const MARGIN_RIGHT = 12;
+    const MARGIN_TOP = 8;
+    const MARGIN_BOTTOM = 8;
 
-            const docBase = new jsPDF('p', 'mm', 'a4');
-            const pageHeight = docBase.internal.pageSize.height;
-            const pageWidth = docBase.internal.pageSize.width;
-            const doc = new jsPDF('p', 'mm', [pageWidth, pageHeight]);
+    const docBase = new jsPDF('p', 'mm', 'a4');
+    const pageHeight = docBase.internal.pageSize.height;
+    const pageWidth = docBase.internal.pageSize.width;
+    const doc = new jsPDF('p', 'mm', [pageWidth, pageHeight]);
 
-            const CONTENT_WIDTH = pageWidth - MARGIN_LEFT - MARGIN_RIGHT;
+    const CONTENT_WIDTH = pageWidth - MARGIN_LEFT - MARGIN_RIGHT;
 
-            const loadImageAsBase64 = (src) => {
-                return new Promise((resolve) => {
-                    if (!src || src.includes('via.placeholder') || src.startsWith('data:image/svg+xml')) {
-                        resolve(null);
-                        return;
-                    }
-                    const img = new Image();
-                    img.setAttribute('crossOrigin', 'anonymous');
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = this.width;
-                        canvas.height = this.height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(this, 0, 0);
-                        if (src.startsWith('data:image/png') || src.toLowerCase().includes('.png')) {
-                            resolve(canvas.toDataURL('image/png'));
-                        } else {
-                            resolve(canvas.toDataURL('image/jpeg'));
-                        }
-                    };
-                    img.onerror = () => resolve(null);
-                    img.src = src;
-                });
-            };
-
-            const logoBase64 = logoImg ? await loadImageAsBase64(logoImg.src) : null;
-
-            for (let index = 0; index < selectedRows.length; index++) {
-                const cb = selectedRows[index];
-                const row = cb.closest('tr');
-                const data = {};
-                row.querySelectorAll('[data-field]').forEach(el => {
-                    data[el.dataset.field] = el.value !== undefined ? el.value : el.innerText;
-                });
-
-                if (index > 0) doc.addPage([pageWidth, pageHeight]);
-
-                const usableHeight = pageHeight - MARGIN_TOP - MARGIN_BOTTOM;
-
-                let currentY = MARGIN_TOP;
-
-                if (logoBase64) {
-                    try {
-                        const format = logoBase64.startsWith('data:image/png') ? 'PNG' : 'JPEG';
-                        doc.addImage(logoBase64, format, MARGIN_LEFT + 2, currentY + 1, 20, 20);
-                    } catch (e) { console.error(e); }
-                }
-
-                const headerTextYOffset = logoBase64 ? 6 : 0;
-                
-                doc.setFontSize(12);
-                doc.setFont("helvetica", "bold");
-                doc.text("BIODATA INDUK SANTRI", pageWidth / 2, currentY + 5 + headerTextYOffset, { align: "center" });
-                
-                doc.setFontSize(9.5);
-                doc.text(namaLembaga.toUpperCase(), pageWidth / 2, currentY + 10 + headerTextYOffset, { align: "center" });
-                
-                doc.setFontSize(7.5);
-                doc.setFont("helvetica", "normal");
-                const splitAlamat = doc.splitTextToSize(alamatLembaga, CONTENT_WIDTH);
-                doc.text(splitAlamat, pageWidth / 2, currentY + 14.5 + headerTextYOffset, { align: "center" });
-                
-                const lineY = currentY + 19 + headerTextYOffset;
-                doc.setLineWidth(0.5);
-                doc.line(MARGIN_LEFT, lineY, pageWidth - MARGIN_RIGHT, lineY);
-                doc.setLineWidth(0.2);
-                doc.line(MARGIN_LEFT, lineY + 1, pageWidth - MARGIN_RIGHT, lineY + 1);
-                
-                currentY = lineY + 4;
-
-                if (logoBase64) {
-                    try {
-                        doc.saveGraphicsState();
-                        doc.setGState(new doc.GState({ opacity: 0.04 }));
-                        const wmSize = 60;
-                        const format = logoBase64.startsWith('data:image/png') ? 'PNG' : 'JPEG';
-                        doc.addImage(logoBase64, format, (pageWidth - wmSize) / 2, (pageHeight - wmSize) / 2 - 20, wmSize, wmSize);
-                        doc.restoreGraphicsState();
-                    } catch (e) { console.error(e); }
-                }
-
-                const santriPhoto = row.querySelector('.photo-preview');
-                const fotoWidth = 24;
-                const fotoHeight = 32;
-                const fotoX = pageWidth - MARGIN_RIGHT - fotoWidth;
-                const fotoSantriBase64 = santriPhoto ? await loadImageAsBase64(santriPhoto.src) : null;
-
-                if (fotoSantriBase64) {
-                    try {
-                        const format = fotoSantriBase64.startsWith('data:image/png') ? 'PNG' : 'JPEG';
-                        doc.addImage(fotoSantriBase64, format, fotoX, currentY, fotoWidth, fotoHeight);
-                        doc.rect(fotoX, currentY, fotoWidth, fotoHeight);
-                    } catch (e) { console.error(e); }
+    const loadImageAsBase64 = (src) => {
+        return new Promise((resolve) => {
+            if (!src || src.includes('via.placeholder') || src.startsWith('data:image/svg+xml')) {
+                resolve(null);
+                return;
+            }
+            const img = new Image();
+            img.setAttribute('crossOrigin', 'anonymous');
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = this.width;
+                canvas.height = this.height;
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(this, 0, 0);
+                if (src.startsWith('data:image/png') || src.toLowerCase().includes('.png')) {
+                    resolve(canvas.toDataURL('image/png'));
                 } else {
-                    doc.rect(fotoX, currentY, fotoWidth, fotoHeight);
-                    doc.setFontSize(6);
-                    doc.setFont("helvetica", "normal");
-                    doc.text("FOTO 3X4", fotoX + (fotoWidth / 2), currentY + (fotoHeight / 2), { align: "center" });
+                    resolve(canvas.toDataURL('image/jpeg'));
                 }
+            };
+            img.onerror = () => resolve(null);
+            img.src = src;
+        });
+    };
 
-                const renderSection = (title, dataRows) => {
-                    const remainingSpace = pageHeight - currentY - MARGIN_BOTTOM - 35;
-                    
-                    let totalEstimatedHeight = 0;
-                    const allRows = [];
-                    dataRows.forEach(row => {
-                        const text = row[1] || '';
-                        const splitText = doc.splitTextToSize(text, fotoX - MARGIN_LEFT - 10);
-                        const rowHeight = Math.max(4.5, splitText.length * 4 + 1.5);
-                        allRows.push({ row, height: rowHeight });
-                        totalEstimatedHeight += rowHeight + 1;
-                    });
-                    
-                    let fontSize = 8.5;
-                    let cellPadding = 0.8;
-                    
-                    totalEstimatedHeight += 10;
-                    
-                    if (totalEstimatedHeight > remainingSpace) {
-                        const shrinkFactor = Math.min(0.9, remainingSpace / totalEstimatedHeight);
-                        fontSize = Math.max(5.5, 8.5 * Math.max(0.65, shrinkFactor));
-                        cellPadding = Math.max(0.4, 0.8 * shrinkFactor * 0.8);
-                    }
+    const logoBase64 = logoImg ? await loadImageAsBase64(logoImg.src) : null;
 
-                    doc.setFillColor(242, 244, 245);
-                    const headerWidth = Math.min(fotoX - MARGIN_LEFT - 4, CONTENT_WIDTH);
-                    doc.rect(MARGIN_LEFT, currentY, headerWidth, 5, "F");
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(Math.min(8.5, fontSize + 1));
-                    doc.setTextColor(44, 62, 80);
-                    doc.text(title, MARGIN_LEFT + 3, currentY + 3.8);
-                    doc.setTextColor(0, 0, 0);
-                    currentY += 5.5;
+    for (let index = 0; index < selectedRows.length; index++) {
+        const cb = selectedRows[index];
+        const row = cb.closest('tr');
+        const data = {};
+        row.querySelectorAll('[data-field]').forEach(el => {
+            data[el.dataset.field] = el.value !== undefined ? el.value : el.innerText;
+        });
 
-                    doc.autoTable({
-                        startY: currentY,
-                        margin: { left: MARGIN_LEFT + 2, right: MARGIN_RIGHT + 2 },
-                        body: dataRows,
-                        theme: 'plain',
-                        styles: { 
-                            fontSize: fontSize, 
-                            cellPadding: cellPadding, 
-                            textColor: [0, 0, 0], 
-                            font: "helvetica" 
-                        },
-                        columnStyles: { 
-                            0: { cellWidth: 30, fontStyle: 'bold' },
-                            1: { cellWidth: 'auto' }
-                        },
-                        tableWidth: 'auto'
-                    });
-                    currentY = doc.lastAutoTable.finalY + 2;
-                };
+        if (index > 0) doc.addPage([pageWidth, pageHeight]);
 
-                const personalData = [
-                    ["Nama Lengkap", `: ${data.nama?.toUpperCase() || '-'}`],
-                    ["Tempat / Tanggal Lahir", `: ${data.tmp_lahir || '-'}, ${data.tgl_lahir || '-'}`],
-                    ["Jenis Kelamin", `: ${data.jk || '-'}`],
-                    ["No. Induk Kependudukan (NIK)", `: ${data.nik || '-'}`],
-                    ["NISN / NISM", `: ${data.nisn || '-'} / ${data.nism || '-'}`],
-                    ["Status / Anak Ke-", `: ${data.stat_anak || '-'} (Anak ke ${data.anak_ke || '-'})`],
-                    ["Alamat Tempat Tinggal", `: ${data.alamat || '-'}`],
-                    ["Desa / Kelurahan", `: ${data.desa || '-'}`],
-                    ["Kecamatan", `: ${data.kec || '-'}`],
-                    ["Kabupaten / Kota", `: ${data.kab || '-'}`]
-                ];
-                renderSection("A. DATA PRIBADI SANTRI", personalData);
+        const usableHeight = pageHeight - MARGIN_TOP - MARGIN_BOTTOM;
 
-                const parentData = [
-                    ["Nama Lengkap Ayah", `: ${data.ayah || '-'}`],
-                    ["Pekerjaan Ayah", `: ${data.pek_ayah || '-'}`],
-                    ["Nama Lengkap Ibu", `: ${data.ibu || '-'}`],
-                    ["Pekerjaan Ibu", `: ${data.pek_ibu || '-'}`],
-                    ["No. HP / WA Orang Tua", `: ${data.hp_ayah || data.hp_ibu || '-'}`]
-                ];
-                renderSection("B. DATA ORANG TUA KANDUNG", parentData);
+        let currentY = MARGIN_TOP;
 
-                const waliData = [
-                    ["Nama Lengkap Wali", `: ${data.nama_wali || '-'}`],
-                    ["Hubungan Keluarga", `: ${data.hub_wali || '-'}`],
-                    ["Pekerjaan Wali", `: ${data.pek_wali || '-'}`],
-                    ["No. HP / WA Wali", `: ${data.hp_wali || '-'}`],
-                    ["Alamat Lengkap Wali", `: ${data.almt_wali || '-'}`]
-                ];
-                renderSection("C. DATA WALI SANTRI (PENGGANTI)", waliData);
+        // ===== HEADER =====
+        if (logoBase64) {
+            try {
+                const format = logoBase64.startsWith('data:image/png') ? 'PNG' : 'JPEG';
+                doc.addImage(logoBase64, format, MARGIN_LEFT + 2, currentY + 1, 20, 20);
+            } catch (e) { console.error(e); }
+        }
 
-                const eduData = [
-                    ["Asal Sekolah / Madrasah", `: ${data.sekolah_asal || '-'}`],
-                    ["Jenjang Pendidikan", `: ${data.jenjang || '-'}`],
-                    ["Kelas Berjalan", `: Kelas ${data.kls_now || '-'}`],
-                    ["Program Unggulan", `: ${data.program || '-'}`],
-                    ["Tanggal Masuk Lembaga", `: ${data.tgl_masuk || '-'}`],
-                    ["Status Santri", `: ${data.stat_akhir || 'Aktif'}`]
-                ];
-                renderSection("D. KETERANGAN AKADEMIK & LEMBAGA", eduData);
+        const headerTextYOffset = logoBase64 ? 6 : 0;
+        
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.text("BIODATA INDUK SANTRI", pageWidth / 2, currentY + 5 + headerTextYOffset, { align: "center" });
+        
+        doc.setFontSize(9.5);
+        doc.text(namaLembaga.toUpperCase(), pageWidth / 2, currentY + 10 + headerTextYOffset, { align: "center" });
+        
+        doc.setFontSize(7.5);
+        doc.setFont("helvetica", "normal");
+        const splitAlamat = doc.splitTextToSize(alamatLembaga, CONTENT_WIDTH);
+        doc.text(splitAlamat, pageWidth / 2, currentY + 14.5 + headerTextYOffset, { align: "center" });
+        
+        const lineY = currentY + 19 + headerTextYOffset;
+        doc.setLineWidth(0.5);
+        doc.line(MARGIN_LEFT, lineY, pageWidth - MARGIN_RIGHT, lineY);
+        doc.setLineWidth(0.2);
+        doc.line(MARGIN_LEFT, lineY + 1, pageWidth - MARGIN_RIGHT, lineY + 1);
+        
+        currentY = lineY + 4;
 
-                let finalY = doc.lastAutoTable.finalY + 3;
-                const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        // ===== WATERMARK =====
+        if (logoBase64) {
+            try {
+                doc.saveGraphicsState();
+                doc.setGState(new doc.GState({ opacity: 0.04 }));
+                const wmSize = 60;
+                const format = logoBase64.startsWith('data:image/png') ? 'PNG' : 'JPEG';
+                doc.addImage(logoBase64, format, (pageWidth - wmSize) / 2, (pageHeight - wmSize) / 2 - 20, wmSize, wmSize);
+                doc.restoreGraphicsState();
+            } catch (e) { console.error(e); }
+        }
 
-                doc.setFontSize(6.5);
-                doc.setFont("helvetica", "italic");
-                doc.text(`Dokumen dicetak pada: ${today}`, MARGIN_LEFT, finalY);
+        // ===== FOTO SANTRI =====
+        const santriPhoto = row.querySelector('.photo-preview');
+        const fotoWidth = 24;
+        const fotoHeight = 32;
+        const fotoX = pageWidth - MARGIN_RIGHT - fotoWidth;
+        const fotoSantriBase64 = santriPhoto ? await loadImageAsBase64(santriPhoto.src) : null;
 
-                const ttdY = finalY + 5;
-                const ttdWidth = 50;
-                
-                const leftX = MARGIN_LEFT + 5;
-                const rightX = pageWidth - MARGIN_RIGHT - ttdWidth - 5;
-                
-                const footerHeight = 32;
-                if (ttdY + footerHeight > pageHeight - MARGIN_BOTTOM) {
-                    const compressFactor = (pageHeight - MARGIN_BOTTOM - ttdY) / footerHeight;
-                    if (compressFactor < 0.7) {
-                        doc.setFontSize(5.5);
-                    }
-                }
+        if (fotoSantriBase64) {
+            try {
+                const format = fotoSantriBase64.startsWith('data:image/png') ? 'PNG' : 'JPEG';
+                doc.addImage(fotoSantriBase64, format, fotoX, currentY, fotoWidth, fotoHeight);
+                doc.rect(fotoX, currentY, fotoWidth, fotoHeight);
+            } catch (e) { console.error(e); }
+        } else {
+            doc.rect(fotoX, currentY, fotoWidth, fotoHeight);
+            doc.setFontSize(6);
+            doc.setFont("helvetica", "normal");
+            doc.text("FOTO 3X4", fotoX + (fotoWidth / 2), currentY + (fotoHeight / 2), { align: "center" });
+        }
 
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(7.5);
-                
-                doc.text("Mengetahui,", leftX + ttdWidth/2, ttdY, { align: "center" });
-                doc.text(dataStrukturGlobal.jabatanKepala || "Kepala Lembaga / Pesantren,", leftX + ttdWidth/2, ttdY + 4, { align: "center" });
-
-                const ttdKepalaBase64 = dataStrukturGlobal.ttdKepala ? await loadImageAsBase64(dataStrukturGlobal.ttdKepala) : null;
-                if (ttdKepalaBase64) {
-                    try {
-                        doc.addImage(ttdKepalaBase64, 'PNG', leftX + 8, ttdY + 5, 30, 12);
-                    } catch (e) { console.error(e); }
-                }
-
-                doc.setFont("helvetica", "bold");
-                doc.text(dataStrukturGlobal.namaKepala || "( _______________________ )", leftX + ttdWidth/2, ttdY + 21, { align: "center" });
-                if (dataStrukturGlobal.nikKepala) {
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(6.5);
-                    doc.text(`NIK. ${dataStrukturGlobal.nikKepala}`, leftX + ttdWidth/2, ttdY + 25, { align: "center" });
-                }
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(7.5);
-                doc.text(dataStrukturGlobal.jabatanStaff || "Staf Administrasi Kesantrian,", rightX + ttdWidth/2, ttdY + 4, { align: "center" });
-
-                const ttdStaffBase64 = dataStrukturGlobal.ttdStaff ? await loadImageAsBase64(dataStrukturGlobal.ttdStaff) : null;
-                if (ttdStaffBase64) {
-                    try {
-                        doc.addImage(ttdStaffBase64, 'PNG', rightX + 8, ttdY + 5, 30, 12);
-                    } catch (e) { console.error(e); }
-                }
-
-                doc.setFont("helvetica", "bold");
-                doc.text(dataStrukturGlobal.namaStaff || "( _______________________ )", rightX + ttdWidth/2, ttdY + 21, { align: "center" });
-                if (dataStrukturGlobal.nikStaff) {
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(6.5);
-                    doc.text(`NIK. ${dataStrukturGlobal.nikStaff}`, rightX + ttdWidth/2, ttdY + 25, { align: "center" });
-                }
+        // ===== RENDER SECTION =====
+        const renderSection = (title, dataRows) => {
+            const remainingSpace = pageHeight - currentY - MARGIN_BOTTOM - 35;
+            
+            let totalEstimatedHeight = 0;
+            const allRows = [];
+            dataRows.forEach(row => {
+                const text = row[1] || '';
+                const splitText = doc.splitTextToSize(text, fotoX - MARGIN_LEFT - 10);
+                const rowHeight = Math.max(4.5, splitText.length * 4 + 1.5);
+                allRows.push({ row, height: rowHeight });
+                totalEstimatedHeight += rowHeight + 1;
+            });
+            
+            let fontSize = 8.5;
+            let cellPadding = 0.8;
+            
+            totalEstimatedHeight += 10;
+            
+            if (totalEstimatedHeight > remainingSpace) {
+                const shrinkFactor = Math.min(0.9, remainingSpace / totalEstimatedHeight);
+                fontSize = Math.max(5.5, 8.5 * Math.max(0.65, shrinkFactor));
+                cellPadding = Math.max(0.4, 0.8 * shrinkFactor * 0.8);
             }
 
-            loader.style.display = 'none';
-            doc.autoPrint();
-            const blobUrl = doc.output('bloburl');
-            const printWindow = window.open(blobUrl, '_blank');
-            if (!printWindow) {
-                alert("Jendela cetak diblokir. Mengunduh PDF...");
-                doc.save(`Biodata_Santri_${new Date().getTime()}.pdf`);
-            }
+            doc.setFillColor(242, 244, 245);
+            const headerWidth = Math.min(fotoX - MARGIN_LEFT - 4, CONTENT_WIDTH);
+            doc.rect(MARGIN_LEFT, currentY, headerWidth, 5, "F");
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(Math.min(8.5, fontSize + 1));
+            doc.setTextColor(44, 62, 80);
+            doc.text(title, MARGIN_LEFT + 3, currentY + 3.8);
+            doc.setTextColor(0, 0, 0);
+            currentY += 5.5;
+
+            doc.autoTable({
+                startY: currentY,
+                margin: { left: MARGIN_LEFT + 2, right: MARGIN_RIGHT + 2 },
+                body: dataRows,
+                theme: 'plain',
+                styles: { 
+                    fontSize: fontSize, 
+                    cellPadding: cellPadding, 
+                    textColor: [0, 0, 0], 
+                    font: "helvetica" 
+                },
+                columnStyles: { 
+                    0: { cellWidth: 30, fontStyle: 'bold' },
+                    1: { cellWidth: 'auto' }
+                },
+                tableWidth: 'auto'
+            });
+            currentY = doc.lastAutoTable.finalY + 2;
         };
+
+        // ===== DATA PRIBADI =====
+        const personalData = [
+            ["Nama Lengkap", `: ${data.nama?.toUpperCase() || '-'}`],
+            ["Tempat / Tanggal Lahir", `: ${data.tmp_lahir || '-'}, ${data.tgl_lahir || '-'}`],
+            ["Jenis Kelamin", `: ${data.jk || '-'}`],
+            ["No. Induk Kependudukan (NIK)", `: ${data.nik || '-'}`],
+            ["NISN / NISM", `: ${data.nisn || '-'} / ${data.nism || '-'}`],
+            ["Status / Anak Ke-", `: ${data.stat_anak || '-'} (Anak ke ${data.anak_ke || '-'})`],
+            ["Alamat Tempat Tinggal", `: ${data.alamat || '-'}`],
+            ["Desa / Kelurahan", `: ${data.desa || '-'}`],
+            ["Kecamatan", `: ${data.kec || '-'}`],
+            ["Kabupaten / Kota", `: ${data.kab || '-'}`]
+        ];
+        renderSection("A. DATA PRIBADI SANTRI", personalData);
+
+        // ===== DATA ORANG TUA =====
+        const parentData = [
+            ["Nama Lengkap Ayah", `: ${data.ayah || '-'}`],
+            ["Pekerjaan Ayah", `: ${data.pek_ayah || '-'}`],
+            ["Nama Lengkap Ibu", `: ${data.ibu || '-'}`],
+            ["Pekerjaan Ibu", `: ${data.pek_ibu || '-'}`],
+            ["No. HP / WA Orang Tua", `: ${data.hp_ayah || data.hp_ibu || '-'}`]
+        ];
+        renderSection("B. DATA ORANG TUA KANDUNG", parentData);
+
+        // ===== DATA WALI =====
+        const waliData = [
+            ["Nama Lengkap Wali", `: ${data.nama_wali || '-'}`],
+            ["Hubungan Keluarga", `: ${data.hub_wali || '-'}`],
+            ["Pekerjaan Wali", `: ${data.pek_wali || '-'}`],
+            ["No. HP / WA Wali", `: ${data.hp_wali || '-'}`],
+            ["Alamat Lengkap Wali", `: ${data.almt_wali || '-'}`]
+        ];
+        renderSection("C. DATA WALI SANTRI (PENGGANTI)", waliData);
+
+        // ===== DATA AKADEMIK =====
+        const eduData = [
+            ["Asal Sekolah / Madrasah", `: ${data.sekolah_asal || '-'}`],
+            ["Jenjang Pendidikan", `: ${data.jenjang || '-'}`],
+            ["Kelas Berjalan", `: Kelas ${data.kls_now || '-'}`],
+            ["Program Unggulan", `: ${data.program || '-'}`],
+            ["Tanggal Masuk Lembaga", `: ${data.tgl_masuk || '-'}`],
+            ["Status Santri", `: ${data.stat_akhir || 'Aktif'}`]
+        ];
+        renderSection("D. KETERANGAN AKADEMIK & LEMBAGA", eduData);
+
+        // ===== FOOTER & TANDA TANGAN =====
+        let finalY = doc.lastAutoTable.finalY + 3;
+        const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        doc.setFontSize(6.5);
+        doc.setFont("helvetica", "italic");
+        doc.text(`Dokumen dicetak pada: ${today}`, MARGIN_LEFT, finalY);
+
+        const ttdY = finalY + 5;
+        const ttdWidth = 50;
+        
+        const leftX = MARGIN_LEFT + 5;
+        const rightX = pageWidth - MARGIN_RIGHT - ttdWidth - 5;
+        
+        const footerHeight = 32;
+        if (ttdY + footerHeight > pageHeight - MARGIN_BOTTOM) {
+            const compressFactor = (pageHeight - MARGIN_BOTTOM - ttdY) / footerHeight;
+            if (compressFactor < 0.7) {
+                doc.setFontSize(5.5);
+            }
+        }
+
+        // ===== CETAK TEKS TANDA TANGAN (DI BAWAH) =====
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        
+        // Teks di kiri (Kepala)
+        doc.text("Mengetahui,", leftX + ttdWidth/2, ttdY, { align: "center" });
+        doc.text(dataStrukturGlobal.jabatanKepala || "Kepala Lembaga / Pesantren,", leftX + ttdWidth/2, ttdY + 4, { align: "center" });
+        
+        // Nama Kepala (teks di bawah TTD)
+        doc.setFont("helvetica", "bold");
+        doc.text(dataStrukturGlobal.namaKepala || "( _______________________ )", leftX + ttdWidth/2, ttdY + 21, { align: "center" });
+        if (dataStrukturGlobal.nikKepala) {
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(6.5);
+            doc.text(`NIK. ${dataStrukturGlobal.nikKepala}`, leftX + ttdWidth/2, ttdY + 25, { align: "center" });
+        }
+
+        // Teks di kanan (Staff)
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        doc.text(dataStrukturGlobal.jabatanStaff || "Staf Administrasi Kesantrian,", rightX + ttdWidth/2, ttdY + 4, { align: "center" });
+        
+        // Nama Staff (teks di bawah TTD)
+        doc.setFont("helvetica", "bold");
+        doc.text(dataStrukturGlobal.namaStaff || "( _______________________ )", rightX + ttdWidth/2, ttdY + 21, { align: "center" });
+        if (dataStrukturGlobal.nikStaff) {
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(6.5);
+            doc.text(`NIK. ${dataStrukturGlobal.nikStaff}`, rightX + ttdWidth/2, ttdY + 25, { align: "center" });
+        }
+
+        // ================================================================
+        // ===== TTD OVERLAY - TTD KEPALA & STAFF DINAIKKAN =====
+        // ================================================================
+        
+        // ===== TTD KEPALA - DIPERBESAR, DIGESER KIRI, DAN NAIK =====
+        const ttdKepalaBase64 = dataStrukturGlobal.ttdKepala ? await loadImageAsBase64(dataStrukturGlobal.ttdKepala) : null;
+        if (ttdKepalaBase64) {
+            // *** PERUBAHAN: TTD KEPALA NAIK 6mm (dari posisi semula) ***
+            const ttdYPos = ttdY + 2;  // <-- DINAIKKAN LEBIH TINGGI (sebelumnya +8, sekarang +2)
+            
+            // TTD KEPALA DIPERBESAR
+            const ttdMaxWidth = 60;
+            const ttdMaxHeight = 24;
+            
+            // GESER TTD KEPALA KE KIRI
+            const ttdOffsetX = -10;
+            
+            try {
+                const img = new Image();
+                img.src = ttdKepalaBase64;
+                await new Promise((resolve) => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                });
+                
+                let width = ttdMaxWidth;
+                let height = ttdMaxHeight;
+                
+                if (img.width && img.height && img.width > 0 && img.height > 0) {
+                    const ratio = img.width / img.height;
+                    if (ratio > 1) {
+                        width = ttdMaxWidth;
+                        height = ttdMaxWidth / ratio;
+                    } else {
+                        height = ttdMaxHeight;
+                        width = ttdMaxHeight * ratio;
+                    }
+                }
+                
+                const xOffset = (ttdWidth - width) / 2 + ttdOffsetX;
+                const yOffset = (ttdMaxHeight - height) / 2;
+                doc.addImage(ttdKepalaBase64, 'PNG', leftX + xOffset, ttdYPos + yOffset, width, height);
+            } catch (e) {
+                console.error('Error adding TTD Kepala overlay:', e);
+            }
+        }
+
+        // ===== TTD STAFF - UKURAN NORMAL, NAIK =====
+        const ttdStaffBase64 = dataStrukturGlobal.ttdStaff ? await loadImageAsBase64(dataStrukturGlobal.ttdStaff) : null;
+        if (ttdStaffBase64) {
+            // *** PERUBAHAN: TTD STAFF NAIK 6mm (dari posisi semula) ***
+            const ttdYPos = ttdY + 2;  // <-- DINAIKKAN LEBIH TINGGI (sebelumnya +8, sekarang +2)
+            
+            // Ukuran normal
+            const ttdMaxWidth = 45;
+            const ttdMaxHeight = 18;
+            
+            try {
+                const img = new Image();
+                img.src = ttdStaffBase64;
+                await new Promise((resolve) => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                });
+                
+                let width = ttdMaxWidth;
+                let height = ttdMaxHeight;
+                
+                if (img.width && img.height && img.width > 0 && img.height > 0) {
+                    const ratio = img.width / img.height;
+                    if (ratio > 1) {
+                        width = ttdMaxWidth;
+                        height = ttdMaxWidth / ratio;
+                    } else {
+                        height = ttdMaxHeight;
+                        width = ttdMaxHeight * ratio;
+                    }
+                }
+                
+                const xOffset = (ttdWidth - width) / 2;
+                const yOffset = (ttdMaxHeight - height) / 2;
+                doc.addImage(ttdStaffBase64, 'PNG', rightX + xOffset, ttdYPos + yOffset, width, height);
+            } catch (e) {
+                console.error('Error adding TTD Staff overlay:', e);
+            }
+        }
+    }
+
+    loader.style.display = 'none';
+    doc.autoPrint();
+    const blobUrl = doc.output('bloburl');
+    const printWindow = window.open(blobUrl, '_blank');
+    if (!printWindow) {
+        alert("Jendela cetak diblokir. Mengunduh PDF...");
+        doc.save(`Biodata_Santri_${new Date().getTime()}.pdf`);
+    }
+};
+
+
 
         // ===== VALIDASI TANGGAL =====
         window.validateAndFixAllDates = async () => {
@@ -12003,6 +12163,7 @@ window.generateSurat = (jenis) => {
         };
 
 
+// ===== PREVIEW KTS (DIPERBAIKI - ASPEK RASIO TTD) =====
 window.previewKTS = () => {
     const wrapper = document.getElementById('ktsPreviewWrapper');
     
@@ -12030,10 +12191,11 @@ window.previewKTS = () => {
         const nama = data.nama || 'Tanpa Nama';
         const kelas = data.kls_now || '-';
         const nisn = data.nisn || '-';
-        const nik = data.nik || '-';  // NIK Santri
+        const nik = data.nik || '-';
         const ttl = `${data.tmp_lahir || '-'}, ${data.tgl_lahir || '-'}`;
         const foto = data.foto || '';
         const status = data.stat_akhir || 'Aktif';
+        const statusClass = status.toLowerCase().replace(' ', '-');
         
         const alamat = data.alamat || '';
         const desa = data.desa || '';
@@ -12047,8 +12209,6 @@ window.previewKTS = () => {
         if (kec) alamatLengkap += (alamatLengkap ? ', ' : '') + `Kec. ${kec}`;
         if (kab) alamatLengkap += (alamatLengkap ? ', ' : '') + `Kab. ${kab}`;
         if (prov) alamatLengkap += (alamatLengkap ? ', ' : '') + prov;
-        
-        const statusClass = status.toLowerCase().replace(' ', '-');
         
         html += `
             <div class="kts-card">
@@ -12077,7 +12237,11 @@ window.previewKTS = () => {
                 <div class="kts-footer">
                     <div class="kts-label-kepala">Diketahui oleh Kepala Sekolah</div>
                     <div class="kts-ttd">
-                        ${ttdKepala ? `<img src="${ttdKepala}" alt="Tanda Tangan">` : ''}
+                        ${ttdKepala ? `
+                            <div style="display: flex; justify-content: center; align-items: center; width: 100%; max-height: 24px; overflow: hidden;">
+                                <img src="${ttdKepala}" style="max-height: 24px; max-width: 55px; width: auto; height: auto; object-fit: contain;" alt="Tanda Tangan">
+                            </div>
+                        ` : ''}
                         <span class="kts-nama-kepala">${namaKepala}</span>
                     </div>
                     <div class="kts-lembaga">PPS. Ibnul Jauzy</div>
@@ -12090,6 +12254,7 @@ window.previewKTS = () => {
 };
 
 
+// ===== CETAK KTS (DIPERBAIKI - ASPEK RASIO TTD) =====
 window.printKTS = () => {
     if (ktsDataCache.length === 0) {
         alert("Tidak ada data santri. Silakan filter atau pilih santri terlebih dahulu.");
@@ -12110,7 +12275,7 @@ window.printKTS = () => {
         const nama = data.nama || 'Tanpa Nama';
         const kelas = data.kls_now || '-';
         const nisn = data.nisn || '-';
-        const nik = data.nik || '-';  // NIK Santri
+        const nik = data.nik || '-';
         const ttl = `${data.tmp_lahir || '-'}, ${data.tgl_lahir || '-'}`;
         const foto = data.foto || '';
         const status = data.stat_akhir || 'Aktif';
@@ -12165,7 +12330,11 @@ window.printKTS = () => {
                 <div style="font-size: 4.8px; color: #6c757d; margin-top: auto; border-top: 1px solid rgba(201, 168, 76, 0.10); padding-top: 4px; background: linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.02)); border-radius: 0 0 18px 18px;">
                     <div style="font-size: 5.5px; font-weight: 600; color: #495057; margin-bottom: 2px; letter-spacing: 0.8px; text-transform: uppercase; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; opacity: 0.8;">Diketahui oleh Kepala Sekolah</div>
                     <div style="display: flex; flex-direction: column; align-items: center;">
-                        ${ttdKepala ? `<img src="${ttdKepala}" style="max-height: 24px; max-width: 55px; object-fit: contain; margin-bottom: 1px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.04));" alt="TTD">` : ''}
+                        ${ttdKepala ? `
+                            <div style="display: flex; justify-content: center; align-items: center; width: 100%; max-height: 24px; overflow: hidden;">
+                                <img src="${ttdKepala}" style="max-height: 24px; max-width: 55px; width: auto; height: auto; object-fit: contain; margin-bottom: 1px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.04));" alt="TTD">
+                            </div>
+                        ` : ''}
                         <span style="font-size: 5.5px; font-weight: 700; color: #1a2639; font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: 0.5px;">${namaKepala}</span>
                     </div>
                     <div style="font-size: 4.8px; color: #6c757d; font-weight: 500; letter-spacing: 0.8px; margin-top: 1px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic;">PPS. Ibnul Jauzy</div>
@@ -12195,7 +12364,6 @@ window.printKTS = () => {
                     body { margin: 0; padding: 0; }
                     div { break-inside: avoid; page-break-inside: avoid; }
                 }
-                /* Style untuk NIK di print */
                 .kts-nik-print {
                     font-size: 6.5px;
                     color: #6c757d;
@@ -12207,6 +12375,22 @@ window.printKTS = () => {
                     .kts-nik-print {
                         font-size: 5.5px !important;
                     }
+                }
+                /* Pastikan TTD proporsional */
+                .ttd-container {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    max-height: 24px;
+                    overflow: hidden;
+                }
+                .ttd-container img {
+                    max-height: 24px;
+                    max-width: 55px;
+                    width: auto;
+                    height: auto;
+                    object-fit: contain;
                 }
             </style>
         </head>
@@ -12224,6 +12408,7 @@ window.printKTS = () => {
     `);
     printWindow.document.close();
 };
+
 
 
         // ===== SIMPAN DATA BARU =====
