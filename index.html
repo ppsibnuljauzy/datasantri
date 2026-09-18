@@ -3841,6 +3841,182 @@
             max-width: 45px !important;
         }
     }
+
+    /* ============================================================
+       ===== FIELD KOSONG BERWARNA ABU-ABU PADA TABEL =====
+       ============================================================ */
+    .editable-table .input-cell.is-empty,
+    .editable-table .input-cell:placeholder-shown {
+        background-color: #f0f2f5 !important;
+        color: #adb5bd !important;
+        border-color: #e9ecef !important;
+    }
+
+    .editable-table .input-cell.is-empty:focus,
+    .editable-table .input-cell:focus {
+        background-color: #ffffff !important;
+        color: var(--text-primary) !important;
+        border-color: var(--accent-color) !important;
+    }
+
+    /* Select kosong */
+    .editable-table select.input-cell.is-empty {
+        background-color: #f0f2f5 !important;
+        color: #adb5bd !important;
+    }
+
+    .editable-table select.input-cell.is-empty:focus {
+        background-color: #ffffff !important;
+        color: var(--text-primary) !important;
+    }
+
+    /* Input readonly yang kosong tetap abu-abu lebih gelap */
+    .editable-table .input-cell[readonly].is-empty {
+        background-color: #e9ecef !important;
+        color: #adb5bd !important;
+    }
+
+    /* Khusus input nama santri yang kosong */
+    .editable-table tbody td.col-nama-santri .input-nama-santri.is-empty {
+        background: #f0f2f5 !important;
+        color: #adb5bd !important;
+        border-left-color: #dee2e6 !important;
+    }
+
+    .editable-table tbody td.col-nama-santri .input-nama-santri.is-empty:focus {
+        background: #ffffff !important;
+        color: var(--text-primary) !important;
+        border-left-color: var(--accent-color) !important;
+    }
+
+    /* Dark mode */
+    [data-theme="dark"] .editable-table .input-cell.is-empty,
+    [data-theme="dark"] .editable-table .input-cell:placeholder-shown {
+        background-color: #1c2333 !important;
+        color: #484f58 !important;
+        border-color: #30363d !important;
+    }
+
+    [data-theme="dark"] .editable-table .input-cell.is-empty:focus {
+        background-color: #0d1117 !important;
+        color: #e6edf3 !important;
+        border-color: var(--accent-color) !important;
+    }
+
+    [data-theme="dark"] .editable-table select.input-cell.is-empty {
+        background-color: #1c2333 !important;
+        color: #484f58 !important;
+    }
+
+    [data-theme="dark"] .editable-table .input-cell[readonly].is-empty {
+        background-color: #161b22 !important;
+        color: #484f58 !important;
+    }
+
+    [data-theme="dark"] .editable-table tbody td.col-nama-santri .input-nama-santri.is-empty {
+        background: #1c2333 !important;
+        color: #484f58 !important;
+        border-left-color: #30363d !important;
+    }
+
+    [data-theme="dark"] .editable-table tbody td.col-nama-santri .input-nama-santri.is-empty:focus {
+        background: #0d1117 !important;
+        color: #e6edf3 !important;
+        border-left-color: var(--accent-color) !important;
+    }
+
+    /* Foto kosong */
+    .editable-table .photo-empty {
+        background: #f0f2f5 !important;
+        border: 2px dashed #dee2e6 !important;
+        color: #adb5bd !important;
+    }
+
+    [data-theme="dark"] .editable-table .photo-empty {
+        background: #1c2333 !important;
+        border-color: #30363d !important;
+    }
+
+    /* ===== FIELD KOSONG BERWARNA ABU-ABU ===== */
+    .modal-tambah-data .form-control:placeholder-shown:not(:focus):not([readonly]):not([type="file"]),
+    .modal-edit-data .form-control:placeholder-shown:not(:focus):not([readonly]):not([type="file"]) {
+        background-color: #f1f3f5 !important;
+        border-color: #dee2e6 !important;
+        color: #adb5bd !important;
+    }
+
+    .modal-tambah-data .form-select:invalid,
+    .modal-tambah-data .form-select:not(:focus):not([readonly])[data-empty="true"],
+    .modal-edit-data .form-select:invalid,
+    .modal-edit-data .form-select:not(:focus):not([readonly])[data-empty="true"] {
+        background-color: #f1f3f5 !important;
+        border-color: #dee2e6 !important;
+        color: #adb5bd !important;
+    }
+
+    .modal-tambah-data .form-control:not(:placeholder-shown):not([readonly]):not([type="file"]),
+    .modal-edit-data .form-control:not(:placeholder-shown):not([readonly]):not([type="file"]) {
+        background-color: #ffffff !important;
+        border-color: #e9ecef !important;
+        color: #2c3e50 !important;
+    }
+
+    .modal-tambah-data .form-select:valid:not([data-empty="true"]),
+    .modal-edit-data .form-select:valid:not([data-empty="true"]) {
+        background-color: #ffffff !important;
+        border-color: #e9ecef !important;
+        color: #2c3e50 !important;
+    }
+
+    .modal-tambah-data .form-control[readonly],
+    .modal-edit-data .form-control[readonly] {
+        background-color: #f1f3f5 !important;
+        color: #6c757d !important;
+    }
+
+    .modal-tambah-data .date-input:placeholder-shown:not(:focus),
+    .modal-edit-data .date-input:placeholder-shown:not(:focus) {
+        background-color: #f1f3f5 !important;
+        border-color: #dee2e6 !important;
+        color: #adb5bd !important;
+    }
+
+    /* Dark mode */
+    [data-theme="dark"] .modal-tambah-data .form-control:placeholder-shown:not(:focus):not([readonly]):not([type="file"]),
+    [data-theme="dark"] .modal-edit-data .form-control:placeholder-shown:not(:focus):not([readonly]):not([type="file"]) {
+        background-color: #1c2333 !important;
+        border-color: #30363d !important;
+        color: #484f58 !important;
+    }
+
+    [data-theme="dark"] .modal-tambah-data .form-select:invalid,
+    [data-theme="dark"] .modal-tambah-data .form-select:not(:focus)[data-empty="true"],
+    [data-theme="dark"] .modal-edit-data .form-select:invalid,
+    [data-theme="dark"] .modal-edit-data .form-select:not(:focus)[data-empty="true"] {
+        background-color: #1c2333 !important;
+        border-color: #30363d !important;
+        color: #484f58 !important;
+    }
+
+    [data-theme="dark"] .modal-tambah-data .form-control:not(:placeholder-shown):not([readonly]):not([type="file"]),
+    [data-theme="dark"] .modal-edit-data .form-control:not(:placeholder-shown):not([readonly]):not([type="file"]) {
+        background-color: #0d1117 !important;
+        border-color: #30363d !important;
+        color: #e6edf3 !important;
+    }
+
+    [data-theme="dark"] .modal-tambah-data .form-select:valid:not([data-empty="true"]),
+    [data-theme="dark"] .modal-edit-data .form-select:valid:not([data-empty="true"]) {
+        background-color: #0d1117 !important;
+        border-color: #30363d !important;
+        color: #e6edf3 !important;
+    }
+
+    [data-theme="dark"] .modal-tambah-data .form-control[readonly],
+    [data-theme="dark"] .modal-edit-data .form-control[readonly] {
+        background-color: #1c2333 !important;
+        color: #484f58 !important;
+    }
 </style>
 </head>
 <body>
@@ -4050,7 +4226,7 @@
                     <div class="col-md-4">
                         <label class="form-label small fw-semibold text-muted">Cari Santri</label>
                         <div class="d-flex gap-2">
-                            <input type="text" id="globalSearch" class="form-control form-control-sm" placeholder="🔍 Cari Nama Santri..." oninput="applyFilters()" style="flex: 1;">
+                            <input type="text" id="globalSearch" class="form-control form-control-sm" placeholder="🔍 Cari Nama Santri..." oninput="debouncedSearch()" style="flex: 1;">
                             <button class="btn btn-sm btn-outline-secondary" onclick="resetAllFilters()" title="Reset semua filter">
                                 <i class="bi bi-arrow-counterclockwise"></i> Reset
                             </button>
@@ -7049,23 +7225,29 @@
             badge.style.display = activeCount > 0 ? 'inline-block' : 'none';
         };
 
-        // ===== LOAD FILTER STATE =====
-        window.loadFilterPanelState = function() {
-            const isCollapsed = localStorage.getItem('filterPanelCollapsed') === 'true';
-            const wrapper = document.getElementById('filterSectionWrapper');
-            const btn = document.getElementById('filterToggleBtn');
-            
-            if (wrapper && btn) {
-                if (isCollapsed) {
-                    wrapper.classList.add('collapsed');
-                    btn.classList.add('collapsed');
-                } else {
-                    wrapper.classList.remove('collapsed');
-                    btn.classList.remove('collapsed');
-                }
-            }
-            updateFilterCountBadge();
-        };
+
+// ===== LOAD FILTER STATE =====
+window.loadFilterPanelState = function() {
+    const savedState = localStorage.getItem('filterPanelCollapsed');
+    
+    // Default: TERTUTUP jika belum pernah disimpan
+    const isCollapsed = savedState === null ? true : savedState === 'true';
+    
+    const wrapper = document.getElementById('filterSectionWrapper');
+    const btn = document.getElementById('filterToggleBtn');
+    
+    if (wrapper && btn) {
+        if (isCollapsed) {
+            wrapper.classList.add('collapsed');
+            btn.classList.add('collapsed');
+        } else {
+            wrapper.classList.remove('collapsed');
+            btn.classList.remove('collapsed');
+        }
+    }
+    updateFilterCountBadge();
+};
+
 
         // ===== DASHBOARD =====
         window.toggleDashboardView = (isDashboard) => {
@@ -7364,6 +7546,52 @@
         let dataStrukturGlobal = { namaKepala: "", jabatanKepala: "Kepala Lembaga", nikKepala: "", ttdKepala: "", namaStaff: "", jabatanStaff: "Staff Administrasi", nikStaff: "", ttdStaff: "" };
         let allDataCache = {};
         let ktsDataCache = [];
+
+
+// ===== SIMPAN FOTO KE KOLEKSI TERPISAH =====
+window.simpanFotoKeKoleksi = async (santriId, base64Foto) => {
+    if (!santriId || !base64Foto) return null;
+    
+    try {
+        const fotoRef = doc(db, "foto_santri", santriId);
+        await setDoc(fotoRef, {
+            santri_id: santriId,
+            foto: base64Foto,
+            updated_at: serverTimestamp()
+        });
+        return santriId;
+    } catch (error) {
+        console.error("Gagal simpan foto:", error);
+        throw error;
+    }
+};
+
+// ===== AMBIL FOTO DARI KOLEKSI TERPISAH =====
+window.ambilFotoDariKoleksi = async (santriId) => {
+    if (!santriId) return null;
+    
+    try {
+        const fotoDoc = await getDoc(doc(db, "foto_santri", santriId));
+        if (fotoDoc.exists()) {
+            return fotoDoc.data().foto || null;
+        }
+        return null;
+    } catch (error) {
+        console.error("Gagal ambil foto:", error);
+        return null;
+    }
+};
+
+// ===== HAPUS FOTO =====
+window.hapusFotoDariKoleksi = async (santriId) => {
+    if (!santriId) return;
+    try {
+        await deleteDoc(doc(db, "foto_santri", santriId));
+    } catch (error) {
+        console.error("Gagal hapus foto:", error);
+    }
+};
+
 
         let trenData = [];
         let trenDataFiltered = [];
@@ -9190,88 +9418,142 @@
             return constraints;
         };
 
-        window.loadDataPaging = async (collName, tbodyId, direction = 0, goToPage = null) => {
-            const loader = document.getElementById('loader');
-            loader.style.display = 'flex';
 
+window.loadDataPaging = async (collName, tbodyId, direction = 0, goToPage = null, isSearch = false) => {
+    const loader = document.getElementById('loader');
+    if (!isSearch) {
+        loader.style.display = 'flex';
+    }
+
+    try {
+        const collRef = collection(db, collName);
+        const constraints = buildFilterConstraints();
+        const searchTerm = document.getElementById('globalSearch').value.trim().toLowerCase();
+        
+        let q = query(collRef, ...constraints);
+        const snapshot = await getDocs(q);
+        let docs = snapshot.docs;
+        
+        if (searchTerm) {
+            docs = docs.filter(doc => {
+                const data = doc.data();
+                return (data.nama || '').toLowerCase().includes(searchTerm);
+            });
+        }
+        
+        allDataCache[tbodyId] = docs;
+        
+        const sortField = sortState[tbodyId]?.field;
+        const sortOrder = sortState[tbodyId]?.order || 'asc';
+        
+        if (sortField) {
+            docs.sort((a, b) => {
+                const dataA = a.data();
+                const dataB = b.data();
+                
+                let valA = getSortValue(dataA, sortField);
+                let valB = getSortValue(dataB, sortField);
+                
+                if (valA === undefined || valA === null) valA = '';
+                if (valB === undefined || valB === null) valB = '';
+                
+                if (typeof valA === 'number' && typeof valB === 'number') {
+                    return sortOrder === 'asc' ? valA - valB : valB - valA;
+                }
+                
+                const strA = String(valA);
+                const strB = String(valB);
+                const result = strA.localeCompare(strB);
+                return sortOrder === 'asc' ? result : -result;
+            });
+        }
+        
+        const totalDocs = docs.length;
+        const pageSize = pageSizeMap[tbodyId] || 10;
+        totalPages[tbodyId] = Math.max(1, Math.ceil(totalDocs / pageSize));
+        
+        let page = currentPage[tbodyId];
+        if (goToPage !== null && goToPage >= 1 && goToPage <= totalPages[tbodyId]) {
+            page = goToPage;
+        }
+        if (direction === -1) page = Math.max(1, page - 1);
+        if (direction === 1) page = Math.min(totalPages[tbodyId], page + 1);
+        currentPage[tbodyId] = page;
+        
+        const start = (page - 1) * pageSize;
+        const end = Math.min(start + pageSize, docs.length);
+        const pageDocs = docs.slice(start, end);
+        
+        const tbody = document.getElementById(tbodyId);
+        tbody.innerHTML = '';
+        
+        // ============================================================
+        // ===== AMBIL FOTO DARI KOLEKSI TERPISAH SECARA PARALEL =====
+        // ============================================================
+        // Cek dulu apakah ada data yang perlu foto di-load
+        const docsNeedFoto = pageDocs.filter(docSnap => {
+            const data = docSnap.data();
+            // Foto perlu di-load jika:
+            // 1. Tidak ada field foto sama sekali
+            // 2. Field foto ada tapi bukan base64 (misal kosong atau placeholder)
+            return !data.foto || !data.foto.startsWith('data:image');
+        });
+
+        // Load semua foto yang dibutuhkan secara paralel (Promise.all)
+        // Ini jauh lebih cepat daripada sequential await di dalam loop
+        const fotoMap = {};
+        if (docsNeedFoto.length > 0 && collName === 'data_santri') {
             try {
-                const collRef = collection(db, collName);
-                const constraints = buildFilterConstraints();
-                const searchTerm = document.getElementById('globalSearch').value.trim().toLowerCase();
-                
-                let q = query(collRef, ...constraints);
-                const snapshot = await getDocs(q);
-                let docs = snapshot.docs;
-                
-                if (searchTerm) {
-                    docs = docs.filter(doc => {
-                        const data = doc.data();
-                        return (data.nama || '').toLowerCase().includes(searchTerm);
-                    });
-                }
-                
-                allDataCache[tbodyId] = docs;
-                
-                const sortField = sortState[tbodyId]?.field;
-                const sortOrder = sortState[tbodyId]?.order || 'asc';
-                
-                if (sortField) {
-                    docs.sort((a, b) => {
-                        const dataA = a.data();
-                        const dataB = b.data();
-                        
-                        let valA = getSortValue(dataA, sortField);
-                        let valB = getSortValue(dataB, sortField);
-                        
-                        if (valA === undefined || valA === null) valA = '';
-                        if (valB === undefined || valB === null) valB = '';
-                        
-                        if (typeof valA === 'number' && typeof valB === 'number') {
-                            return sortOrder === 'asc' ? valA - valB : valB - valA;
+                const fotoPromises = docsNeedFoto.map(async (docSnap) => {
+                    try {
+                        const fotoDoc = await getDoc(doc(db, "foto_santri", docSnap.id));
+                        if (fotoDoc.exists()) {
+                            return { id: docSnap.id, foto: fotoDoc.data().foto || '' };
                         }
-                        
-                        const strA = String(valA);
-                        const strB = String(valB);
-                        const result = strA.localeCompare(strB);
-                        return sortOrder === 'asc' ? result : -result;
-                    });
-                }
-                
-                const totalDocs = docs.length;
-                const pageSize = pageSizeMap[tbodyId] || 10;
-                totalPages[tbodyId] = Math.max(1, Math.ceil(totalDocs / pageSize));
-                
-                let page = currentPage[tbodyId];
-                if (goToPage !== null && goToPage >= 1 && goToPage <= totalPages[tbodyId]) {
-                    page = goToPage;
-                }
-                if (direction === -1) page = Math.max(1, page - 1);
-                if (direction === 1) page = Math.min(totalPages[tbodyId], page + 1);
-                currentPage[tbodyId] = page;
-                
-                const start = (page - 1) * pageSize;
-                const end = Math.min(start + pageSize, docs.length);
-                const pageDocs = docs.slice(start, end);
-                
-                const tbody = document.getElementById(tbodyId);
-                tbody.innerHTML = '';
-                
-                pageDocs.forEach((docSnap, index) => {
-                    const data = docSnap.data();
-                    addRow(tbodyId, { id: docSnap.id, ...data }, start + index + 1);
+                    } catch (e) {
+                        console.warn(`Gagal load foto untuk ${docSnap.id}:`, e);
+                    }
+                    return { id: docSnap.id, foto: '' };
                 });
-                
-                updateSortHeaderUI(tbodyId);
-                updatePaginationUI(tbodyId);
-                updateFilterCountBadge();
-                
-            } catch (error) {
-                console.error("Error load data: ", error);
-                alert("Gagal memuat data.");
-            } finally {
-                loader.style.display = 'none';
+
+                const fotoResults = await Promise.all(fotoPromises);
+                fotoResults.forEach(result => {
+                    if (result.foto) {
+                        fotoMap[result.id] = result.foto;
+                    }
+                });
+            } catch (e) {
+                console.error("Gagal batch load foto:", e);
             }
-        };
+        }
+        
+        // Render baris dengan foto yang sudah di-load
+        pageDocs.forEach((docSnap, index) => {
+            const data = docSnap.data();
+            
+            // Gabungkan foto dari koleksi terpisah jika ada
+            if (fotoMap[docSnap.id]) {
+                data.foto = fotoMap[docSnap.id];
+            }
+            
+            addRow(tbodyId, { id: docSnap.id, ...data }, start + index + 1);
+        });
+        
+        // ===== UPDATE SEL KOSONG SETELAH SEMUA ROW DITAMBAHKAN =====
+        updateEmptyCells(tbodyId);
+        
+        updateSortHeaderUI(tbodyId);
+        updatePaginationUI(tbodyId);
+        updateFilterCountBadge();
+        
+    } catch (error) {
+        console.error("Error load data: ", error);
+        alert("Gagal memuat data.");
+    } finally {
+        loader.style.display = 'none';
+    }
+};
+
 
         function updateSortHeaderUI(tbodyId) {
             const headerId = getHeaderIdFromTbody(tbodyId);
@@ -9420,13 +9702,30 @@
             loadDataPaging(collName, tbodyId, 0, 1);
         };
 
-        window.applyFilters = () => {
-            const tbodyId = getCurrentTbodyId();
-            const collName = tbodyId === 'tbodySantri' ? 'data_santri' : (tbodyId === 'tbodyLulus' ? 'data_santri_lulus' : 'data_santri_mutasi');
-            currentPage[tbodyId] = 1;
-            loadDataPaging(collName, tbodyId, 0, 1);
-            updateFilterCountBadge();
-        };
+
+window.applyFilters = () => {
+    const tbodyId = getCurrentTbodyId();
+    const collName = tbodyId === 'tbodySantri' ? 'data_santri' : 
+                     (tbodyId === 'tbodyLulus' ? 'data_santri_lulus' : 'data_santri_mutasi');
+    currentPage[tbodyId] = 1;
+    loadDataPaging(collName, tbodyId, 0, 1, true);  // ← true = mode search, tanpa overlay
+    updateFilterCountBadge();
+};
+
+
+// ===== DEBOUNCE UNTUK PENCARIAN =====
+let searchDebounceTimer = null;
+
+window.debouncedSearch = function() {
+    if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+    }
+    // Tunggu 400ms setelah user berhenti mengetik, baru cari
+    searchDebounceTimer = setTimeout(() => {
+        applyFilters();
+    }, 400);
+};
+
 
         window.resetAllFilters = function() {
             document.getElementById('fKls').value = '';
@@ -9455,6 +9754,88 @@
             if (id === 'tab-mutasi') return 'tbodyMutasi';
             return 'tbodySantri';
         }
+
+        // ============================================================
+        // ===== FUNGSI DETEKSI INPUT KOSONG PADA TABEL =====
+        // ============================================================
+        window.updateEmptyCells = function(tbodyId) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+            
+            tbody.querySelectorAll('tr').forEach(row => {
+                row.querySelectorAll('[data-field]').forEach(input => {
+                    const fieldName = input.dataset.field || '';
+                    
+                    // Skip field yang memang readonly dan auto-generated
+                    const skipFields = ['umur', 'nis', 'nism', 'updated_at', 'created_at'];
+                    if (skipFields.includes(fieldName)) {
+                        // Tetap tandai sebagai empty jika kosong
+                    }
+                    
+                    const value = (input.value || '').trim();
+                    
+                    if (value === '') {
+                        input.classList.add('is-empty');
+                    } else {
+                        input.classList.remove('is-empty');
+                    }
+                });
+                
+                // Cek foto kosong
+                const photoInput = row.querySelector('[data-field="foto"]');
+                const photoPreview = row.querySelector('.photo-preview');
+                if (photoPreview) {
+                    const src = photoPreview.getAttribute('src') || '';
+                    if (!src || src.includes('via.placeholder') || src.includes('No+Foto')) {
+                        photoPreview.classList.add('photo-empty');
+                    } else {
+                        photoPreview.classList.remove('photo-empty');
+                    }
+                }
+            });
+        };
+
+        // ===== PASANG EVENT LISTENER KE SEMUA INPUT DI TABEL =====
+        window.attachEmptyDetection = function(tbodyId) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+            
+            // Deteksi perubahan pada input
+            tbody.addEventListener('input', function(e) {
+                if (e.target.matches('[data-field]')) {
+                    const value = (e.target.value || '').trim();
+                    if (value === '') {
+                        e.target.classList.add('is-empty');
+                    } else {
+                        e.target.classList.remove('is-empty');
+                    }
+                }
+            });
+            
+            // Deteksi perubahan pada select
+            tbody.addEventListener('change', function(e) {
+                if (e.target.matches('select[data-field]')) {
+                    const value = (e.target.value || '').trim();
+                    if (value === '') {
+                        e.target.classList.add('is-empty');
+                    } else {
+                        e.target.classList.remove('is-empty');
+                    }
+                }
+            });
+            
+            // Deteksi blur untuk memastikan
+            tbody.addEventListener('blur', function(e) {
+                if (e.target.matches('[data-field]')) {
+                    const value = (e.target.value || '').trim();
+                    if (value === '') {
+                        e.target.classList.add('is-empty');
+                    } else {
+                        e.target.classList.remove('is-empty');
+                    }
+                }
+            }, true);
+        };
 
         window.addRow = function(targetId, data = {}, rowNumber = null) {
             const tbody = document.getElementById(targetId);
@@ -9496,10 +9877,14 @@
                     const displayTime = val ? formatDate(val) : formatDate(new Date());
                     inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${displayTime}" readonly style="background-color: #f1f3f5; cursor: not-allowed; font-style: italic; color: #6c757d; font-size: 0.7rem; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; width: 100%; min-width: 80px;" placeholder="-">`;
                 } else if (col === 'foto') {
+                    const hasPhoto = val && val.startsWith('data:image');
                     inputHtml = `
                         <div class="text-center p-1" style="display: flex; align-items: center; justify-content: center;">
                             <input type="file" class="photo-input" hidden accept="image/*" onchange="handleRowPhoto(this)">
-                            <img src="${val || 'https://via.placeholder.com/40x50?text=FOTO'}" class="photo-preview" onclick="this.previousElementSibling.click()" style="cursor: pointer; border-radius: 4px; border: 1px solid var(--border-color);">
+                            <img src="${hasPhoto ? val : 'https://via.placeholder.com/40x50?text=FOTO'}" 
+                                 class="photo-preview ${hasPhoto ? '' : 'photo-empty'}" 
+                                 onclick="this.previousElementSibling.click()" 
+                                 style="cursor: pointer; border-radius: 4px; border: 1px solid var(--border-color);">
                             <input type="hidden" data-field="foto" value="${val}">
                         </div>`;
                 } else if (col === 'kode_absen') {
@@ -9573,6 +9958,26 @@
             if (data.tgl_masuk || data.tanggal_masuk) {
                 setTimeout(() => updateNIS(row), 100);
             }
+            
+            // ===== DETEKSI SEL KOSONG UNTUK ROW INI =====
+            setTimeout(() => {
+                row.querySelectorAll('[data-field]').forEach(input => {
+                    const value = (input.value || '').trim();
+                    if (value === '') {
+                        input.classList.add('is-empty');
+                    }
+                });
+                
+                // Cek foto
+                const photoPreview = row.querySelector('.photo-preview');
+                if (photoPreview) {
+                    const src = photoPreview.getAttribute('src') || '';
+                    if (!src || src.includes('via.placeholder') || src.includes('No+Foto')) {
+                        photoPreview.classList.add('photo-empty');
+                    }
+                }
+            }, 50);
+            
             return row;
         };
 
@@ -9871,19 +10276,60 @@
 
         window.formatTgl = window.formatDateInput;
 
-        window.handleRowPhoto = (input) => {
-            const file = input.files[0];
-            if (file) {
-                if (file.size > 500000) { alert("Ukuran foto maksimal 500KB."); return; }
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const row = input.closest('tr');
-                    row.querySelector('.photo-preview').src = e.target.result;
-                    row.querySelector('[data-field="foto"]').value = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
+window.handleRowPhoto = (input) => {
+    const file = input.files[0];
+    if (file) {
+        if (file.size > 500000) { 
+            alert("Ukuran foto maksimal 500KB."); 
+            input.value = '';
+            return; 
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const row = input.closest('tr');
+            const previewImg = row.querySelector('.photo-preview');
+            const fotoInput = row.querySelector('[data-field="foto"]');
+            
+            const img = new Image();
+            img.onload = async function() {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 200, MAX_HEIGHT = 250;
+                let width = img.width, height = img.height;
+                
+                if (width > height) {
+                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                } else {
+                    if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                }
+                
+                canvas.width = width; canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                
+                previewImg.src = compressedBase64;
+                previewImg.classList.remove('photo-empty');
+                if (fotoInput) fotoInput.value = compressedBase64;
+                
+                // ===== SIMPAN LANGSUNG KE KOLEKSI TERPISAH =====
+                const santriId = row.dataset.id;
+                if (santriId) {
+                    try {
+                        await simpanFotoKeKoleksi(santriId, compressedBase64);
+                        console.log('✅ Foto tersimpan otomatis untuk santri', santriId);
+                        // Kosongkan input agar tidak dobel simpan
+                        if (fotoInput) fotoInput.value = '';
+                    } catch (err) {
+                        console.warn('Gagal auto-save foto:', err);
+                    }
+                }
+            };
+            img.src = e.target.result;
         };
+        reader.readAsDataURL(file);
+    }
+};
+
 
         window.updateNIS = (row) => {
             const tglMasukInput = row.querySelector('[data-field="tgl_masuk"]');
@@ -9957,118 +10403,193 @@
         };
 
         // ===== SAVE & DELETE =====
-        window.saveAllData = async () => {
-            const rows = document.querySelectorAll('#tbodySantri tr');
-            if (rows.length === 0) return;
-            if (!confirm("Simpan semua perubahan ke Database?")) return;
+window.saveAllData = async () => {
+    const rows = document.querySelectorAll('#tbodySantri tr');
+    if (rows.length === 0) return;
+    if (!confirm("Simpan semua perubahan ke Database?")) return;
 
-            const loader = document.getElementById('loader');
-            loader.style.display = 'flex';
-            const batch = writeBatch(db);
+    const loader = document.getElementById('loader');
+    loader.style.display = 'flex';
+    const batch = writeBatch(db);
+    
+    const allData = [];
+    const fotoToSave = [];  // ← kumpulkan foto untuk disimpan terpisah
 
-            rows.forEach(row => {
-                const data = {};
-                row.querySelectorAll('[data-field]').forEach(input => {
-                    data[input.dataset.field] = input.value;
-                });
-                Object.keys(data).forEach(fieldName => {
-                    if (fieldName.includes('tgl') || fieldName.includes('tanggal')) {
-                        if (data[fieldName] && /^\d{2}\/\d{2}\/\d{4}$/.test(data[fieldName])) {
-                            data[fieldName] = data[fieldName];
-                        }
-                    }
-                });
-                data.updated_at = serverTimestamp();
+    rows.forEach(row => {
+        const data = {};
+        row.querySelectorAll('[data-field]').forEach(input => {
+            // SKIP field foto dari data utama
+            if (input.dataset.field === 'foto') return;
+            data[input.dataset.field] = input.value;
+        });
 
-                if (row.dataset.id) {
-                    batch.update(doc(db, "data_santri", row.dataset.id), data);
-                } else {
-                    const newRef = doc(collection(db, "data_santri"));
-                    data.created_at = serverTimestamp();
-                    batch.set(newRef, data);
+        // Handle tanggal
+        Object.keys(data).forEach(fieldName => {
+            if (fieldName.includes('tgl') || fieldName.includes('tanggal')) {
+                if (data[fieldName] && /^\d{2}\/\d{2}\/\d{4}$/.test(data[fieldName])) {
+                    data[fieldName] = data[fieldName];
                 }
-            });
-
-            try {
-                await batch.commit();
-                alert("Data Berhasil Disimpan!");
-                loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri']);
-            } catch (error) {
-                console.error("Error saving data: ", error);
-                alert("Gagal menyimpan data.");
-            } finally {
-                loader.style.display = 'none';
             }
-        };
+        });
+        data.updated_at = serverTimestamp();
+        
+        // Kumpulkan foto untuk disimpan terpisah
+        const fotoInput = row.querySelector('[data-field="foto"]');
+        const fotoPreview = row.querySelector('.photo-preview');
+        let fotoData = '';
+        
+        if (fotoInput && fotoInput.value && fotoInput.value.startsWith('data:image')) {
+            fotoData = fotoInput.value;
+        } else if (fotoPreview && fotoPreview.src && fotoPreview.src.startsWith('data:image')) {
+            fotoData = fotoPreview.src;
+        }
+        
+        if (fotoData) {
+            fotoToSave.push({ rowId: row.dataset.id, foto: fotoData });
+        }
+        
+        allData.push({ row, data });
+    });
 
-        window.saveTabSpecificData = async (collectionName, tbodyId) => {
-            const rows = document.querySelectorAll(`#${tbodyId} tr`);
-            if (rows.length === 0) return;
-            if (!confirm(`Simpan semua perubahan pada tabel ini ke ${collectionName}?`)) return;
-
-            const loader = document.getElementById('loader');
-            loader.style.display = 'flex';
-            const batch = writeBatch(db);
-            let count = 0;
-
-            rows.forEach(row => {
-                const data = {};
-                row.querySelectorAll('[data-field]').forEach(input => {
-                    data[input.dataset.field] = input.value || input.innerText;
-                });
-                Object.keys(data).forEach(fieldName => {
-                    if (fieldName.includes('tgl') || fieldName.includes('tanggal')) {
-                        if (data[fieldName] && /^\d{2}\/\d{2}\/\d{4}$/.test(data[fieldName])) {
-                            data[fieldName] = data[fieldName];
-                        }
-                    }
-                });
-                delete data.created_at;
-                data.updated_at = serverTimestamp();
-
-                if (row.dataset.id) {
-                    batch.update(doc(db, collectionName, row.dataset.id), data);
-                    count++;
-                } else if (data.nama) {
-                    const newRef = doc(collection(db, collectionName));
-                    batch.set(newRef, { ...data, created_at: serverTimestamp() });
-                    count++;
-                }
-            });
-
-            try {
-                if (count > 0) {
-                    await batch.commit();
-                    alert(`Berhasil menyimpan ${count} data.`);
-                } else {
-                    alert("Tidak ada perubahan data.");
-                }
-            } catch (error) {
-                alert("Gagal menyimpan: " + error.message);
-            } finally {
-                loader.style.display = 'none';
-            }
-        };
-
-        window.deleteRow = async (btn, coll) => {
-            const row = btn.closest('tr');
-            if (!confirm("Hapus data ini?")) return;
-
-            if (row.dataset.id) {
-                try {
-                    document.getElementById('loader').style.display = 'flex';
-                    await deleteDoc(doc(db, coll, row.dataset.id));
-                    row.remove();
-                    alert("Data berhasil dihapus.");
-                } catch (error) {
-                    alert("Gagal menghapus: " + error.message);
-                } finally {
-                    document.getElementById('loader').style.display = 'none';
-                }
+    try {
+        let savedCount = 0;
+        
+        // Simpan data utama (tanpa foto)
+        for (const item of allData) {
+            if (item.row.dataset.id) {
+                batch.update(doc(db, "data_santri", item.row.dataset.id), item.data);
             } else {
-                row.remove();
+                const newRef = doc(collection(db, "data_santri"));
+                item.data.created_at = serverTimestamp();
+                batch.set(newRef, item.data);
+                item.row.dataset.id = newRef.id; // ← simpan ID untuk foto
             }
-        };
+            savedCount++;
+        }
+        await batch.commit();
+
+        // Simpan foto ke koleksi terpisah (setelah dapat ID)
+        let fotoSavedCount = 0;
+        for (const fotoItem of fotoToSave) {
+            let santriId = fotoItem.rowId;
+            
+            // Jika row baru, ambil ID dari dataset yang sudah di-set
+            if (!santriId) {
+                const row = document.querySelector(`tr[data-id]`);
+                // Cari row yang sesuai
+                const targetRow = Array.from(document.querySelectorAll('#tbodySantri tr'))
+                    .find(r => r.querySelector('[data-field="foto"]')?.value === fotoItem.foto || 
+                               r.querySelector('.photo-preview')?.src === fotoItem.foto);
+                if (targetRow) santriId = targetRow.dataset.id;
+            }
+            
+            if (santriId) {
+                try {
+                    await simpanFotoKeKoleksi(santriId, fotoItem.foto);
+                    fotoSavedCount++;
+                } catch (e) {
+                    console.warn("Gagal simpan foto:", e);
+                }
+            }
+        }
+        
+        alert(`✅ ${savedCount} data tersimpan!\n📸 ${fotoSavedCount} foto tersimpan di koleksi terpisah.`);
+        loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri']);
+    } catch (error) {
+        console.error("Error saving data: ", error);
+        alert("Gagal menyimpan data: " + error.message);
+    } finally {
+        loader.style.display = 'none';
+    }
+};
+
+
+window.saveTabSpecificData = async (collectionName, tbodyId) => {
+    const rows = document.querySelectorAll(`#${tbodyId} tr`);
+    if (rows.length === 0) return;
+    if (!confirm(`Simpan semua perubahan pada tabel ini ke ${collectionName}?`)) return;
+
+    const loader = document.getElementById('loader');
+    loader.style.display = 'flex';
+    const batch = writeBatch(db);
+    let count = 0;
+
+    rows.forEach(row => {
+        const data = {};
+        row.querySelectorAll('[data-field]').forEach(input => {
+            data[input.dataset.field] = input.value || input.innerText || '';
+        });
+        
+        // Pastikan foto diambil dengan benar
+        const fotoInput = row.querySelector('[data-field="foto"]');
+        const fotoPreview = row.querySelector('.photo-preview');
+        if (fotoInput && fotoInput.value && fotoInput.value.startsWith('data:image')) {
+            data.foto = fotoInput.value;
+        } else if (fotoPreview && fotoPreview.src && fotoPreview.src.startsWith('data:image')) {
+            data.foto = fotoPreview.src;
+        }
+        
+        // Handle tanggal
+        Object.keys(data).forEach(fieldName => {
+            if (fieldName.includes('tgl') || fieldName.includes('tanggal')) {
+                if (data[fieldName] && /^\d{2}\/\d{2}\/\d{4}$/.test(data[fieldName])) {
+                    data[fieldName] = data[fieldName];
+                }
+            }
+        });
+        delete data.created_at;
+        data.updated_at = serverTimestamp();
+
+        if (row.dataset.id) {
+            batch.update(doc(db, collectionName, row.dataset.id), data);
+            count++;
+        } else if (data.nama) {
+            const newRef = doc(collection(db, collectionName));
+            batch.set(newRef, { ...data, created_at: serverTimestamp() });
+            count++;
+        }
+    });
+
+    try {
+        if (count > 0) {
+            await batch.commit();
+            alert(`Berhasil menyimpan ${count} data.`);
+        } else {
+            alert("Tidak ada perubahan data.");
+        }
+    } catch (error) {
+        alert("Gagal menyimpan: " + error.message);
+    } finally {
+        loader.style.display = 'none';
+    }
+};
+
+
+window.deleteRow = async (btn, coll) => {
+    const row = btn.closest('tr');
+    if (!confirm("Hapus data ini?")) return;
+
+    const docId = row.dataset.id;
+    
+    if (docId) {
+        try {
+            document.getElementById('loader').style.display = 'flex';
+            // Hapus data utama
+            await deleteDoc(doc(db, coll, docId));
+            // Hapus foto di koleksi terpisah
+            await hapusFotoDariKoleksi(docId);
+            row.remove();
+            alert("Data & foto berhasil dihapus.");
+        } catch (error) {
+            alert("Gagal menghapus: " + error.message);
+        } finally {
+            document.getElementById('loader').style.display = 'none';
+        }
+    } else {
+        row.remove();
+    }
+};
+
 
         window.bulkDelete = async () => {
             const tbodyId = getCurrentTbodyId();
@@ -10791,77 +11312,121 @@
         };
 
         // ===== BULK PHOTO =====
-        window.handleBulkPhotoUpload = async (input) => {
-            const file = input.files[0];
-            if (!file) return;
-            if (!file.name.endsWith('.zip')) { alert('Upload file ZIP!'); return; }
+window.handleBulkPhotoUpload = async (input) => {
+    const file = input.files[0];
+    if (!file) return;
+    if (!file.name.endsWith('.zip')) { alert('Upload file ZIP!'); return; }
 
-            const loader = document.getElementById('loader');
-            loader.style.display = 'flex';
+    const loader = document.getElementById('loader');
+    loader.style.display = 'flex';
 
-            try {
-                const JSZip = window.JSZip;
-                const zip = await JSZip.loadAsync(file);
-                const photoFiles = [];
+    try {
+        const zip = await JSZip.loadAsync(file);
+        const photoFiles = [];
 
-                for (const [filename, zipEntry] of Object.entries(zip.files)) {
-                    if (!zipEntry.dir && /\.(jpg|jpeg|png|gif|webp)$/i.test(filename)) {
-                        const blob = await zipEntry.async('blob');
-                        const base64 = await new Promise((resolve) => {
-                            const reader = new FileReader();
-                            reader.onload = () => resolve(reader.result);
-                            reader.readAsDataURL(blob);
-                        });
-                        const nameKey = filename.split('/').pop().replace(/\.[^/.]+$/, '').toLowerCase();
-                        photoFiles.push({ key: nameKey, base64: base64, filename: filename });
+        // Baca semua gambar dari ZIP
+        for (const [filename, zipEntry] of Object.entries(zip.files)) {
+            if (!zipEntry.dir && /\.(jpg|jpeg|png|gif|webp)$/i.test(filename)) {
+                const blob = await zipEntry.async('blob');
+                const nameKey = filename.split('/').pop().replace(/\.[^/.]+$/, '').toLowerCase();
+                photoFiles.push({ key: nameKey, blob: blob, filename });
+            }
+        }
+
+        if (photoFiles.length === 0) { alert('Tidak ada gambar dalam ZIP.'); return; }
+
+        // Fungsi kompres
+        const compressImage = (blob) => new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 200, MAX_HEIGHT = 250;
+                    let width = img.width, height = img.height;
+                    if (width > height) {
+                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                    } else {
+                        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
                     }
+                    canvas.width = width; canvas.height = height;
+                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.7));
+                };
+                img.onerror = () => resolve(null);
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(blob);
+        });
+
+        let updatedCount = 0;
+        let savedToDbCount = 0;
+        const rows = document.querySelectorAll('#tbodySantri tr');
+
+        for (const row of rows) {
+            const namaSantri = (row.querySelector('[data-field="nama"]')?.value || '').toLowerCase().trim();
+            const nisSantri = (row.querySelector('[data-field="nis"]')?.value || '').toLowerCase().trim();
+            const kodeAbsen = (row.querySelector('[data-field="kode_absen"]')?.value || '').toLowerCase().trim();
+            const fotoInput = row.querySelector('[data-field="foto"]');
+            const previewImg = row.querySelector('.photo-preview');
+
+            // Cari foto yang cocok
+            let matchedIndex = -1;
+            for (let i = 0; i < photoFiles.length; i++) {
+                const key = photoFiles[i].key;
+                if (key === namaSantri || (nisSantri && key === nisSantri) || 
+                    (kodeAbsen && key === kodeAbsen) ||
+                    (namaSantri && key.includes(namaSantri)) || 
+                    (nisSantri && key.includes(nisSantri))) {
+                    matchedIndex = i;
+                    break;
                 }
+            }
 
-                if (photoFiles.length === 0) { alert('Tidak ada gambar dalam ZIP.'); return; }
+            if (matchedIndex > -1) {
+                const compressedBase64 = await compressImage(photoFiles[matchedIndex].blob);
+                
+                if (compressedBase64 && fotoInput) {
+                    fotoInput.value = compressedBase64;
+                    if (previewImg) {
+                        previewImg.src = compressedBase64;
+                        previewImg.classList.remove('photo-empty');
+                    }
+                    updatedCount++;
 
-                let updatedCount = 0;
-                const rows = document.querySelectorAll('#tbodySantri tr');
-
-                for (const row of rows) {
-                    const namaInput = row.querySelector('[data-field="nama"]');
-                    const nisInput = row.querySelector('[data-field="nis"]');
-                    const kodeAbsenInput = row.querySelector('[data-field="kode_absen"]');
-                    const fotoInput = row.querySelector('[data-field="foto"]');
-                    const previewImg = row.querySelector('.photo-preview');
-
-                    const namaSantri = (namaInput?.value || '').toLowerCase().trim();
-                    const nisSantri = (nisInput?.value || '').toLowerCase().trim();
-                    const kodeAbsen = (kodeAbsenInput?.value || '').toLowerCase().trim();
-
-                    let matchedPhoto = null;
-                    for (const photo of photoFiles) {
-                        const photoKey = photo.key;
-                        if (photoKey === namaSantri || (nisSantri && photoKey === nisSantri) ||
-                            (kodeAbsen && photoKey === kodeAbsen) ||
-                            (namaSantri && photoKey.includes(namaSantri)) ||
-                            (nisSantri && photoKey.includes(nisSantri))) {
-                            matchedPhoto = photo;
-                            break;
+                    // ===== SIMPAN LANGSUNG KE KOLEKSI TERPISAH =====
+                    const santriId = row.dataset.id;
+                    if (santriId) {
+                        try {
+                            await simpanFotoKeKoleksi(santriId, compressedBase64);
+                            savedToDbCount++;
+                            
+                            // Kosongkan field foto di data_santri (tidak perlu disimpan di sana)
+                            fotoInput.value = '';  // ← bersihkan agar tidak disimpan di data utama
+                        } catch (err) {
+                            console.warn(`Gagal simpan foto untuk ${namaSantri}:`, err);
                         }
                     }
-
-                    if (matchedPhoto && fotoInput) {
-                        fotoInput.value = matchedPhoto.base64;
-                        if (previewImg) previewImg.src = matchedPhoto.base64;
-                        updatedCount++;
-                        const index = photoFiles.indexOf(matchedPhoto);
-                        if (index > -1) photoFiles.splice(index, 1);
-                    }
                 }
-
-                alert(`✅ Berhasil mengupload ${updatedCount} foto.`);
-            } catch (error) {
-                alert('Gagal: ' + error.message);
-            } finally {
-                loader.style.display = 'none';
-                input.value = '';
+                
+                photoFiles.splice(matchedIndex, 1);
             }
-        };
+        }
+
+        alert(`✅ Berhasil upload ${updatedCount} foto.\n` +
+              `💾 Tersimpan langsung ke database: ${savedToDbCount} foto.\n\n` +
+              (updatedCount > savedToDbCount 
+                ? `⚠️ ${updatedCount - savedToDbCount} foto belum tersimpan (santri baru/ID kosong). Klik "Simpan" untuk menyimpan data santri terlebih dahulu.`
+                : `✨ Semua foto sudah tersimpan otomatis!`));
+        
+    } catch (error) {
+        alert('Gagal: ' + error.message);
+    } finally {
+        loader.style.display = 'none';
+        input.value = '';
+    }
+};
+
 
         window.downloadAllPhotos = async () => {
             const loader = document.getElementById('loader');
@@ -12842,6 +13407,11 @@
                     }
                 });
             }
+            
+            // ===== INISIALISASI DETEKSI SEL KOSONG =====
+            ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(id => {
+                attachEmptyDetection(id);
+            });
         });
 
         // ===== REGISTER FUNGSI KTS KE WINDOW =====
@@ -13382,6 +13952,84 @@
             
             return mapping[headerLower] || null;
         }
+
+
+// ===== DETEKSI FIELD KOSONG PADA MODAL TAMBAH & EDIT =====
+function updateEmptyFieldStyle(modalSelector) {
+    const modal = document.querySelector(modalSelector);
+    if (!modal) return;
+
+    // Untuk input text, textarea, date
+    modal.querySelectorAll('.form-control:not([readonly]):not([type="file"]), .date-input').forEach(input => {
+        if (input.value.trim() === '') {
+            input.classList.add('field-empty');
+        } else {
+            input.classList.remove('field-empty');
+        }
+    });
+
+    // Untuk select
+    modal.querySelectorAll('.form-select').forEach(select => {
+        if (select.value === '' || select.value === null) {
+            select.classList.add('field-empty');
+            select.setAttribute('data-empty', 'true');
+        } else {
+            select.classList.remove('field-empty');
+            select.removeAttribute('data-empty');
+        }
+    });
+}
+
+// Observer untuk modal tambah data
+const modalTambah = document.getElementById('modalTambahData');
+if (modalTambah) {
+    modalTambah.addEventListener('shown.bs.modal', function() {
+        updateEmptyFieldStyle('#modalTambahData');
+    });
+    
+    modalTambah.addEventListener('input', function(e) {
+        if (e.target.matches('.form-control, .form-select, .date-input')) {
+            updateEmptyFieldStyle('#modalTambahData');
+        }
+    });
+    
+    modalTambah.addEventListener('change', function(e) {
+        if (e.target.matches('.form-control, .form-select, .date-input')) {
+            updateEmptyFieldStyle('#modalTambahData');
+        }
+    });
+}
+
+// Observer untuk modal edit data
+const modalEdit = document.getElementById('modalEditData');
+if (modalEdit) {
+    modalEdit.addEventListener('shown.bs.modal', function() {
+        // Delay sedikit untuk memastikan value sudah terisi
+        setTimeout(() => {
+            updateEmptyFieldStyle('#modalEditData');
+        }, 100);
+    });
+    
+    modalEdit.addEventListener('input', function(e) {
+        if (e.target.matches('.form-control, .form-select, .date-input')) {
+            updateEmptyFieldStyle('#modalEditData');
+        }
+    });
+    
+    modalEdit.addEventListener('change', function(e) {
+        if (e.target.matches('.form-control, .form-select, .date-input')) {
+            updateEmptyFieldStyle('#modalEditData');
+        }
+    });
+}
+
+// Panggil juga saat pertama kali halaman dimuat
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        updateEmptyFieldStyle('#modalTambahData');
+        updateEmptyFieldStyle('#modalEditData');
+    }, 500);
+});
     </script>
 </body>
 </html>
