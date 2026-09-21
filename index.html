@@ -8325,6 +8325,174 @@ window.loadFilterPanelState = function() {
         let ktsDataCache = [];
 
 
+// ============================================================
+// ===== FUNGSI SEMBUNYIKAN FIELD ORANG TUA OTOMATIS =====
+// ============================================================
+
+// Konfigurasi: field apa saja yang disembunyikan untuk ayah & ibu
+const FIELD_CONFIG_AYAH = [
+    { id: 'tdNikAyah',    wrapperId: 'tdNikAyah' },
+    { id: 'tdPenAyah',    wrapperId: 'tdPenAyah' },
+    { id: 'tdPekAyah',    wrapperId: 'tdPekAyah' },
+    { id: 'tdGajiAyah',   wrapperId: 'tdGajiAyah' },
+    { id: 'tdHpAyah',     wrapperId: 'tdHpAyah' },
+    { id: 'tdThnAyah',    wrapperId: 'tdThnAyah' }
+];
+
+const FIELD_CONFIG_IBU = [
+    { id: 'edNikIbu',     wrapperId: 'edNikIbu' },
+    { id: 'edPenIbu',     wrapperId: 'edPenIbu' },
+    { id: 'edPekIbu',     wrapperId: 'edPekIbu' },
+    { id: 'edGajiIbu',    wrapperId: 'edGajiIbu' },
+    { id: 'edHpIbu',      wrapperId: 'edHpIbu' },
+    { id: 'edThnIbu',     wrapperId: 'edThnIbu' }
+];
+
+// Helper: sembunyikan/ tampilkan kolom pembungkus field
+function toggleFieldVisibility(fieldId, visible) {
+    const input = document.getElementById(fieldId);
+    if (!input) return;
+    // Cari parent col-* terdekat
+    const wrapper = input.closest('.col-md-2, .col-md-3, .col-md-4, .col-md-6, [class*="col-"]');
+    if (wrapper) {
+        wrapper.style.display = visible ? '' : 'none';
+    }
+}
+
+// ============================================================
+// ===== MODAL TAMBAH DATA =====
+// ============================================================
+function handleStatusAyahTambah() {
+    const statusSelect = document.getElementById('tdStatAyah');
+    if (!statusSelect) return;
+    
+    const status = statusSelect.value;
+    const sembunyikan = (status === 'Sudah Meninggal' || status === 'Tidak diketahui');
+    
+    FIELD_CONFIG_AYAH.forEach(f => {
+        toggleFieldVisibility(f.id, !sembunyikan);
+    });
+    
+    // Opsional: kosongkan nilai saat disembunyikan
+    if (sembunyikan) {
+        ['tdNikAyah','tdPenAyah','tdPekAyah','tdGajiAyah','tdHpAyah','tdThnAyah'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+    }
+}
+
+function handleStatusIbuTambah() {
+    const statusSelect = document.getElementById('tdStatIbu');
+    if (!statusSelect) return;
+    
+    const status = statusSelect.value;
+    const sembunyikan = (status === 'Sudah Meninggal' || status === 'Tidak diketahui');
+    
+    // Gunakan field ID untuk tambah (td...)
+    const fieldIds = ['tdNikIbu','tdPenIbu','tdPekIbu','tdGajiIbu','tdHpIbu','tdThnIbu'];
+    fieldIds.forEach(id => {
+        toggleFieldVisibility(id, !sembunyikan);
+    });
+    
+    if (sembunyikan) {
+        fieldIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+    }
+}
+
+// ============================================================
+// ===== MODAL EDIT DATA =====
+// ============================================================
+function handleStatusAyahEdit() {
+    const statusSelect = document.getElementById('edStatAyah');
+    if (!statusSelect) return;
+    
+    const status = statusSelect.value;
+    const sembunyikan = (status === 'Sudah Meninggal' || status === 'Tidak diketahui');
+    
+    const fieldIds = ['edNikAyah','edPenAyah','edPekAyah','edGajiAyah','edHpAyah','edThnAyah'];
+    fieldIds.forEach(id => {
+        toggleFieldVisibility(id, !sembunyikan);
+    });
+    
+    if (sembunyikan) {
+        fieldIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+    }
+}
+
+function handleStatusIbuEdit() {
+    const statusSelect = document.getElementById('edStatIbu');
+    if (!statusSelect) return;
+    
+    const status = statusSelect.value;
+    const sembunyikan = (status === 'Sudah Meninggal' || status === 'Tidak diketahui');
+    
+    const fieldIds = ['edNikIbu','edPenIbu','edPekIbu','edGajiIbu','edHpIbu','edThnIbu'];
+    fieldIds.forEach(id => {
+        toggleFieldVisibility(id, !sembunyikan);
+    });
+    
+    if (sembunyikan) {
+        fieldIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+    }
+}
+
+// ============================================================
+// ===== PASANG EVENT LISTENER =====
+// ============================================================
+
+// Event untuk modal TAMBAH
+const tdStatAyah = document.getElementById('tdStatAyah');
+const tdStatIbu  = document.getElementById('tdStatIbu');
+if (tdStatAyah) tdStatAyah.addEventListener('change', handleStatusAyahTambah);
+if (tdStatIbu)  tdStatIbu.addEventListener('change', handleStatusIbuTambah);
+
+// Event untuk modal EDIT
+const edStatAyah = document.getElementById('edStatAyah');
+const edStatIbu  = document.getElementById('edStatIbu');
+if (edStatAyah) edStatAyah.addEventListener('change', handleStatusAyahEdit);
+if (edStatIbu)  edStatIbu.addEventListener('change', handleStatusIbuEdit);
+
+// ============================================================
+// ===== SAAT MODAL DIBUKA (supaya status awal juga diterapkan) =====
+// ============================================================
+
+// Modal Tambah
+const modalTambahEl = document.getElementById('modalTambahData');
+if (modalTambahEl) {
+    modalTambahEl.addEventListener('shown.bs.modal', function() {
+        // Reset dulu ke tampil semua
+        ['tdNikAyah','tdPenAyah','tdPekAyah','tdGajiAyah','tdHpAyah','tdThnAyah',
+         'tdNikIbu','tdPenIbu','tdPekIbu','tdGajiIbu','tdHpIbu','tdThnIbu'].forEach(id => {
+            toggleFieldVisibility(id, true);
+        });
+        handleStatusAyahTambah();
+        handleStatusIbuTambah();
+    });
+}
+
+// Modal Edit — diterapkan setelah data terisi
+const modalEditEl = document.getElementById('modalEditData');
+if (modalEditEl) {
+    modalEditEl.addEventListener('shown.bs.modal', function() {
+        // Delay kecil agar value dari openEditModal sudah ter-set
+        setTimeout(() => {
+            handleStatusAyahEdit();
+            handleStatusIbuEdit();
+        }, 150);
+    });
+}
+
+
 // ===== SIMPAN FOTO KE KOLEKSI TERPISAH =====
 window.simpanFotoKeKoleksi = async (santriId, base64Foto) => {
     if (!santriId || !base64Foto) return null;
