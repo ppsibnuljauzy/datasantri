@@ -6958,11 +6958,18 @@
             <div class="modal-dialog modal-full-screen modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="bi bi-pencil-square"></i> Edit Data Santri
-                            <span class="badge bg-gold text-dark ms-2" style="background: var(--gold-gradient); font-weight: 600; font-size: 0.65rem; letter-spacing: 0.5px; padding: 4px 14px;">Form Lengkap</span>
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                       <div>
+                          <h5 class="modal-title">
+                             <i class="bi bi-pencil-square"></i> Edit Data Santri
+                             <span class="badge bg-gold text-dark ms-2" style="background: var(--gold-gradient); font-weight: 600; font-size: 0.65rem; letter-spacing: 0.5px; padding: 4px 14px;">Form Lengkap</span>
+        </h5>
+                          <div id="editNamaSantriHeader" class="mt-1" style="font-size: 0.85rem; color: rgba(255,255,255,0.85); font-weight: 500; letter-spacing: 0.3px;">
+                            <i class="bi bi-person-fill me-1" style="color: var(--gold-color);"></i>
+                            <span id="editNamaSantriText">-</span>
+                    <span id="editKelasSantriText" class="ms-2" style="opacity: 0.7; font-size: 0.75rem;"></span>
+                          </div>
+                       </div>
+                       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <form id="formEditData">
@@ -17678,6 +17685,38 @@ window.openEditModal = async (btn, collName) => {
 
         const data = docSnap.data();
 
+        // ============================================================
+        // ===== SET JUDUL NAMA SANTRI DI HEADER MODAL EDIT =====
+        // ============================================================
+        const namaSantriEl = document.getElementById('editNamaSantriText');
+        const kelasSantriEl = document.getElementById('editKelasSantriText');
+        const collLabelEl = document.getElementById('editCollectionLabel');
+        
+        if (namaSantriEl) {
+            namaSantriEl.textContent = data.nama || 'Tanpa Nama';
+        }
+        
+        if (kelasSantriEl) {
+            const kelas = data.kls_now || data.kelas || '-';
+            const jenjang = data.jenjang || '';
+            kelasSantriEl.textContent = `• Kelas ${kelas}${jenjang ? ` (${jenjang})` : ''}`;
+        }
+        
+        // Label sumber data (Input Data / Data Lulus / Data Mutasi)
+        if (collLabelEl) {
+            let labelText = 'Data Aktif';
+            let labelColor = '#2ecc71';
+            if (collName === 'data_santri_lulus') {
+                labelText = 'Data Lulus';
+                labelColor = '#3498db';
+            } else if (collName === 'data_santri_mutasi') {
+                labelText = 'Data Mutasi';
+                labelColor = '#f39c12';
+            }
+            collLabelEl.innerHTML = `<i class="bi bi-database-fill me-1"></i>${labelText}`;
+            collLabelEl.style.color = labelColor;
+        }
+
         document.getElementById('edDocId').value = docId;
         document.getElementById('edCollection').value = collName;
 
@@ -19262,6 +19301,66 @@ document.addEventListener('DOMContentLoaded', function() {
         updateEmptyFieldStyle('#modalTambahData');
         updateEmptyFieldStyle('#modalEditData');
     }, 500);
+
+    // ============================================================
+    // ===== UPDATE JUDUL NAMA SANTRI DI HEADER SAAT DIUBAH DI FORM =====
+    // ============================================================
+    
+    // Update nama santri di header saat input nama berubah
+    const edNamaInput = document.getElementById('edNama');
+    if (edNamaInput) {
+        edNamaInput.addEventListener('input', function() {
+            const namaSantriEl = document.getElementById('editNamaSantriText');
+            if (namaSantriEl) {
+                namaSantriEl.textContent = this.value.trim() || 'Tanpa Nama';
+            }
+        });
+    }
+
+    // Update kelas di header saat kls_now berubah
+    const edKlsNowSelect = document.getElementById('edKlsNow');
+    if (edKlsNowSelect) {
+        edKlsNowSelect.addEventListener('change', function() {
+            const kelasSantriEl = document.getElementById('editKelasSantriText');
+            if (kelasSantriEl) {
+                const kelas = this.value || '-';
+                const jenjang = document.getElementById('edJenjang')?.value || '';
+                kelasSantriEl.textContent = `• Kelas ${kelas}${jenjang ? ` (${jenjang})` : ''}`;
+            }
+        });
+    }
+
+    // Update jenjang di header saat jenjang berubah
+    const edJenjangSelect = document.getElementById('edJenjang');
+    if (edJenjangSelect) {
+        edJenjangSelect.addEventListener('change', function() {
+            const kelasSantriEl = document.getElementById('editKelasSantriText');
+            if (kelasSantriEl) {
+                const kelas = document.getElementById('edKlsNow')?.value || '-';
+                const jenjang = this.value || '';
+                kelasSantriEl.textContent = `• Kelas ${kelas}${jenjang ? ` (${jenjang})` : ''}`;
+            }
+        });
+    }
+
+    // ============================================================
+    // ===== RESET JUDUL NAMA SANTRI SAAT MODAL DITUTUP =====
+    // ============================================================
+    const modalEditEl = document.getElementById('modalEditData');
+    if (modalEditEl) {
+        modalEditEl.addEventListener('hidden.bs.modal', function() {
+            const namaSantriEl = document.getElementById('editNamaSantriText');
+            const kelasSantriEl = document.getElementById('editKelasSantriText');
+            const collLabelEl = document.getElementById('editCollectionLabel');
+            
+            if (namaSantriEl) namaSantriEl.textContent = '-';
+            if (kelasSantriEl) kelasSantriEl.textContent = '';
+            if (collLabelEl) {
+                collLabelEl.innerHTML = '';
+                collLabelEl.style.color = '';
+            }
+        });
+    }
 });
     </script>
 </body>
