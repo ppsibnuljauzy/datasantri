@@ -12631,7 +12631,7 @@ window.saveAllData = async () => {
 
         for (const nf of nikKkFields) {
             const nilai = (rowData[nf.key] || '').trim();
-            if (!nilai) continue; // Kosong diizinkan
+            if (!nilai) continue;
 
             if (!numericRegexNIK.test(nilai)) {
                 const pesanMasalah = /\D/.test(nilai)
@@ -12669,6 +12669,90 @@ window.saveAllData = async () => {
     }
     // ===== SELESAI VALIDASI FORMAT NISN, NIK, KK =====
 
+    // ===== ✅ VALIDASI FORMAT NPSN (8 DIGIT) & NSPP (12 DIGIT) PER BARIS =====
+    const numericRegexNPSN = /^\d{8}$/;
+    const numericRegexNSPP = /^\d{12}$/;
+
+    for (const row of rows) {
+        const rowData = {};
+        row.querySelectorAll('[data-field]').forEach(input => {
+            rowData[input.dataset.field] = input.value || '';
+        });
+        
+        const namaSantri = rowData.nama || 'Tanpa Nama';
+
+        // ---- Validasi NPSN (8 digit) ----
+        if (rowData.npsn_asal && !numericRegexNPSN.test(rowData.npsn_asal.trim())) {
+            const nilai = rowData.npsn_asal.trim();
+            const pesanMasalah = /\D/.test(nilai)
+                ? 'Mengandung karakter non-angka (huruf/simbol)'
+                : `Jumlah digit tidak sesuai (${nilai.length} digit)`;
+
+            await showAlertModal({
+                title: 'Format NPSN Tidak Valid',
+                message: `NPSN Asal untuk santri "${namaSantri}" harus terdiri dari 8 digit angka.`,
+                details: `
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px;">
+                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
+                        <span style="font-weight: 600;">Field</span><span>: NPSN Asal</span>
+                        <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${nilai}"</span>
+                        <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
+                        <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 8 digit angka</span>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        <strong>Contoh benar:</strong> 20123456, 10203040
+                    </div>
+                `,
+                type: 'danger',
+                okText: 'OK, Saya Perbaiki',
+                icon: 'bi-building'
+            });
+            const inputEl = row.querySelector('[data-field="npsn_asal"]');
+            if (inputEl) {
+                inputEl.focus();
+                inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
+            return;
+        }
+
+        // ---- Validasi NSPP (12 digit) ----
+        if (rowData.nspp_asal && !numericRegexNSPP.test(rowData.nspp_asal.trim())) {
+            const nilai = rowData.nspp_asal.trim();
+            const pesanMasalah = /\D/.test(nilai)
+                ? 'Mengandung karakter non-angka (huruf/simbol)'
+                : `Jumlah digit tidak sesuai (${nilai.length} digit)`;
+
+            await showAlertModal({
+                title: 'Format NSPP Tidak Valid',
+                message: `NSPP Asal untuk santri "${namaSantri}" harus terdiri dari 12 digit angka.`,
+                details: `
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px;">
+                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
+                        <span style="font-weight: 600;">Field</span><span>: NSPP Asal</span>
+                        <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${nilai}"</span>
+                        <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
+                        <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 12 digit angka</span>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        <strong>Contoh benar:</strong> 510012050049, 123456789012
+                    </div>
+                `,
+                type: 'danger',
+                okText: 'OK, Saya Perbaiki',
+                icon: 'bi-building'
+            });
+            const inputEl = row.querySelector('[data-field="nspp_asal"]');
+            if (inputEl) {
+                inputEl.focus();
+                inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
+            return;
+        }
+    }
+    // ===== SELESAI VALIDASI FORMAT NPSN & NSPP =====
+
     // Tampilkan modal konfirmasi
     const konfirmasi = await showKonfirmasiSimpan();
     if (!konfirmasi) return;
@@ -12683,12 +12767,10 @@ window.saveAllData = async () => {
     rows.forEach(row => {
         const data = {};
         row.querySelectorAll('[data-field]').forEach(input => {
-            // SKIP field foto dari data utama
             if (input.dataset.field === 'foto') return;
             data[input.dataset.field] = input.value;
         });
 
-        // Handle tanggal
         Object.keys(data).forEach(fieldName => {
             if (fieldName.includes('tgl') || fieldName.includes('tanggal')) {
                 if (data[fieldName] && /^\d{2}\/\d{2}\/\d{4}$/.test(data[fieldName])) {
@@ -12697,7 +12779,6 @@ window.saveAllData = async () => {
             }
         });
 
-        // Hitung ulang umur dari tgl_lahir
         if (data.tgl_lahir) {
             const hitungUmur = hitungUmurDariTanggal(data.tgl_lahir);
             if (hitungUmur) {
@@ -12711,7 +12792,6 @@ window.saveAllData = async () => {
 
         data.updated_at = serverTimestamp();
         
-        // Kumpulkan foto untuk disimpan terpisah
         const fotoInput = row.querySelector('[data-field="foto"]');
         const fotoPreview = row.querySelector('.photo-preview');
         let fotoData = '';
@@ -12732,7 +12812,6 @@ window.saveAllData = async () => {
     try {
         let savedCount = 0;
         
-        // Simpan data utama (tanpa foto)
         for (const item of allData) {
             if (item.row.dataset.id) {
                 batch.update(doc(db, "data_santri", item.row.dataset.id), item.data);
@@ -12746,7 +12825,6 @@ window.saveAllData = async () => {
         }
         await batch.commit();
 
-        // Simpan foto ke koleksi terpisah
         let fotoSavedCount = 0;
         for (const fotoItem of fotoToSave) {
             let santriId = fotoItem.rowId;
@@ -12765,7 +12843,6 @@ window.saveAllData = async () => {
             }
         }
         
-        // Tampilkan notifikasi sukses
         showToast({
             title: '✅ Data Berhasil Disimpan',
             message: `${savedCount} data tersimpan${fotoSavedCount > 0 ? `, ${fotoSavedCount} foto tersimpan` : ''}.`,
@@ -12774,7 +12851,6 @@ window.saveAllData = async () => {
             icon: 'bi-check-circle-fill'
         });
         
-        // Reload data
         loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri']);
         
     } catch (error) {
@@ -12907,7 +12983,7 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
 
         for (const nf of nikKkFields) {
             const nilai = (rowData[nf.key] || '').trim();
-            if (!nilai) continue; // Kosong diizinkan
+            if (!nilai) continue;
 
             if (!numericRegexNIK.test(nilai)) {
                 const pesanMasalah = /\D/.test(nilai)
@@ -12944,51 +13020,134 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
         }
     }
     // ===== SELESAI VALIDASI FORMAT NISN, NIK, KK =====
-    
-    // ===== KONFIRMASI SIMPAN DENGAN MODAL KUSTOM =====
-const labelTabel = collectionName === 'data_santri_lulus' ? 'Data Lulus'
-                 : collectionName === 'data_santri_mutasi' ? 'Data Mutasi'
-                 : 'Data Aktif';
 
-// Hitung statistik data
-const totalBaris = rows.length;
-let dataBaru = 0;
-let dataDiubah = 0;
+    // ===== ✅ VALIDASI FORMAT NPSN (8 DIGIT) & NSPP (12 DIGIT) PER BARIS =====
+    const numericRegexNPSN = /^\d{8}$/;
+    const numericRegexNSPP = /^\d{12}$/;
 
-rows.forEach(row => {
-    if (!row.dataset.id || row.dataset.id === '') {
-        dataBaru++;
-    } else {
-        dataDiubah++;
+    for (const row of rows) {
+        const rowData = {};
+        row.querySelectorAll('[data-field]').forEach(input => {
+            rowData[input.dataset.field] = input.value || '';
+        });
+        
+        const namaSantri = rowData.nama || 'Tanpa Nama';
+
+        // ---- Validasi NPSN (8 digit) ----
+        if (rowData.npsn_asal && !numericRegexNPSN.test(rowData.npsn_asal.trim())) {
+            const nilai = rowData.npsn_asal.trim();
+            const pesanMasalah = /\D/.test(nilai)
+                ? 'Mengandung karakter non-angka (huruf/simbol)'
+                : `Jumlah digit tidak sesuai (${nilai.length} digit)`;
+
+            await showAlertModal({
+                title: 'Format NPSN Tidak Valid',
+                message: `NPSN Asal untuk santri "${namaSantri}" harus terdiri dari 8 digit angka.`,
+                details: `
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px;">
+                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
+                        <span style="font-weight: 600;">Field</span><span>: NPSN Asal</span>
+                        <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${nilai}"</span>
+                        <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
+                        <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 8 digit angka</span>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        <strong>Contoh benar:</strong> 20123456, 10203040
+                    </div>
+                `,
+                type: 'danger',
+                okText: 'OK, Saya Perbaiki',
+                icon: 'bi-building'
+            });
+            const inputEl = row.querySelector('[data-field="npsn_asal"]');
+            if (inputEl) {
+                inputEl.focus();
+                inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
+            return;
+        }
+
+        // ---- Validasi NSPP (12 digit) ----
+        if (rowData.nspp_asal && !numericRegexNSPP.test(rowData.nspp_asal.trim())) {
+            const nilai = rowData.nspp_asal.trim();
+            const pesanMasalah = /\D/.test(nilai)
+                ? 'Mengandung karakter non-angka (huruf/simbol)'
+                : `Jumlah digit tidak sesuai (${nilai.length} digit)`;
+
+            await showAlertModal({
+                title: 'Format NSPP Tidak Valid',
+                message: `NSPP Asal untuk santri "${namaSantri}" harus terdiri dari 12 digit angka.`,
+                details: `
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px;">
+                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
+                        <span style="font-weight: 600;">Field</span><span>: NSPP Asal</span>
+                        <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${nilai}"</span>
+                        <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
+                        <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 12 digit angka</span>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        <strong>Contoh benar:</strong> 510012050049, 123456789012
+                    </div>
+                `,
+                type: 'danger',
+                okText: 'OK, Saya Perbaiki',
+                icon: 'bi-building'
+            });
+            const inputEl = row.querySelector('[data-field="nspp_asal"]');
+            if (inputEl) {
+                inputEl.focus();
+                inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
+            return;
+        }
     }
-});
+    // ===== SELESAI VALIDASI FORMAT NPSN & NSPP =====
 
-const konfirmasi = await showConfirmModal({
-    title: 'Konfirmasi Simpan Data',
-    message: `Apakah Anda yakin ingin menyimpan semua perubahan pada tabel ${labelTabel}?`,
-    details: `
-        <div style="display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px;">
-            <span style="font-weight: 600;">Target Tabel</span>
-            <span>: ${labelTabel}</span>
-            <span style="font-weight: 600;">Total Baris</span>
-            <span>: ${totalBaris} data</span>
-            <span style="font-weight: 600;">Data Baru</span>
-            <span style="color: #2ecc71; font-weight: 700;">: ${dataBaru} data</span>
-            <span style="font-weight: 600;">Data Diubah</span>
-            <span style="color: #f39c12; font-weight: 700;">: ${dataDiubah} data</span>
-        </div>
-        <div style="margin-top: 10px; padding: 8px 12px; background: #eafaf1; border-radius: 8px; border-left: 3px solid #2ecc71; font-size: 0.8rem; color: #1a5a3a;">
-            <i class="bi bi-info-circle-fill me-1"></i>
-            <strong>Catatan:</strong> Pastikan semua data sudah benar sebelum disimpan. Data yang sudah tersimpan tidak dapat dikembalikan ke versi sebelumnya.
-        </div>
-    `,
-    type: 'success',
-    okText: 'Ya, Simpan Data',
-    cancelText: 'Batal',
-    icon: 'bi-cloud-arrow-up-fill'
-});
+    // ===== KONFIRMASI SIMPAN DENGAN MODAL KUSTOM =====
+    const labelTabel = collectionName === 'data_santri_lulus' ? 'Data Lulus'
+                     : collectionName === 'data_santri_mutasi' ? 'Data Mutasi'
+                     : 'Data Aktif';
 
-if (!konfirmasi) return;
+    const totalBaris = rows.length;
+    let dataBaru = 0;
+    let dataDiubah = 0;
+
+    rows.forEach(row => {
+        if (!row.dataset.id || row.dataset.id === '') {
+            dataBaru++;
+        } else {
+            dataDiubah++;
+        }
+    });
+
+    const konfirmasi = await showConfirmModal({
+        title: 'Konfirmasi Simpan Data',
+        message: `Apakah Anda yakin ingin menyimpan semua perubahan pada tabel ${labelTabel}?`,
+        details: `
+            <div style="display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px;">
+                <span style="font-weight: 600;">Target Tabel</span>
+                <span>: ${labelTabel}</span>
+                <span style="font-weight: 600;">Total Baris</span>
+                <span>: ${totalBaris} data</span>
+                <span style="font-weight: 600;">Data Baru</span>
+                <span style="color: #2ecc71; font-weight: 700;">: ${dataBaru} data</span>
+                <span style="font-weight: 600;">Data Diubah</span>
+                <span style="color: #f39c12; font-weight: 700;">: ${dataDiubah} data</span>
+            </div>
+            <div style="margin-top: 10px; padding: 8px 12px; background: #eafaf1; border-radius: 8px; border-left: 3px solid #2ecc71; font-size: 0.8rem; color: #1a5a3a;">
+                <i class="bi bi-info-circle-fill me-1"></i>
+                <strong>Catatan:</strong> Pastikan semua data sudah benar sebelum disimpan. Data yang sudah tersimpan tidak dapat dikembalikan ke versi sebelumnya.
+            </div>
+        `,
+        type: 'success',
+        okText: 'Ya, Simpan Data',
+        cancelText: 'Batal',
+        icon: 'bi-cloud-arrow-up-fill'
+    });
+
+    if (!konfirmasi) return;
 
     const loader = document.getElementById('loader');
     loader.style.display = 'flex';
@@ -12999,12 +13158,10 @@ if (!konfirmasi) return;
     rows.forEach(row => {
         const data = {};
         row.querySelectorAll('[data-field]').forEach(input => {
-            // SKIP field foto dari data utama
             if (input.dataset.field === 'foto') return;
             data[input.dataset.field] = input.value || input.innerText || '';
         });
         
-        // Kumpulkan foto untuk disimpan terpisah
         const fotoInput = row.querySelector('[data-field="foto"]');
         const fotoPreview = row.querySelector('.photo-preview');
         let fotoData = '';
@@ -13019,7 +13176,6 @@ if (!konfirmasi) return;
             fotoToSave.push({ rowId: row.dataset.id, foto: fotoData, row: row });
         }
         
-        // Handle tanggal
         Object.keys(data).forEach(fieldName => {
             if (fieldName.includes('tgl') || fieldName.includes('tanggal')) {
                 if (data[fieldName] && /^\d{2}\/\d{2}\/\d{4}$/.test(data[fieldName])) {
@@ -13028,7 +13184,6 @@ if (!konfirmasi) return;
             }
         });
 
-        // Hitung ulang umur dari tgl_lahir
         if (data.tgl_lahir) {
             const hitungUmur = hitungUmurDariTanggal(data.tgl_lahir);
             if (hitungUmur) {
@@ -13058,7 +13213,6 @@ if (!konfirmasi) return;
         if (count > 0) {
             await batch.commit();
             
-            // Simpan foto ke koleksi terpisah
             let fotoSavedCount = 0;
             for (const fotoItem of fotoToSave) {
                 let santriId = fotoItem.rowId;
@@ -16946,6 +17100,137 @@ window.validateNIK = async function(nikValue, fieldLabel = 'NIK', fieldId = null
 };
 
 
+// ===== VALIDASI NPSN (8 DIGIT ANGKA) =====
+window.validateNPSN = async function(npsnValue, fieldLabel = 'NPSN', fieldId = null) {
+    if (!npsnValue || npsnValue.trim() === '') {
+        return true;
+    }
+
+    const value = npsnValue.trim();
+
+    if (!/^\d+$/.test(value)) {
+        await showAlertModal({
+            title: 'Format NPSN Tidak Valid',
+            message: `Kolom ${fieldLabel} hanya boleh berisi angka, tidak boleh huruf atau simbol.`,
+            details: `
+                <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                    <span style="font-weight: 600;">Field</span><span>: ${fieldLabel}</span>
+                    <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${value}"</span>
+                    <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: Mengandung karakter non-angka</span>
+                    <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 8 digit angka</span>
+                </div>
+                <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                    <strong>Contoh benar:</strong> 20123456, 10203040
+                </div>
+            `,
+            type: 'danger',
+            okText: 'OK, Saya Perbaiki',
+            icon: 'bi-building'
+        });
+        if (fieldId) {
+            const el = document.getElementById(fieldId);
+            if (el) { el.focus(); el.select(); }
+        }
+        return false;
+    }
+
+    if (value.length !== 8) {
+        await showAlertModal({
+            title: 'Panjang NPSN Tidak Sesuai',
+            message: `Kolom ${fieldLabel} harus terdiri dari tepat 8 digit angka.`,
+            details: `
+                <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                    <span style="font-weight: 600;">Field</span><span>: ${fieldLabel}</span>
+                    <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${value}"</span>
+                    <span style="font-weight: 600;">Jumlah Digit</span><span style="color: #e74c3c;">: ${value.length} digit</span>
+                    <span style="font-weight: 600;">Seharusnya</span><span style="color: #2ecc71;">: 8 digit</span>
+                </div>
+                <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                    <i class="bi bi-lightbulb-fill me-1"></i>
+                    <strong>Contoh:</strong> 20123456 (8 digit)
+                </div>
+            `,
+            type: 'warning',
+            okText: 'OK, Saya Perbaiki',
+            icon: 'bi-building'
+        });
+        if (fieldId) {
+            const el = document.getElementById(fieldId);
+            if (el) { el.focus(); el.select(); }
+        }
+        return false;
+    }
+
+    return true;
+};
+
+// ===== VALIDASI NSPP (12 DIGIT ANGKA) =====
+window.validateNSPP = async function(nsppValue, fieldLabel = 'NSPP', fieldId = null) {
+    if (!nsppValue || nsppValue.trim() === '') {
+        return true;
+    }
+
+    const value = nsppValue.trim();
+
+    if (!/^\d+$/.test(value)) {
+        await showAlertModal({
+            title: 'Format NSPP Tidak Valid',
+            message: `Kolom ${fieldLabel} hanya boleh berisi angka, tidak boleh huruf atau simbol.`,
+            details: `
+                <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                    <span style="font-weight: 600;">Field</span><span>: ${fieldLabel}</span>
+                    <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${value}"</span>
+                    <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: Mengandung karakter non-angka</span>
+                    <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 12 digit angka</span>
+                </div>
+                <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                    <strong>Contoh benar:</strong> 510012050049, 123456789012
+                </div>
+            `,
+            type: 'danger',
+            okText: 'OK, Saya Perbaiki',
+            icon: 'bi-building'
+        });
+        if (fieldId) {
+            const el = document.getElementById(fieldId);
+            if (el) { el.focus(); el.select(); }
+        }
+        return false;
+    }
+
+    if (value.length !== 12) {
+        await showAlertModal({
+            title: 'Panjang NSPP Tidak Sesuai',
+            message: `Kolom ${fieldLabel} harus terdiri dari tepat 12 digit angka.`,
+            details: `
+                <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                    <span style="font-weight: 600;">Field</span><span>: ${fieldLabel}</span>
+                    <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${value}"</span>
+                    <span style="font-weight: 600;">Jumlah Digit</span><span style="color: #e74c3c;">: ${value.length} digit</span>
+                    <span style="font-weight: 600;">Seharusnya</span><span style="color: #2ecc71;">: 12 digit</span>
+                </div>
+                <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                    <i class="bi bi-lightbulb-fill me-1"></i>
+                    <strong>Contoh:</strong> 510012050049 (12 digit)
+                </div>
+            `,
+            type: 'warning',
+            okText: 'OK, Saya Perbaiki',
+            icon: 'bi-building'
+        });
+        if (fieldId) {
+            const el = document.getElementById(fieldId);
+            if (el) { el.focus(); el.select(); }
+        }
+        return false;
+    }
+
+    return true;
+};
+
+
 // ===== VALIDASI SEMUA FIELD IDENTITAS SEKALIGUS =====
 // Mengembalikan object: { valid: boolean, message: string }
 window.validateAllIdentityFields = async function(dataObj, prefixId = '') {
@@ -17052,7 +17337,6 @@ window.simpanDataBaru = async () => {
         updated_at: new Date().toISOString()
     };
 
-    // Hitung ulang umur dari tgl_lahir
     if (data.tgl_lahir) {
         const hitungUmur = hitungUmurDariTanggal(data.tgl_lahir);
         if (hitungUmur) {
@@ -17143,11 +17427,9 @@ window.simpanDataBaru = async () => {
     if (!allDatesValid) return;
 
     // ===== ✅ VALIDASI NISN (10 DIGIT), NIK & KK (16 DIGIT) =====
-    // Validasi NISN
     const isNisnValid = await validateNISN(data.nisn, 'NISN', 'tdNisn');
     if (!isNisnValid) return;
 
-    // Validasi semua field NIK & KK (16 digit)
     const nikKkFields = [
         { value: data.nik,       label: 'NIK Santri',    fieldId: 'tdNik' },
         { value: data.nik_ayah,  label: 'NIK Ayah',      fieldId: 'tdNikAyah' },
@@ -17162,6 +17444,14 @@ window.simpanDataBaru = async () => {
         if (!isValid) return;
     }
     // ===== SELESAI VALIDASI NISN, NIK, KK =====
+
+    // ===== ✅ VALIDASI NPSN (8 DIGIT) & NSPP (12 DIGIT) =====
+    const isNpsnValid = await validateNPSN(data.npsn_asal, 'NPSN Asal', 'tdNpsnAsal');
+    if (!isNpsnValid) return;
+
+    const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'tdNsppAsal');
+    if (!isNsppValid) return;
+    // ===== SELESAI VALIDASI NPSN & NSPP =====
 
     // ===== VALIDASI: WAJIB ISI MINIMAL SALAH SATU NIK ATAU NISN =====
     if (!data.nik && !data.nisn) {
@@ -17271,10 +17561,8 @@ window.simpanDataBaru = async () => {
         data.created_at = serverTimestamp();
         data.updated_at = serverTimestamp();
 
-        // Simpan data utama (tanpa foto)
         await setDoc(newRef, data);
 
-        // ===== SIMPAN FOTO KE KOLEKSI TERPISAH =====
         if (fotoBaru && fotoBaru.startsWith('data:image')) {
             try {
                 await simpanFotoKeKoleksi(newRef.id, fotoBaru);
@@ -17585,7 +17873,6 @@ window.simpanEditData = async () => {
         updated_at: new Date().toISOString()
     };
 
-    // Hitung ulang umur dari tgl_lahir
     if (data.tgl_lahir) {
         const hitungUmur = hitungUmurDariTanggal(data.tgl_lahir);
         if (hitungUmur) {
@@ -17675,11 +17962,9 @@ window.simpanEditData = async () => {
     if (!allDatesValid) return;
 
     // ===== ✅ VALIDASI NISN (10 DIGIT), NIK & KK (16 DIGIT) =====
-    // Validasi NISN
     const isNisnValid = await validateNISN(data.nisn, 'NISN', 'edNisn');
     if (!isNisnValid) return;
 
-    // Validasi semua field NIK & KK (16 digit)
     const nikKkFields = [
         { value: data.nik,       label: 'NIK Santri',    fieldId: 'edNik' },
         { value: data.nik_ayah,  label: 'NIK Ayah',      fieldId: 'edNikAyah' },
@@ -17694,6 +17979,14 @@ window.simpanEditData = async () => {
         if (!isValid) return;
     }
     // ===== SELESAI VALIDASI NISN, NIK, KK =====
+
+    // ===== ✅ VALIDASI NPSN (8 DIGIT) & NSPP (12 DIGIT) =====
+    const isNpsnValid = await validateNPSN(data.npsn_asal, 'NPSN Asal', 'edNpsnAsal');
+    if (!isNpsnValid) return;
+
+    const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'edNsppAsal');
+    if (!isNsppValid) return;
+    // ===== SELESAI VALIDASI NPSN & NSPP =====
 
     // ===== VALIDASI: WAJIB ISI MINIMAL SALAH SATU NIK ATAU NISN =====
     if (!data.nik && !data.nisn) {
@@ -17805,7 +18098,6 @@ window.simpanEditData = async () => {
     loader.style.display = 'flex';
 
     try {
-        // ===== SIMPAN FOTO KE KOLEKSI TERPISAH (JIKA ADA FOTO BARU) =====
         if (fotoBaru && fotoBaru.startsWith('data:image')) {
             try {
                 await simpanFotoKeKoleksi(docId, fotoBaru);
@@ -17814,8 +18106,6 @@ window.simpanEditData = async () => {
             }
         }
 
-        // ===== SIMPAN DATA UTAMA (TANPA FOTO) =====
-        // Hapus field foto dari data utama agar tidak dobel
         delete data.foto;
 
         const docRef = doc(db, collName, docId);
@@ -17890,111 +18180,140 @@ window.simpanEditData = async () => {
             populateKTSSelect();
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const el = document.getElementById("draggable-fab");
-            let isDragging = false;
-            let offsetX, offsetY;
 
-            const dragStart = (e) => {
-                const clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
-                const clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
-                const rect = el.getBoundingClientRect();
-                offsetX = clientX - rect.left;
-                offsetY = clientY - rect.top;
-                isDragging = true;
-                document.addEventListener("mousemove", dragMove);
-                document.addEventListener("touchmove", dragMove, { passive: false });
-                document.addEventListener("mouseup", dragEnd);
-                document.addEventListener("touchend", dragEnd);
-            };
+document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById("draggable-fab");
+    let isDragging = false;
+    let offsetX, offsetY;
 
-            const dragMove = (e) => {
-                if (!isDragging) return;
-                e.preventDefault();
-                const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
-                const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
-                let newX = clientX - offsetX;
-                let newY = clientY - offsetY;
-                const maxX = window.innerWidth - el.offsetWidth;
-                const maxY = window.innerHeight - el.offsetHeight;
-                newX = Math.max(0, Math.min(newX, maxX));
-                newY = Math.max(0, Math.min(newY, maxY));
-                el.style.left = newX + "px";
-                el.style.top = newY + "px";
-                el.style.bottom = "auto";
-                el.style.right = "auto";
-            };
+    const dragStart = (e) => {
+        const clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
+        const rect = el.getBoundingClientRect();
+        offsetX = clientX - rect.left;
+        offsetY = clientY - rect.top;
+        isDragging = true;
+        document.addEventListener("mousemove", dragMove);
+        document.addEventListener("touchmove", dragMove, { passive: false });
+        document.addEventListener("mouseup", dragEnd);
+        document.addEventListener("touchend", dragEnd);
+    };
 
-            const dragEnd = () => {
-                isDragging = false;
-                document.removeEventListener("mousemove", dragMove);
-                document.removeEventListener("touchmove", dragMove);
-            };
+    const dragMove = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+        let newX = clientX - offsetX;
+        let newY = clientY - offsetY;
+        const maxX = window.innerWidth - el.offsetWidth;
+        const maxY = window.innerHeight - el.offsetHeight;
+        newX = Math.max(0, Math.min(newX, maxX));
+        newY = Math.max(0, Math.min(newY, maxY));
+        el.style.left = newX + "px";
+        el.style.top = newY + "px";
+        el.style.bottom = "auto";
+        el.style.right = "auto";
+    };
 
-            el.addEventListener("mousedown", dragStart);
-            el.addEventListener("touchstart", dragStart, { passive: false });
+    const dragEnd = () => {
+        isDragging = false;
+        document.removeEventListener("mousemove", dragMove);
+        document.removeEventListener("touchmove", dragMove);
+    };
 
-            toggleDashboardView(true);
+    el.addEventListener("mousedown", dragStart);
+    el.addEventListener("touchstart", dragStart, { passive: false });
 
-            document.querySelectorAll('#formTambahKelulusan input').forEach(input => {
-                input.addEventListener('input', updateKelPreview);
-            });
-            
-            const kelTahunInput = document.getElementById('kelTahun');
-            if (kelTahunInput) {
-                kelTahunInput.addEventListener('focus', function() {
-                    if (!this.value) {
-                        const tahunSekarang = new Date().getFullYear();
-                        this.placeholder = `Contoh: ${tahunSekarang - 1}/${tahunSekarang}`;
-                    }
-                });
+    toggleDashboardView(true);
+
+    document.querySelectorAll('#formTambahKelulusan input').forEach(input => {
+        input.addEventListener('input', updateKelPreview);
+    });
+    
+    const kelTahunInput = document.getElementById('kelTahun');
+    if (kelTahunInput) {
+        kelTahunInput.addEventListener('focus', function() {
+            if (!this.value) {
+                const tahunSekarang = new Date().getFullYear();
+                this.placeholder = `Contoh: ${tahunSekarang - 1}/${tahunSekarang}`;
             }
-            
-            // ===== INISIALISASI DETEKSI SEL KOSONG & IDENTITY GUARD =====
-            ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(id => {
-                attachEmptyDetection(id);
-                attachIdentityGuard(id);
-            });
-
-            // ===== ✅ AUTO-FILTER INPUT HANYA ANGKA UNTUK NISN, NIK, KK DI TABEL =====
-            const numericFields = ['nisn', 'nik', 'nik_ayah', 'nik_ibu', 'nik_wali', 'no_kk', 'kk_wali'];
-            
-            ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(tbodyId => {
-                const tbody = document.getElementById(tbodyId);
-                if (!tbody) return;
-                
-                tbody.addEventListener('input', function(e) {
-                    const field = e.target.dataset?.field;
-                    if (numericFields.includes(field)) {
-                        // Hapus semua karakter non-angka
-                        const cleaned = e.target.value.replace(/\D/g, '');
-                        // Batasi panjang: NISN max 10, NIK/KK max 16
-                        const maxLen = field === 'nisn' ? 10 : 16;
-                        e.target.value = cleaned.slice(0, maxLen);
-                    }
-                });
-            });
-
-            // ===== ✅ AUTO-FILTER INPUT HANYA ANGKA UNTUK MODAL TAMBAH & EDIT =====
-            const modalNumericFields = [
-                'tdNisn', 'tdNik', 'tdNikAyah', 'tdNikIbu', 'tdNikWali', 'tdNoKk', 'tdKkWali',
-                'edNisn', 'edNik', 'edNikAyah', 'edNikIbu', 'edNikWali', 'edNoKk', 'edKkWali'
-            ];
-            
-            modalNumericFields.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('input', function() {
-                        const isNisn = id.toLowerCase().includes('nisn');
-                        const maxLen = isNisn ? 10 : 16;
-                        this.value = this.value.replace(/\D/g, '').slice(0, maxLen);
-                    });
-                    // Tambahkan maxlength attribute juga
-                    el.setAttribute('maxlength', id.toLowerCase().includes('nisn') ? '10' : '16');
-                    el.setAttribute('inputmode', 'numeric');
-                }
-            });
         });
+    }
+    
+    // ===== INISIALISASI DETEKSI SEL KOSONG & IDENTITY GUARD =====
+    ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(id => {
+        attachEmptyDetection(id);
+        attachIdentityGuard(id);
+    });
+
+    // ===== ✅ AUTO-FILTER INPUT HANYA ANGKA UNTUK NISN, NIK, KK, NPSN, NSPP DI TABEL =====
+    const numericFields = [
+        'nisn', 
+        'nik', 'nik_ayah', 'nik_ibu', 'nik_wali', 
+        'no_kk', 'kk_wali', 
+        'npsn_asal', 'nspp_asal'
+    ];
+    
+    ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(tbodyId => {
+        const tbody = document.getElementById(tbodyId);
+        if (!tbody) return;
+        
+        tbody.addEventListener('input', function(e) {
+            const field = e.target.dataset?.field;
+            if (numericFields.includes(field)) {
+                // Hapus semua karakter non-angka
+                const cleaned = e.target.value.replace(/\D/g, '');
+                // Batasi panjang sesuai field
+                let maxLen = 16; // default untuk NIK/KK
+                if (field === 'nisn') maxLen = 10;
+                else if (field === 'npsn_asal') maxLen = 8;
+                else if (field === 'nspp_asal') maxLen = 12;
+                e.target.value = cleaned.slice(0, maxLen);
+            }
+        });
+    });
+
+    // ===== ✅ AUTO-FILTER INPUT HANYA ANGKA UNTUK MODAL TAMBAH & EDIT =====
+    const modalNumericFields = [
+        // Modal Tambah
+        'tdNisn', 
+        'tdNik', 'tdNikAyah', 'tdNikIbu', 'tdNikWali', 
+        'tdNoKk', 'tdKkWali',
+        'tdNpsnAsal', 'tdNsppAsal',
+        // Modal Edit
+        'edNisn', 
+        'edNik', 'edNikAyah', 'edNikIbu', 'edNikWali', 
+        'edNoKk', 'edKkWali',
+        'edNpsnAsal', 'edNsppAsal'
+    ];
+    
+    modalNumericFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', function() {
+                const idLower = id.toLowerCase();
+                let maxLen = 16; // default untuk NIK/KK
+                if (idLower.includes('nisn')) maxLen = 10;
+                else if (idLower.includes('npsn')) maxLen = 8;
+                else if (idLower.includes('nspp')) maxLen = 12;
+                
+                this.value = this.value.replace(/\D/g, '').slice(0, maxLen);
+            });
+            
+            // Set maxlength attribute dan inputmode numeric
+            const idLower = id.toLowerCase();
+            let maxLen = 16;
+            if (idLower.includes('nisn')) maxLen = 10;
+            else if (idLower.includes('npsn')) maxLen = 8;
+            else if (idLower.includes('nspp')) maxLen = 12;
+            
+            el.setAttribute('maxlength', maxLen);
+            el.setAttribute('inputmode', 'numeric');
+        }
+    });
+});
+
 
         // ===== REGISTER FUNGSI KTS KE WINDOW =====
         window.previewKTS = previewKTS;
