@@ -1933,33 +1933,63 @@
         display: block;
     }
 
+    /* ===== NAVIGASI TAB UTAMA - MODERN & ELEGAN ===== */
     .nav-tabs {
         border-bottom: none;
-        gap: 4px;
+        gap: 6px;
         padding: 0 15px;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        position: relative;
+    }
+
+    .nav-tabs .nav-item {
+        position: relative;
     }
 
     .nav-tabs .nav-link {
         color: #6c757d;
         font-weight: 600;
-        border: none;
-        border-radius: 10px 10px 0 0;
-        padding: 12px 24px;
-        transition: all var(--transition-speed);
+        border: 1px solid transparent;
+        border-radius: 12px 12px 0 0;
+        padding: 12px 22px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         background: transparent;
         position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+    }
+
+    .nav-tabs .nav-link i {
+        font-size: 1.1rem;
+        transition: transform 0.3s ease, color 0.3s ease;
+        color: #adb5bd;
+        margin-right: 0;
     }
 
     .nav-tabs .nav-link:hover {
         color: var(--primary-color);
-        background: rgba(26, 38, 57, 0.05);
+        background: rgba(26, 38, 57, 0.04);
+        border-color: rgba(26, 38, 57, 0.08);
+        transform: translateY(-2px);
+    }
+
+    .nav-tabs .nav-link:hover i {
+        transform: scale(1.15);
+        color: var(--accent-color);
     }
 
     .nav-tabs .nav-link.active {
         background: var(--bg-card) !important;
         color: var(--primary-color) !important;
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+        border-color: var(--border-color) var(--border-color) transparent var(--border-color) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+        transform: translateY(0);
+        font-weight: 700;
     }
 
     .nav-tabs .nav-link.active::after {
@@ -1968,14 +1998,134 @@
         bottom: -1px;
         left: 50%;
         transform: translateX(-50%);
-        width: 60%;
+        width: 70%;
         height: 3px;
-        background: var(--accent-color);
+        background: linear-gradient(90deg, var(--gold-color), var(--accent-color));
         border-radius: 3px 3px 0 0;
+        animation: slideIn 0.3s ease-out;
     }
 
-    .nav-tabs .nav-link i {
-        margin-right: 6px;
+    @keyframes slideIn {
+        from { width: 0; opacity: 0; }
+        to { width: 70%; opacity: 1; }
+    }
+
+    .nav-tabs .nav-link.active i {
+        color: var(--gold-color) !important;
+        transform: scale(1.15);
+    }
+
+    /* Warna ikon per tab */
+    .nav-tabs .nav-link[data-bs-target="#tab-dashboard"] i { color: #3498db; }
+    .nav-tabs .nav-link[data-bs-target="#tab-input"] i { color: #2ecc71; }
+    .nav-tabs .nav-link[data-bs-target="#tab-lulus"] i { color: #9b59b6; }
+    .nav-tabs .nav-link[data-bs-target="#tab-mutasi"] i { color: #e67e22; }
+    .nav-tabs .nav-link[data-bs-target="#tab-struktur"] i { color: #1abc9c; }
+    .nav-tabs .nav-link[data-bs-target="#tab-cetak-kts"] i { color: #e74c3c; }
+    .nav-tabs .nav-link[data-bs-target="#tab-tren"] i { color: #f1c40f; }
+    .nav-tabs .nav-link[data-bs-target="#tab-surat"] i { color: #34495e; }
+
+    /* Dark mode navbar utama */
+    [data-theme="dark"] .nav-tabs .nav-link {
+        color: var(--text-muted) !important;
+    }
+    [data-theme="dark"] .nav-tabs .nav-link:hover {
+        color: var(--text-primary) !important;
+        background: rgba(255, 255, 255, 0.04) !important;
+        border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+    [data-theme="dark"] .nav-tabs .nav-link.active {
+        background: var(--bg-card) !important;
+        color: var(--text-primary) !important;
+        border-color: var(--border-color) var(--border-color) transparent var(--border-color) !important;
+    }
+    [data-theme="dark"] .nav-tabs .nav-link.active::after {
+        background: linear-gradient(90deg, var(--gold-color), var(--accent-color)) !important;
+    }
+
+
+    /* ===== SUB-NAVIGASI TAB (Sub Tab Tren) ===== */
+    #trenSubTab.nav-tabs {
+        border-bottom: none;
+        gap: 4px;
+        padding: 0;
+        margin-bottom: 20px;
+        background: transparent;
+    }
+
+    #trenSubTab .nav-link {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 24px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #6c757d;
+        background: transparent;
+        transition: all 0.25s ease;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    #trenSubTab .nav-link i {
+        font-size: 1rem;
+        color: #adb5bd;
+        transition: color 0.25s ease;
+        margin-right: 0;
+    }
+
+    #trenSubTab .nav-link:hover {
+        color: var(--primary-color);
+        background: rgba(26, 38, 57, 0.05);
+    }
+
+    #trenSubTab .nav-link:hover i {
+        color: var(--accent-color);
+    }
+
+    #trenSubTab .nav-link.active {
+        background: var(--bg-card) !important;
+        color: var(--primary-color) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        font-weight: 700;
+    }
+
+    #trenSubTab .nav-link.active i {
+        color: var(--gold-color);
+    }
+
+    /* Dark mode sub-tab */
+    [data-theme="dark"] #trenSubTab .nav-link {
+        color: var(--text-muted) !important;
+    }
+    [data-theme="dark"] #trenSubTab .nav-link:hover {
+        color: var(--text-primary) !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
+    [data-theme="dark"] #trenSubTab .nav-link.active {
+        background: var(--bg-card) !important;
+        color: var(--text-primary) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    [data-theme="dark"] #trenSubTab .nav-link.active i {
+        color: var(--gold-color) !important;
+    }
+
+        /* Garis dekoratif di bawah navbar */
+    .nav-tabs {
+        position: relative;
+    }
+
+    .nav-tabs::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+        opacity: 0.6;
     }
 
     .tab-toolbar-right {
@@ -5629,7 +5779,7 @@
                                 <button class="btn btn-success btn-sm" onclick="printKTS()">
                                     <i class="bi bi-printer me-1"></i> Cetak KTS
                                 </button>
-                                <button class="btn btn-secondary btn-sm" onclick="window.location.reload()">
+                                <button class="btn btn-secondary btn-sm" onclick="resetKTSFilter()">
                                     <i class="bi bi-arrow-repeat me-1"></i> Reset
                                 </button>
                             </div>
@@ -18361,6 +18511,43 @@ document.addEventListener('DOMContentLoaded', () => {
         window.populateKTSSelect = populateKTSSelect;
         window.openEditModal = openEditModal;
         window.simpanEditData = simpanEditData;
+
+
+window.resetKTSFilter = function() {
+    // Reset filter ke nilai default
+    document.getElementById('ktsStatus').value = 'Aktif';
+    document.getElementById('ktsKelas').value = 'all';
+    document.getElementById('ktsJenjang').value = 'all';
+    document.getElementById('ktsUkuran').value = 'A4';
+    document.getElementById('ktsPilihSantri').value = 'all';
+
+    // Kosongkan cache & preview
+    ktsDataCache = [];
+    document.getElementById('ktsJumlahSantri').innerText = '0';
+
+    // Kembalikan tampilan placeholder preview
+    document.getElementById('ktsPreviewWrapper').innerHTML = `
+        <div class="ornament orn-1">✦</div>
+        <div class="ornament orn-2">✦</div>
+        <div class="ornament orn-3">✦</div>
+        <div class="text-muted text-center w-100 py-5" style="color: rgba(255,255,255,0.4) !important; position: relative; z-index: 2;">
+            <i class="bi bi-credit-card-2-front fs-1 d-block mb-3" style="color: rgba(201, 168, 76, 0.3);"></i>
+            <p style="color: rgba(255,255,255,0.5);">Pilih filter dan klik <strong style="color: rgba(201, 168, 76, 0.7);">Preview</strong> untuk melihat tampilan KTS</p>
+            <p class="small" style="color: rgba(255,255,255,0.3);">Setiap KTS akan ditampilkan sesuai data santri yang dipilih</p>
+        </div>
+    `;
+
+    // (Opsional) refresh daftar santri di dropdown
+    if (typeof populateKTSSelect === 'function') populateKTSSelect();
+
+    showToast({
+        title: '🔄 Filter KTS Direset',
+        message: 'Filter dan preview KTS berhasil dikembalikan ke pengaturan awal.',
+        type: 'success',
+        duration: 2500,
+        icon: 'bi-arrow-repeat'
+    });
+};
 
 
 // ===== FUNGSI MODAL KONFIRMASI IMPORT (FIXED) =====
