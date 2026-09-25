@@ -5311,7 +5311,7 @@ body.hide-bulk-luluskan.hide-bulk-mutasi .filter-section-wrapper button[onclick*
                 <li class="nav-item">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-input" type="button"
                             onclick="toggleDashboardView(false); currentTab='tab-input'; loadDataPaging('data_santri', 'tbodySantri', 0)">
-                        <i class="bi bi-person-plus"></i> Input Data
+                        <i class="bi bi-person-plus"></i> Entry Data
                     </button>
                 </li>
                 <li class="nav-item">
@@ -14641,17 +14641,17 @@ window.bulkBatalNaikKelas = async () => {
     if (tbodyId !== 'tbodySantri') {
         return showAlertModal({
             title: 'Tab Tidak Sesuai',
-            message: 'Untuk membatalkan kenaikan kelas, silakan buka tab "Input Data" terlebih dahulu dan pilih santri yang akan dibatalkan.',
+            message: 'Untuk membatalkan kenaikan kelas, silakan buka tab "Entry Data" terlebih dahulu dan pilih santri yang akan dibatalkan.',
             details: `
                 <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
                     <span style="font-weight: 600;">Tab Saat Ini</span>
                     <span style="color: #e74c3c;">: ${tbodyId.replace('tbody', 'Data ')}</span>
                     <span style="font-weight: 600;">Tab Diperlukan</span>
-                    <span style="color: #2ecc71;">: Input Data (Data Aktif)</span>
+                    <span style="color: #2ecc71;">: Entry Data (Data Aktif)</span>
                 </div>
                 <div style="margin-top: 10px; padding: 8px 12px; background: #e8f4fd; border-radius: 8px; border-left: 3px solid #3498db; font-size: 0.8rem; color: #1a5276;">
                     <i class="bi bi-info-circle-fill me-1"></i>
-                    <strong>Cara:</strong> Klik tab <strong>Input Data</strong> di menu navigasi, lalu centang santri yang akan dibatalkan kenaikan kelasnya.
+                    <strong>Cara:</strong> Klik tab <strong>Entry Data</strong> di menu navigasi, lalu centang santri yang akan dibatalkan kenaikan kelasnya.
                 </div>
             `,
             type: 'warning',
@@ -18033,7 +18033,7 @@ window.openEditModal = async (btn, collName) => {
             kelasSantriEl.textContent = `• Kelas ${kelas}${jenjang ? ` (${jenjang})` : ''}`;
         }
         
-        // Label sumber data (Input Data / Data Lulus / Data Mutasi)
+        // Label sumber data (Entry Data / Data Lulus / Data Mutasi)
         if (collLabelEl) {
             let labelText = 'Data Aktif';
             let labelColor = '#2ecc71';
