@@ -5153,6 +5153,69 @@
         width: 100%;
     }
 }
+
+
+/* ============================================================
+   ===== INDIKATOR WAJIB ISI NO. IJAZAH =====
+   ============================================================ */
+.editable-table input[data-field="no_ijazah"].wajib-isi {
+    background-color: #fff5f5 !important;
+    border: 2px solid #e74c3c !important;
+    animation: pulseWajib 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseWajib {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+    50% { box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.15); }
+}
+
+[data-theme="dark"] .editable-table input[data-field="no_ijazah"].wajib-isi {
+    background-color: rgba(231, 76, 60, 0.15) !important;
+    border-color: #e74c3c !important;
+}
+
+
+/* ============================================================
+   ===== SEMBUNYIKAN TOMBOL LULUSKAN & MUTASI DI TAB TERTENTU =====
+   ============================================================ */
+
+/* Sembunyikan tombol "Luluskan" saat di tab Data Lulus */
+body.hide-bulk-luluskan #filterSectionWrapper button[onclick*="bulkMoveData"][onclick*="Lulus"],
+body.hide-bulk-luluskan #filterSectionWrapper button[title="Luluskan Santri"] {
+    display: none !important;
+}
+
+/* Sembunyikan tombol "Mutasi" saat di tab Data Mutasi */
+body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][onclick*="Mutasi"],
+body.hide-bulk-mutasi #filterSectionWrapper button[title="Mutasikan Santri"] {
+    display: none !important;
+}
+
+/* ============================================================
+   ===== SEMBUNYIKAN TOMBOL LULUSKAN & MUTASI DI TAB TERTENTU =====
+   ============================================================ */
+
+/* Sembunyikan tombol "Luluskan" saat di tab Data Lulus */
+body.hide-bulk-luluskan #filterSectionWrapper button[onclick*="bulkMoveData"][onclick*="Lulus"],
+body.hide-bulk-luluskan #filterSectionWrapper button[title="Luluskan Santri"],
+body.hide-bulk-luluskan .filter-section-wrapper button[onclick*="bulkMoveData"][onclick*="Lulus"],
+body.hide-bulk-luluskan .filter-section-wrapper button[title="Luluskan Santri"] {
+    display: none !important;
+}
+
+/* Sembunyikan tombol "Mutasi" saat di tab Data Mutasi */
+body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][onclick*="Mutasi"],
+body.hide-bulk-mutasi #filterSectionWrapper button[title="Mutasikan Santri"],
+body.hide-bulk-mutasi .filter-section-wrapper button[onclick*="bulkMoveData"][onclick*="Mutasi"],
+body.hide-bulk-mutasi .filter-section-wrapper button[title="Mutasikan Santri"] {
+    display: none !important;
+}
+
+/* Sembunyikan KEDUA tombol saat di tab Data Lulus */
+body.hide-bulk-luluskan.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"],
+body.hide-bulk-luluskan.hide-bulk-mutasi .filter-section-wrapper button[onclick*="bulkMoveData"] {
+    display: none !important;
+}
 </style>
 </head>
 <body>
@@ -5683,7 +5746,6 @@
                     <div class="tab-toolbar">
                         <div class="btn-group">
                             <button class="btn btn-success" onclick="saveTabSpecificData('data_santri_lulus', 'tbodyLulus')"><i class="bi bi-cloud-arrow-up"></i> Simpan</button>
-                            <button class="btn btn-warning" onclick="openImportIjazahModal()"><i class="bi bi-file-earmark-arrow-up"></i> Import Ijazah</button>
                         </div>
                         <div class="divider"></div>
                         <div class="btn-group">
@@ -6497,63 +6559,6 @@
             </div>
         </div>
 
-        <!-- MODAL IMPORT IJAZAH -->
-        <div class="modal fade" id="modalImportIjazah" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header bg-warning text-dark">
-                        <h5 class="modal-title"><i class="bi bi-file-earmark-spreadsheet me-2"></i> Import Massal Data Lulus</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle me-2"></i> <strong>Petunjuk:</strong> Upload file Excel (.xlsx, .xls) dengan format:
-                            <ul class="mt-2 mb-0">
-                                <li>Kolom <strong>A</strong>: Nama Santri atau NISN (identifier)</li>
-                                <li>Kolom <strong>B</strong>: Nomor Ijazah</li>
-                                <li>Kolom <strong>C</strong>: Tanggal Akhir (format: <code>dd/mm/yyyy</code>)</li>
-                            </ul>
-                            <div class="mt-2">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="downloadTemplateIjazah()">
-                                    <i class="bi bi-download me-1"></i> Download Template
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Jenis Identifier</label>
-                                <select id="identifierType" class="form-select">
-                                    <option value="nama">Berdasarkan Nama Santri</option>
-                                    <option value="nisn">Berdasarkan NISN</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Opsi Update</label>
-                                <select id="updateOptions" class="form-select">
-                                    <option value="both">Update Nomor Ijazah & Tanggal Akhir</option>
-                                    <option value="ijazah_only">Update Nomor Ijazah Saja</option>
-                                    <option value="tanggal_only">Update Tanggal Akhir Saja</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Upload File Excel</label>
-                            <input type="file" id="importIjazahFile" class="form-control" accept=".xlsx, .xls">
-                        </div>
-                        <div id="previewImportIjazah" style="max-height: 300px; overflow-y: auto; display: none;">
-                            <hr>
-                            <h6>Preview Data:</h6>
-                            <div id="previewTable"></div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-warning" onclick="processImportIjazah()"><i class="bi bi-cloud-upload me-1"></i> Proses Import</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- ===== MODAL TAMBAH DATA - FULL WIDTH & LARGE ===== -->
         <div class="modal fade modal-tambah-data" id="modalTambahData" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-full-screen modal-xl">
@@ -7085,8 +7090,8 @@
                                                 <input type="text" class="form-control form-control-sm date-input" id="tdTglAkhir" placeholder="dd/mm/yyyy" maxlength="10" oninput="formatTgl(this)">
                                             </div>
                                             <div class="col-md-2">
-                                                <label class="form-label">No. Ijazah</label>
-                                                <input type="text" class="form-control form-control-sm" id="tdNoIjazah" placeholder="No. Ijazah">
+                                                <label class="form-label">No. Ijazah/Mutasi</label>
+                                                <input type="text" class="form-control form-control-sm" id="tdNoIjazah" placeholder="No. Ijazah/Mutasi">
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">Timestamp</label>
@@ -7647,8 +7652,8 @@
                                                 <input type="text" class="form-control form-control-sm date-input" id="edTglAkhir" placeholder="dd/mm/yyyy" maxlength="10" oninput="formatTgl(this)">
                                             </div>
                                             <div class="col-md-2">
-                                                <label class="form-label">No. Ijazah</label>
-                                                <input type="text" class="form-control form-control-sm" id="edNoIjazah" placeholder="No. Ijazah">
+                                                <label class="form-label">No. Ijazah/Mutasi</label>
+                                                <input type="text" class="form-control form-control-sm" id="edNoIjazah" placeholder="No. Ijazah/Mutasi">
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">Timestamp</label>
@@ -10906,7 +10911,7 @@ window.hapusFotoDariKoleksi = async (santriId) => {
                 { headerId: 'hMutasi', tbodyId: 'tbodyMutasi' }
             ];
 
-            const labels = ["KODE ABSEN", "FOTO", "NAMA LENGKAP SANTRI", "TEMPAT LAHIR", "TANGGAL LAHIR", "UMUR", "JENIS KELAMIN", "STATUS ANAK", "ANAK KE", "NIK SANTRI", "ALAMAT", "DESA/KEL.", "KEC.", "KAB./KOTA", "PROV.", "KODE POS", "NISN", "STATUS AWAL", "KELAS AWAL", "KELAS BERJALAN", "SEM AWAL", "TANGGAL MASUK", "NIS", "NISM", "PROGRAM", "JENJANG", "SEKOLAH ASAL", "NPSN ASAL", "NSPP ASAL", "ALAMAT ASAL", "STATUS TINGGAL", "NO. KK", "AYAH", "STATUS AYAH", "NIK AYAH", "PEND. AYAH", "PEK. AYAH", "GAJI AYAH", "HP AYAH", "THN AYAH", "IBU", "STATUS IBU", "NIK IBU", "PEND. IBU", "PEK. IBU", "GAJI IBU", "HP IBU", "THN IBU", "ALAMAT ORANGTUA", "KK WALI", "NIK WALI", "NAMA WALI", "HUB. WALI", "PEND. WALI", "PEK. WALI", "GAJI WALI", "HP WALI", "THN WALI", "ALAMAT WALI", "KETERANGAN", "STATUS AKHIR", "TGL AKHIR", "NO. IJAZAH", "TIMESTAMP"];
+            const labels = ["KODE ABSEN", "FOTO", "NAMA LENGKAP SANTRI", "TEMPAT LAHIR", "TANGGAL LAHIR", "UMUR", "JENIS KELAMIN", "STATUS ANAK", "ANAK KE", "NIK SANTRI", "ALAMAT", "DESA/KEL.", "KEC.", "KAB./KOTA", "PROV.", "KODE POS", "NISN", "STATUS AWAL", "KELAS AWAL", "KELAS BERJALAN", "SEM AWAL", "TANGGAL MASUK", "NIS", "NISM", "PROGRAM", "JENJANG", "SEKOLAH ASAL", "NPSN ASAL", "NSPP ASAL", "ALAMAT ASAL", "STATUS TINGGAL", "NO. KK", "AYAH", "STATUS AYAH", "NIK AYAH", "PEND. AYAH", "PEK. AYAH", "GAJI AYAH", "HP AYAH", "THN AYAH", "IBU", "STATUS IBU", "NIK IBU", "PEND. IBU", "PEK. IBU", "GAJI IBU", "HP IBU", "THN IBU", "ALAMAT ORANGTUA", "KK WALI", "NIK WALI", "NAMA WALI", "HUB. WALI", "PEND. WALI", "PEK. WALI", "GAJI WALI", "HP WALI", "THN WALI", "ALAMAT WALI", "KETERANGAN", "STATUS AKHIR", "TGL AKHIR", "NO. IJAZAH/MUTASI", "TIMESTAMP"];
 
             const alamatFields = ['ALAMAT', 'DESA/KEL.', 'KEC.', 'KAB./KOTA', 'PROV.', 'KODE POS', 'ALAMAT ASAL', 'ALAMAT ORANGTUA', 'ALAMAT WALI'];
 
@@ -10959,7 +10964,7 @@ window.hapusFotoDariKoleksi = async (santriId) => {
                 "ALAMAT WALI": "almt_wali",
                 "STATUS AKHIR": "stat_akhir",
                 "TGL AKHIR": "tgl_akhir",
-                "NO. IJAZAH": "no_ijazah",
+                "NO. IJAZAH/MUTASI": "no_ijazah",
                 "TIMESTAMP": "updated_at"
             };
 
@@ -11391,55 +11396,62 @@ window.debouncedSearch = function() {
         }
 
 
-        // ============================================================
-        // ===== FUNGSI DETEKSI INPUT KOSONG PADA TABEL =====
-        // ============================================================
-        window.updateEmptyCells = function(tbodyId) {
-            const tbody = document.getElementById(tbodyId);
-            if (!tbody) return;
+window.updateEmptyCells = function(tbodyId) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    
+    tbody.querySelectorAll('tr').forEach(row => {
+        row.querySelectorAll('[data-field]').forEach(input => {
+            const fieldName = input.dataset.field || '';
             
-            tbody.querySelectorAll('tr').forEach(row => {
-                row.querySelectorAll('[data-field]').forEach(input => {
-                    const fieldName = input.dataset.field || '';
-                    
-                    // Skip field yang memang readonly dan auto-generated
-                    const skipFields = ['umur', 'nis', 'nism', 'updated_at', 'created_at'];
-                    if (skipFields.includes(fieldName)) {
-                        // Tetap tandai sebagai empty jika kosong
-                    }
-                    
-                    const value = (input.value || '').trim();
-                    
-                    if (value === '') {
-                        input.classList.add('is-empty');
-                    } else {
-                        input.classList.remove('is-empty');
-                    }
-                });
-                
-                // Cek foto kosong
-                const photoInput = row.querySelector('[data-field="foto"]');
-                const photoPreview = row.querySelector('.photo-preview');
-                if (photoPreview) {
-                    const src = photoPreview.getAttribute('src') || '';
-                    if (!src || src.includes('via.placeholder') || src.includes('No+Foto')) {
-                        photoPreview.classList.add('photo-empty');
-                    } else {
-                        photoPreview.classList.remove('photo-empty');
-                    }
-                }
-                
-                // ===== TANDAI BARIS TANPA IDENTITAS =====
-                const nik = (row.querySelector('[data-field="nik"]')?.value || '').trim();
-                const nisn = (row.querySelector('[data-field="nisn"]')?.value || '').trim();
-                
-                if (!nik && !nisn) {
-                    row.classList.add('row-no-identity');
-                } else {
-                    row.classList.remove('row-no-identity');
-                }
-            });
-        };
+            const skipFields = ['umur', 'nis', 'nism', 'updated_at', 'created_at'];
+            if (skipFields.includes(fieldName)) {
+                // tetap tandai
+            }
+            
+            const value = (input.value || '').trim();
+            
+            if (value === '') {
+                input.classList.add('is-empty');
+            } else {
+                input.classList.remove('is-empty');
+            }
+        });
+        
+        // Cek foto kosong
+        const photoInput = row.querySelector('[data-field="foto"]');
+        const photoPreview = row.querySelector('.photo-preview');
+        if (photoPreview) {
+            const src = photoPreview.getAttribute('src') || '';
+            if (!src || src.includes('via.placeholder') || src.includes('No+Foto')) {
+                photoPreview.classList.add('photo-empty');
+            } else {
+                photoPreview.classList.remove('photo-empty');
+            }
+        }
+        
+        // ===== TANDAI BARIS TANPA IDENTITAS =====
+        const nik = (row.querySelector('[data-field="nik"]')?.value || '').trim();
+        const nisn = (row.querySelector('[data-field="nisn"]')?.value || '').trim();
+        
+        if (!nik && !nisn) {
+            row.classList.add('row-no-identity');
+        } else {
+            row.classList.remove('row-no-identity');
+        }
+
+        // ===== TANDAI FIELD NO. IJAZAH YANG WAJIB DIISI =====
+        const statAkhirRow = (row.querySelector('[data-field="stat_akhir"]')?.value || '').trim();
+        const noIjazahInput = row.querySelector('[data-field="no_ijazah"]');
+        if (noIjazahInput) {
+            if ((statAkhirRow === 'Lulus' || statAkhirRow === 'Mutasi') && !noIjazahInput.value.trim()) {
+                noIjazahInput.classList.add('wajib-isi');
+            } else {
+                noIjazahInput.classList.remove('wajib-isi');
+            }
+        }
+    });
+};
 
 
         // ============================================================
@@ -12736,7 +12748,7 @@ window.saveAllData = async () => {
         return;
     }
 
-    // ===== ✅ VALIDASI FORMAT NISN (10 DIGIT) & NIK/KK (16 DIGIT) PER BARIS =====
+    // ===== VALIDASI FORMAT NISN (10 DIGIT) & NIK/KK (16 DIGIT) =====
     const numericRegexNISN = /^\d{10}$/;
     const numericRegexNIK  = /^\d{16}$/;
 
@@ -12748,7 +12760,6 @@ window.saveAllData = async () => {
         
         const namaSantri = rowData.nama || 'Tanpa Nama';
 
-        // ---- Validasi NISN ----
         if (rowData.nisn && !numericRegexNISN.test(rowData.nisn.trim())) {
             const nilai = rowData.nisn.trim();
             const pesanMasalah = /\D/.test(nilai)
@@ -12782,7 +12793,6 @@ window.saveAllData = async () => {
             return;
         }
 
-        // ---- Validasi NIK & KK ----
         const nikKkFields = [
             { key: 'nik',      label: 'NIK Santri' },
             { key: 'nik_ayah', label: 'NIK Ayah' },
@@ -12830,9 +12840,8 @@ window.saveAllData = async () => {
             }
         }
     }
-    // ===== SELESAI VALIDASI FORMAT NISN, NIK, KK =====
 
-    // ===== ✅ VALIDASI FORMAT NPSN (8 DIGIT) & NSPP (12 DIGIT) PER BARIS =====
+    // ===== VALIDASI FORMAT NPSN (8 DIGIT) & NSPP (12 DIGIT) =====
     const numericRegexNPSN = /^\d{8}$/;
     const numericRegexNSPP = /^\d{12}$/;
 
@@ -12844,7 +12853,6 @@ window.saveAllData = async () => {
         
         const namaSantri = rowData.nama || 'Tanpa Nama';
 
-        // ---- Validasi NPSN (8 digit) ----
         if (rowData.npsn_asal && !numericRegexNPSN.test(rowData.npsn_asal.trim())) {
             const nilai = rowData.npsn_asal.trim();
             const pesanMasalah = /\D/.test(nilai)
@@ -12879,7 +12887,6 @@ window.saveAllData = async () => {
             return;
         }
 
-        // ---- Validasi NSPP (12 digit) ----
         if (rowData.nspp_asal && !numericRegexNSPP.test(rowData.nspp_asal.trim())) {
             const nilai = rowData.nspp_asal.trim();
             const pesanMasalah = /\D/.test(nilai)
@@ -12914,7 +12921,33 @@ window.saveAllData = async () => {
             return;
         }
     }
-    // ===== SELESAI VALIDASI FORMAT NPSN & NSPP =====
+
+    // ===== ✅ VALIDASI WAJIB ISI NO. IJAZAH/MUTASI PER BARIS =====
+    for (const row of rows) {
+        const rowData = {};
+        row.querySelectorAll('[data-field]').forEach(input => {
+            rowData[input.dataset.field] = input.value || '';
+        });
+
+        const cekNoIjazah = await cekWajibNoIjazah({
+            statAkhir: rowData.stat_akhir,
+            noIjazah: rowData.no_ijazah,
+            namaSantri: rowData.nama || 'Tanpa Nama',
+            context: 'tabel'
+        });
+
+        if (!cekNoIjazah.valid) {
+            const noIjazahInput = row.querySelector('[data-field="no_ijazah"]');
+            if (noIjazahInput) {
+                setTimeout(() => {
+                    noIjazahInput.focus();
+                    noIjazahInput.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                }, 300);
+            }
+            return;
+        }
+    }
+    // ===== SELESAI VALIDASI NO. IJAZAH =====
 
     // Tampilkan modal konfirmasi
     const konfirmasi = await showKonfirmasiSimpan();
@@ -13088,7 +13121,7 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
         return;
     }
 
-    // ===== ✅ VALIDASI FORMAT NISN (10 DIGIT) & NIK/KK (16 DIGIT) PER BARIS =====
+    // ===== VALIDASI FORMAT NISN (10 DIGIT) & NIK/KK (16 DIGIT) =====
     const numericRegexNISN = /^\d{10}$/;
     const numericRegexNIK  = /^\d{16}$/;
 
@@ -13100,7 +13133,6 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
         
         const namaSantri = rowData.nama || 'Tanpa Nama';
 
-        // ---- Validasi NISN ----
         if (rowData.nisn && !numericRegexNISN.test(rowData.nisn.trim())) {
             const nilai = rowData.nisn.trim();
             const pesanMasalah = /\D/.test(nilai)
@@ -13134,7 +13166,6 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
             return;
         }
 
-        // ---- Validasi NIK & KK ----
         const nikKkFields = [
             { key: 'nik',      label: 'NIK Santri' },
             { key: 'nik_ayah', label: 'NIK Ayah' },
@@ -13182,9 +13213,8 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
             }
         }
     }
-    // ===== SELESAI VALIDASI FORMAT NISN, NIK, KK =====
 
-    // ===== ✅ VALIDASI FORMAT NPSN (8 DIGIT) & NSPP (12 DIGIT) PER BARIS =====
+    // ===== VALIDASI FORMAT NPSN (8 DIGIT) & NSPP (12 DIGIT) =====
     const numericRegexNPSN = /^\d{8}$/;
     const numericRegexNSPP = /^\d{12}$/;
 
@@ -13196,7 +13226,6 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
         
         const namaSantri = rowData.nama || 'Tanpa Nama';
 
-        // ---- Validasi NPSN (8 digit) ----
         if (rowData.npsn_asal && !numericRegexNPSN.test(rowData.npsn_asal.trim())) {
             const nilai = rowData.npsn_asal.trim();
             const pesanMasalah = /\D/.test(nilai)
@@ -13231,7 +13260,6 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
             return;
         }
 
-        // ---- Validasi NSPP (12 digit) ----
         if (rowData.nspp_asal && !numericRegexNSPP.test(rowData.nspp_asal.trim())) {
             const nilai = rowData.nspp_asal.trim();
             const pesanMasalah = /\D/.test(nilai)
@@ -13266,7 +13294,33 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
             return;
         }
     }
-    // ===== SELESAI VALIDASI FORMAT NPSN & NSPP =====
+
+    // ===== ✅ VALIDASI WAJIB ISI NO. IJAZAH/MUTASI PER BARIS =====
+    for (const row of rows) {
+        const rowData = {};
+        row.querySelectorAll('[data-field]').forEach(input => {
+            rowData[input.dataset.field] = input.value || '';
+        });
+
+        const cekNoIjazah = await cekWajibNoIjazah({
+            statAkhir: rowData.stat_akhir,
+            noIjazah: rowData.no_ijazah,
+            namaSantri: rowData.nama || 'Tanpa Nama',
+            context: 'tabel'
+        });
+
+        if (!cekNoIjazah.valid) {
+            const noIjazahInput = row.querySelector('[data-field="no_ijazah"]');
+            if (noIjazahInput) {
+                setTimeout(() => {
+                    noIjazahInput.focus();
+                    noIjazahInput.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                }, 300);
+            }
+            return;
+        }
+    }
+    // ===== SELESAI VALIDASI NO. IJAZAH =====
 
     // ===== KONFIRMASI SIMPAN DENGAN MODAL KUSTOM =====
     const labelTabel = collectionName === 'data_santri_lulus' ? 'Data Lulus'
@@ -13663,6 +13717,60 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
         });
     }
 
+    // ============================================================
+    // ===== ✅ CEK NO. IJAZAH (SEBAGAI PERINGATAN, BUKAN BLOKIR) =====
+    // Blok ini HANYA berjalan untuk status Lulus atau Mutasi
+    // ============================================================
+    let rowsTanpaIjazah = [];
+    let rowsTotalCount = 0;
+
+    if (statusBaru === 'Lulus' || statusBaru === 'Mutasi') {
+
+        const loaderCek = document.getElementById('loader');
+        loaderCek.style.display = 'flex';
+
+        try {
+            const constraintsCek = [];
+            if (filterKelas)    constraintsCek.push(where("kls_now", "==", filterKelas));
+            if (filterJenjang)  constraintsCek.push(where("jenjang", "==", filterJenjang));
+            if (filterJK)       constraintsCek.push(where("jk", "==", filterJK));
+            if (filterStatus)   constraintsCek.push(where("stat_akhir", "==", filterStatus));
+
+            const qCek = query(collection(db, "data_santri"), ...constraintsCek);
+            const snapCek = await getDocs(qCek);
+
+            snapCek.forEach(docSnap => {
+                const data = docSnap.data();
+                const nama = data.nama || 'Tanpa Nama';
+
+                // Terapkan filter pencarian nama (jika ada)
+                if (searchNama && !nama.toLowerCase().includes(searchNama)) return;
+
+                rowsTotalCount++;
+
+                const noIjazah = (data.no_ijazah || '').trim();
+                if (!noIjazah) {
+                    rowsTanpaIjazah.push({
+                        nama: nama,
+                        kelas: data.kls_now || '-',
+                        docId: docSnap.id
+                    });
+                }
+            });
+
+            loaderCek.style.display = 'none';
+
+        } catch (errorCek) {
+            loaderCek.style.display = 'none';
+            console.error("Error saat validasi No. Ijazah:", errorCek);
+            // Lanjutkan saja, tidak perlu blokir karena ini hanya peringatan
+            rowsTanpaIjazah = [];
+        }
+    }
+    // ============================================================
+    // ===== SELESAI CEK NO. IJAZAH =====
+    // ============================================================
+
     // ===== TAMPILKAN KONFIRMASI MODAL =====
     let filterDetails = '';
     if (filterKelas) filterDetails += `<span style="font-weight: 600;">Kelas</span><span>: ${filterKelas}</span>`;
@@ -13676,6 +13784,54 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
     const targetLabel = isLulus ? 'Data Lulus' : 'Data Mutasi';
     const statusColor = isLulus ? '#2ecc71' : '#f39c12';
 
+    // ===== BANGUN BLOK PERINGATAN NO. IJAZAH (JIKA ADA) =====
+    let peringatanIjazahHtml = '';
+
+    if (rowsTanpaIjazah.length > 0) {
+        const maxShow = 8;
+        const showList = rowsTanpaIjazah.slice(0, maxShow).map(s =>
+            `<div style="display: flex; align-items: center; gap: 6px; padding: 3px 0;">
+                <i class="bi bi-exclamation-circle-fill" style="color: #e74c3c; font-size: 0.8rem;"></i>
+                <span style="font-size: 0.8rem;">${s.nama} (Kelas ${s.kelas})</span>
+            </div>`
+        ).join('');
+
+        const moreHtml = rowsTanpaIjazah.length > maxShow
+            ? `<div style="text-align: center; color: #6c757d; font-size: 0.75rem; padding-top: 6px; font-style: italic;">
+                ... dan ${rowsTanpaIjazah.length - maxShow} santri lainnya
+               </div>`
+            : '';
+
+        const labelField = isLulus ? 'Nomor Ijazah' : 'Nomor Surat Mutasi';
+
+        peringatanIjazahHtml = `
+            <div style="margin-top: 12px; padding: 12px 14px; background: #fff5f5; border-radius: 10px; border-left: 4px solid #e74c3c;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <i class="bi bi-exclamation-triangle-fill" style="color: #e74c3c; font-size: 1.1rem;"></i>
+                    <strong style="color: #721c24; font-size: 0.9rem;">
+                        Peringatan: ${rowsTanpaIjazah.length} dari ${rowsTotalCount} santri belum diisi ${labelField}
+                    </strong>
+                </div>
+                <div style="padding: 8px 10px; background: var(--bg-body); border-radius: 6px; max-height: 140px; overflow-y: auto;">
+                    ${showList}
+                    ${moreHtml}
+                </div>
+                <div style="margin-top: 8px; font-size: 0.78rem; color: #856404; padding: 6px 10px; background: #fff8e1; border-radius: 6px; border-left: 3px solid #f39c12;">
+                    <i class="bi bi-info-circle-fill me-1"></i>
+                    Proses <strong>${statusBaru}</strong> tetap dapat dilanjutkan, namun santri tersebut akan tercatat tanpa ${labelField}. Anda dapat mengisinya nanti melalui tab <strong>${targetLabel}</strong>.
+                </div>
+            </div>
+        `;
+    } else if (statusBaru === 'Lulus' || statusBaru === 'Mutasi') {
+        // Semua sudah terisi → tampilkan badge sukses
+        peringatanIjazahHtml = `
+            <div style="margin-top: 12px; padding: 10px 14px; background: #eafaf1; border-radius: 10px; border-left: 4px solid #2ecc71; font-size: 0.8rem; color: #1a5a3a;">
+                <i class="bi bi-check-circle-fill me-1"></i>
+                <strong>Validasi Lolos:</strong> Semua ${rowsTotalCount} santri sudah memiliki No. Ijazah/Mutasi.
+            </div>
+        `;
+    }
+
     const konfirmasi = await showConfirmModal({
         title: isLulus ? 'Konfirmasi Kelulusan Massal' : 'Konfirmasi Mutasi Massal',
         message: `Anda akan memproses ${statusBaru.toUpperCase()} untuk semua santri yang sesuai dengan filter berikut:`,
@@ -13685,13 +13841,17 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
                 <span style="font-weight: 600;">Target</span><span>: ${targetLabel}</span>
                 <span style="font-weight: 600;">Status Baru</span><span style="color: ${statusColor}; font-weight: 700;">: ${statusBaru}</span>
             </div>
-            <div style="margin-top: 12px; padding: 10px 14px; background: ${isLulus ? '#eafaf1' : '#fff8e1'}; border-radius: 10px; border-left: 4px solid ${statusColor}; font-size: 0.8rem; color: ${isLulus ? '#1a5a3a' : '#856404'};">
+            ${peringatanIjazahHtml}
+            <div style="margin-top: 8px; padding: 10px 14px; background: ${isLulus ? '#eafaf1' : '#fff8e1'}; border-radius: 10px; border-left: 4px solid ${statusColor}; font-size: 0.8rem; color: ${isLulus ? '#1a5a3a' : '#856404'};">
                 <i class="bi ${isLulus ? 'bi-mortarboard-fill' : 'bi-arrow-left-right'} me-1"></i>
                 <strong>Perhatian:</strong> Data santri akan <strong>dipindahkan</strong> dari Data Aktif ke ${targetLabel}. Pastikan filter sudah benar.
             </div>
         `,
         type: isLulus ? 'success' : 'info',
-        okText: `Ya, Proses ${statusBaru}`,
+        // ⚠️ Ubah teks tombol jika ada peringatan
+        okText: rowsTanpaIjazah.length > 0 
+            ? `Tetap Proses ${statusBaru} (${rowsTanpaIjazah.length} Tanpa No. Ijazah)`
+            : `Ya, Proses ${statusBaru}`,
         cancelText: 'Batal',
         icon: isLulus ? 'bi-mortarboard-fill' : 'bi-arrow-left-right'
     });
@@ -13703,7 +13863,6 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
     let count = 0;
     let processedNames = [];
 
-    // ✅ PERBAIKAN: Deklarasikan di LUAR loop agar bisa diakses di seluruh fungsi
     const today = new Date();
     const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
 
@@ -13746,7 +13905,6 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
 
             const processedData = { ...data };
 
-            // ✅ Gunakan formattedToday yang sudah dideklarasikan di luar loop
             processedData.stat_akhir = statusBaru;
             processedData.tgl_akhir = formattedToday;
             processedData.updated_at = new Date().toISOString();
@@ -13783,9 +13941,39 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
                     <span style="font-size: 0.8rem;">${n}</span>
                 </div>
             `).join('');
-            const moreHtml = processedNames.length > maxShow 
-                ? `<div style="text-align: center; color: #6c757d; font-size: 0.75rem; padding-top: 6px; font-style: italic;">... dan ${processedNames.length - maxShow} santri lainnya</div>` 
+            const moreHtml = processedNames.length > maxShow
+                ? `<div style="text-align: center; color: #6c757d; font-size: 0.75rem; padding-top: 6px; font-style: italic;">... dan ${processedNames.length - maxShow} santri lainnya</div>`
                 : '';
+
+            // ===== BLOK PERINGATAN HASIL (JIKA ADA YANG TANPA IJAZAH) =====
+            let hasilPeringatanHtml = '';
+            if (rowsTanpaIjazah.length > 0) {
+                const labelField = isLulus ? 'Nomor Ijazah' : 'Nomor Surat Mutasi';
+                const maxShowWarn = 5;
+                const showListWarn = rowsTanpaIjazah.slice(0, maxShowWarn).map(s =>
+                    `• ${s.nama} (Kelas ${s.kelas})`
+                ).join('<br>');
+                const moreHtmlWarn = rowsTanpaIjazah.length > maxShowWarn
+                    ? `<br><span style="font-style: italic; color: #6c757d;">... dan ${rowsTanpaIjazah.length - maxShowWarn} santri lainnya</span>`
+                    : '';
+
+                hasilPeringatanHtml = `
+                    <div style="margin-top: 12px; padding: 10px 14px; background: #fff8e1; border-radius: 10px; border-left: 4px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                            <i class="bi bi-exclamation-triangle-fill" style="color: #f39c12;"></i>
+                            <strong>Perhatian:</strong> ${rowsTanpaIjazah.length} santri belum diisi ${labelField}
+                        </div>
+                        <div style="padding: 8px 10px; background: var(--bg-body); border-radius: 6px; font-size: 0.78rem; line-height: 1.6; max-height: 120px; overflow-y: auto;">
+                            ${showListWarn}
+                            ${moreHtmlWarn}
+                        </div>
+                        <div style="margin-top: 6px; font-size: 0.75rem;">
+                            <i class="bi bi-lightbulb-fill me-1"></i>
+                            Silakan lengkapi ${labelField} melalui tab <strong>${targetLabel}</strong>.
+                        </div>
+                    </div>
+                `;
+            }
 
             await showAlertModal({
                 title: `${statusBaru} Berhasil Diproses`,
@@ -13795,6 +13983,10 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
                         <span style="font-weight: 600;">Total Data</span><span style="color: ${statusColor}; font-weight: 700;">: ${count} santri</span>
                         <span style="font-weight: 600;">Target</span><span>: ${targetLabel}</span>
                         <span style="font-weight: 600;">Tanggal</span><span>: ${formattedToday}</span>
+                        ${rowsTanpaIjazah.length > 0 ? `
+                            <span style="font-weight: 600;">Tanpa No. Ijazah</span>
+                            <span style="color: #f39c12; font-weight: 700;">: ${rowsTanpaIjazah.length} santri</span>
+                        ` : ''}
                     </div>
                     <div style="padding: 10px 12px; background: var(--bg-body); border-radius: 8px; max-height: 180px; overflow-y: auto;">
                         <div style="font-weight: 600; font-size: 0.8rem; margin-bottom: 6px; color: var(--text-primary);">
@@ -13803,6 +13995,7 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
                         ${listHtml}
                         ${moreHtml}
                     </div>
+                    ${hasilPeringatanHtml}
                 `,
                 type: 'success',
                 okText: 'OK, Selesai',
@@ -15116,249 +15309,6 @@ window.handleBulkPhotoUpload = async (input) => {
             }
         };
 
-        // ===== IMPORT IJAZAH =====
-        window.openImportIjazahModal = () => {
-            document.getElementById('importIjazahFile').value = '';
-            document.getElementById('previewImportIjazah').style.display = 'none';
-            new bootstrap.Modal(document.getElementById('modalImportIjazah')).show();
-            document.getElementById('importIjazahFile').onchange = previewImportIjazahExcel;
-        };
-
-        window.previewImportIjazahExcel = (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array', cellDates: false, raw: true });
-                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: "" });
-
-                if (rows.length <= 1) { alert('File kosong!'); return; }
-
-                const dataRows = rows.slice(1);
-                let previewHtml = '<table class="table table-sm table-bordered"><thead><tr><th>Identifier</th><th>Nomor Ijazah</th><th>Tanggal Akhir</th></thead><tbody>';
-
-                for (let i = 0; i < Math.min(dataRows.length, 10); i++) {
-                    const row = dataRows[i];
-                    const identifier = row[0] || '';
-                    const ijazah = row[1] || '';
-                    let tanggalAkhir = row[2] || '';
-                    let dateDisplay = tanggalAkhir;
-                    if (tanggalAkhir) {
-                        const converted = convertToDMY(tanggalAkhir);
-                        if (converted && /^\d{2}\/\d{2}\/\d{4}$/.test(converted)) {
-                            dateDisplay = converted;
-                        } else {
-                            dateDisplay = '❌ Format tidak valid';
-                        }
-                    } else {
-                        dateDisplay = '-';
-                    }
-                    previewHtml += `<tr><td>${escapeHtml(identifier)}</td><td>${escapeHtml(ijazah) || '-'}</td><td>${dateDisplay}</td></tr>`;
-                }
-
-                if (dataRows.length > 10) {
-                    previewHtml += `<tr><td colspan="3" class="text-muted">... dan ${dataRows.length - 10} data lainnya</td></tr>`;
-                }
-
-                previewHtml += '</tbody></table>';
-                previewHtml += `<div class="mt-2"><strong>Total data:</strong> ${dataRows.length} baris</div>`;
-
-                document.getElementById('previewTable').innerHTML = previewHtml;
-                document.getElementById('previewImportIjazah').style.display = 'block';
-                window.importIjazahData = dataRows;
-            };
-            reader.readAsArrayBuffer(file);
-        };
-
-        window.processImportIjazah = async () => {
-            const dataRows = window.importIjazahData;
-            if (!dataRows || dataRows.length === 0) { alert('Tidak ada data!'); return; }
-
-            const identifierType = document.getElementById('identifierType').value;
-            const updateOption = document.getElementById('updateOptions').value;
-
-            if (!confirm(`Import ${dataRows.length} data?`)) return;
-
-            const loader = document.getElementById('loader');
-            loader.style.display = 'flex';
-            let successCount = 0, notFoundCount = 0, duplicateCount = 0;
-            let duplicateIjazahList = [];
-
-            try {
-                const rows = document.querySelectorAll('#tbodyLulus tr');
-
-                const existingIjazahSet = new Set();
-                try {
-                    const lulusSnapshot = await getDocs(collection(db, "data_santri_lulus"));
-                    lulusSnapshot.forEach(doc => {
-                        const data = doc.data();
-                        if (data.no_ijazah && data.no_ijazah.trim()) {
-                            existingIjazahSet.add(data.no_ijazah.trim());
-                        }
-                    });
-                } catch (error) {
-                    console.warn("Gagal memuat data ijazah dari database:", error);
-                }
-
-                for (const row of rows) {
-                    const ijazahInput = row.querySelector('[data-field="no_ijazah"]');
-                    if (ijazahInput && ijazahInput.value && ijazahInput.value.trim()) {
-                        existingIjazahSet.add(ijazahInput.value.trim());
-                    }
-                }
-
-                const processedIjazahSet = new Set();
-
-                for (const importRow of dataRows) {
-                    const identifier = (importRow[0] || '').toString().trim().toLowerCase();
-                    const noIjazah = (importRow[1] || '').toString().trim();
-                    const tanggalAkhirRaw = importRow[2] || '';
-
-                    if (!identifier) continue;
-
-                    let isValidIjazah = true;
-                    let duplicateReason = '';
-
-                    if (noIjazah && (updateOption === 'both' || updateOption === 'ijazah_only')) {
-                        if (existingIjazahSet.has(noIjazah)) {
-                            isValidIjazah = false;
-                            duplicateReason = `Nomor Ijazah "${noIjazah}" sudah terdaftar di database atau tabel`;
-                        } else if (processedIjazahSet.has(noIjazah)) {
-                            isValidIjazah = false;
-                            duplicateReason = `Nomor Ijazah "${noIjazah}" duplikat dalam file import`;
-                        }
-                    }
-
-                    if (!isValidIjazah) {
-                        duplicateCount++;
-                        duplicateIjazahList.push(`- Identifier: "${identifier}", Ijazah: "${noIjazah}" -> ${duplicateReason}`);
-                        continue;
-                    }
-
-                    let tanggalAkhirFormatted = '';
-                    if ((updateOption === 'both' || updateOption === 'tanggal_only') && tanggalAkhirRaw) {
-                        tanggalAkhirFormatted = convertToDMY(tanggalAkhirRaw);
-                        if (!tanggalAkhirFormatted || !/^\d{2}\/\d{2}\/\d{4}$/.test(tanggalAkhirFormatted)) {
-                            tanggalAkhirFormatted = '';
-                        }
-                    }
-
-                    let found = false;
-                    for (const row of rows) {
-                        let rowIdentifier = '';
-                        if (identifierType === 'nama') {
-                            const namaInput = row.querySelector('[data-field="nama"]');
-                            rowIdentifier = (namaInput?.value || '').toString().trim().toLowerCase();
-                        } else {
-                            const nisnInput = row.querySelector('[data-field="nisn"]');
-                            rowIdentifier = (nisnInput?.value || '').toString().trim().toLowerCase();
-                        }
-
-                        if (rowIdentifier === identifier) {
-                            if (noIjazah && (updateOption === 'both' || updateOption === 'ijazah_only')) {
-                                if (processedIjazahSet.has(noIjazah)) {
-                                    duplicateCount++;
-                                    duplicateIjazahList.push(`- Duplikat internal: "${noIjazah}" untuk identifier "${identifier}"`);
-                                    found = true;
-                                    break;
-                                }
-                                processedIjazahSet.add(noIjazah);
-                                existingIjazahSet.add(noIjazah);
-                            }
-
-                            if (updateOption === 'both' || updateOption === 'ijazah_only') {
-                                const ijazahInput = row.querySelector('[data-field="no_ijazah"]');
-                                if (ijazahInput && noIjazah) {
-                                    ijazahInput.value = noIjazah;
-                                }
-                            }
-                            if (updateOption === 'both' || updateOption === 'tanggal_only') {
-                                if (tanggalAkhirFormatted) {
-                                    const tglAkhirInput = row.querySelector('[data-field="tgl_akhir"]');
-                                    if (tglAkhirInput) tglAkhirInput.value = tanggalAkhirFormatted;
-                                }
-                            }
-                            successCount++;
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) notFoundCount++;
-                }
-
-                let message = `✅ Import selesai!\nBerhasil: ${successCount}\nTidak ditemukan: ${notFoundCount}`;
-
-                if (duplicateCount > 0) {
-                    message += `\n⚠️ Duplikat nomor ijazah: ${duplicateCount} data\n\n`;
-                    if (duplicateIjazahList.length > 0) {
-                        const maxShow = 10;
-                        const showList = duplicateIjazahList.slice(0, maxShow);
-                        message += `📋 Detail duplikasi:\n${showList.join('\n')}`;
-                        if (duplicateIjazahList.length > maxShow) {
-                            message += `\n... dan ${duplicateIjazahList.length - maxShow} duplikasi lainnya`;
-                        }
-                    }
-                }
-
-                if (successCount > 0) {
-                    message += `\n\nSimpan perubahan ke database?`;
-                    if (confirm(message)) {
-                        const finalIjazahSet = new Set();
-                        let finalDuplicateFound = false;
-                        const rowsToSave = document.querySelectorAll('#tbodyLulus tr');
-                        for (const row of rowsToSave) {
-                            const ijazahInput = row.querySelector('[data-field="no_ijazah"]');
-                            if (ijazahInput && ijazahInput.value && ijazahInput.value.trim()) {
-                                const ijazahValue = ijazahInput.value.trim();
-                                if (finalIjazahSet.has(ijazahValue)) {
-                                    finalDuplicateFound = true;
-                                    alert(`⚠️ Duplikasi nomor ijazah "${ijazahValue}" masih ditemukan di tabel. Perbaiki sebelum menyimpan.`);
-                                    loader.style.display = 'none';
-                                    return;
-                                }
-                                finalIjazahSet.add(ijazahValue);
-                            }
-                        }
-
-                        if (finalDuplicateFound) {
-                            loader.style.display = 'none';
-                            return;
-                        }
-
-                        await saveTabSpecificData('data_santri_lulus', 'tbodyLulus');
-                        alert('Perubahan disimpan!');
-                        await loadDataPaging('data_santri_lulus', 'tbodyLulus', 0, 1);
-                    }
-                } else {
-                    alert(message);
-                }
-
-                const modal = bootstrap.Modal.getInstance(document.getElementById('modalImportIjazah'));
-                if (modal) modal.hide();
-            } catch (error) {
-                alert('Error: ' + error.message);
-            } finally {
-                loader.style.display = 'none';
-                window.importIjazahData = null;
-            }
-        };
-
-        window.downloadTemplateIjazah = () => {
-            const templateData = [
-                ['Identifier (Nama/NISN)', 'Nomor Ijazah', 'Tanggal Akhir (dd/mm/yyyy)'],
-                ['Ahmad Fauzi', '12.3456.7890', '15/06/2024'],
-                ['Siti Aminah', '98.7654.3210', '20/06/2024'],
-                ['1234567890', '55.1234.5678', '25/06/2024']
-            ];
-            const ws = XLSX.utils.aoa_to_sheet(templateData);
-            ws['!cols'] = [{ wch: 30 }, { wch: 25 }, { wch: 25 }];
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Template');
-            XLSX.writeFile(wb, 'Template_Import_Data_Lulus.xlsx');
-        };
 
         function escapeHtml(text) {
             if (!text) return '';
@@ -16316,6 +16266,17 @@ window.validateAndFixAllDates = async () => {
         });
     }
 };
+
+
+        // ===== TOGGLE ELEMENTS FOR TAB =====
+        window.toggleElementsForTab = (tabId) => {
+            if (tabId === 'tab-struktur' || tabId === 'tab-surat' || tabId === 'tab-cetak-kts' || 
+                tabId === 'tab-tren' || tabId === 'tab-tren-kelulusan') {
+                document.body.classList.add('hide-elements');
+            } else {
+                document.body.classList.remove('hide-elements');
+            }
+        };
 
 
         // ===== TOGGLE ELEMENTS FOR TAB =====
@@ -17328,6 +17289,7 @@ window.validateNPSN = async function(npsnValue, fieldLabel = 'NPSN', fieldId = n
     return true;
 };
 
+
 // ===== VALIDASI NSPP (12 DIGIT ANGKA) =====
 window.validateNSPP = async function(nsppValue, fieldLabel = 'NSPP', fieldId = null) {
     if (!nsppValue || nsppValue.trim() === '') {
@@ -17391,6 +17353,75 @@ window.validateNSPP = async function(nsppValue, fieldLabel = 'NSPP', fieldId = n
     }
 
     return true;
+};
+
+
+// ============================================================
+// ===== VALIDASI WAJIB ISI NO. IJAZAH/MUTASI =====
+// Jika status akhir = "Lulus" atau "Mutasi", maka field
+// no_ijazah WAJIB diisi. Jika kosong, munculkan modal peringatan.
+// ============================================================
+window.cekWajibNoIjazah = async function(options = {}) {
+    const {
+        statAkhir = '',
+        noIjazah = '',
+        namaSantri = 'Santri ini',
+        fieldIdNoIjazah = null,
+        context = 'tabel'
+    } = options;
+
+    if (statAkhir !== 'Lulus' && statAkhir !== 'Mutasi') {
+        return { valid: true };
+    }
+
+    const noIjazahTrim = (noIjazah || '').trim();
+    if (noIjazahTrim !== '') {
+        return { valid: true };
+    }
+
+    const isLulus = statAkhir === 'Lulus';
+    const labelField = isLulus ? 'Nomor Ijazah' : 'Nomor Surat Mutasi';
+    const iconStatus = isLulus ? 'bi-mortarboard-fill' : 'bi-arrow-left-right';
+    const colorStatus = isLulus ? '#2ecc71' : '#f39c12';
+
+    await showAlertModal({
+        title: `${labelField} Wajib Diisi`,
+        message: `Santri "${namaSantri}" berstatus "${statAkhir}". Anda wajib mengisi ${labelField} terlebih dahulu sebelum menyimpan.`,
+        details: `
+            <div style="display: grid; grid-template-columns: 150px 1fr; gap: 8px 12px;">
+                <span style="font-weight: 600;">Nama Santri</span>
+                <span>: ${namaSantri}</span>
+                <span style="font-weight: 600;">Status Akhir</span>
+                <span style="color: ${colorStatus}; font-weight: 700;">
+                    <i class="bi ${iconStatus} me-1"></i>: ${statAkhir}
+                </span>
+                <span style="font-weight: 600;">${labelField}</span>
+                <span style="color: #e74c3c;">: ❌ Kosong</span>
+            </div>
+            <div style="margin-top: 12px; padding: 10px 14px; background: ${isLulus ? '#eafaf1' : '#fff8e1'}; border-radius: 8px; border-left: 3px solid ${colorStatus}; font-size: 0.82rem; color: ${isLulus ? '#1a5a3a' : '#856404'};">
+                <i class="bi bi-lightbulb-fill me-1"></i>
+                <strong>Solusi:</strong> Isi kolom <strong>${labelField}</strong> pada ${context === 'modal' ? 'form' : 'tabel'} terlebih dahulu, lalu simpan kembali.
+            </div>
+        `,
+        type: 'warning',
+        okText: 'OK, Saya Isi',
+        icon: 'bi-exclamation-triangle-fill'
+    });
+
+    if (fieldIdNoIjazah) {
+        setTimeout(() => {
+            const el = document.getElementById(fieldIdNoIjazah);
+            if (el) {
+                el.focus();
+                el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                el.style.transition = 'box-shadow 0.3s ease';
+                el.style.boxShadow = '0 0 0 3px rgba(231, 76, 60, 0.4)';
+                setTimeout(() => { el.style.boxShadow = ''; }, 1500);
+            }
+        }, 300);
+    }
+
+    return { valid: false };
 };
 
 
@@ -17542,9 +17573,7 @@ window.simpanDataBaru = async () => {
         });
     }
 
-    // ⬇️⬇️⬇️ ===== SOLUSI 2: FALLBACK HITUNG NIS/NISM ===== ⬇️⬇️⬇️
-    // Jika NIS atau NISM kosong, hitung ulang dari tgl_masuk & kode_absen
-    // Ini berjaga-jaga jika event listener auto-generate tidak terpanggil
+    // ===== FALLBACK HITUNG NIS/NISM =====
     if ((!data.nis || !data.nism) && data.tgl_masuk && data.kode_absen) {
         const parts = data.tgl_masuk.split('/');
         if (parts.length === 3) {
@@ -17560,19 +17589,12 @@ window.simpanDataBaru = async () => {
                 data.nism = `${kodeMadrasah}${tahunDuaDigit}${kodeClean}`;
             }
 
-            // Update juga field di modal agar user bisa lihat hasilnya
             const nisEl = document.getElementById('tdNis');
             const nismEl = document.getElementById('tdNism');
             if (nisEl && !nisEl.value) nisEl.value = data.nis;
             if (nismEl && !nismEl.value) nismEl.value = data.nism;
-
-            console.log('✅ NIS/NISM di-generate otomatis via fallback:', {
-                nis: data.nis,
-                nism: data.nism
-            });
         }
     }
-    // ⬆️⬆️⬆️ ===== AKHIR SOLUSI 2 ===== ⬆️⬆️⬆️
 
     // ===== VALIDASI NAMA =====
     if (!data.nama) {
@@ -17597,7 +17619,7 @@ window.simpanDataBaru = async () => {
         return;
     }
 
-    // ===== VALIDASI SEMUA TANGGAL DENGAN MODAL =====
+    // ===== VALIDASI SEMUA TANGGAL =====
     const tanggalFields = [
         { id: 'tdTglLahir', label: 'Tanggal Lahir', field: 'tgl_lahir' },
         { id: 'tdTglMasuk', label: 'Tanggal Masuk', field: 'tgl_masuk' },
@@ -17622,8 +17644,7 @@ window.simpanDataBaru = async () => {
 
     if (!allDatesValid) return;
 
-    // ⬇️⬇️⬇️ ===== SOLUSI 3: VALIDASI KELENGKAPAN DATA UNTUK NIS/NISM ===== ⬇️⬇️⬇️
-    // Peringatkan user jika ada data yang dibutuhkan untuk NIS/NISM tapi kosong
+    // ===== PERINGATAN NIS/NISM TIDAK LENGKAP =====
     if (!data.tgl_masuk || data.tgl_masuk.length < 10 || !data.kode_absen) {
         const lanjutkan = await showConfirmModal({
             title: 'Data NIS/NISM Tidak Lengkap',
@@ -17639,14 +17660,6 @@ window.simpanDataBaru = async () => {
                     <span style="color: ${data.kode_absen ? '#2ecc71' : '#e74c3c'};">
                         : ${data.kode_absen || '❌ Kosong'}
                     </span>
-                    <span style="font-weight: 600;">NIS</span>
-                    <span style="color: ${data.nis ? '#2ecc71' : '#e74c3c'};">
-                        : ${data.nis || '❌ Tidak dapat di-generate'}
-                    </span>
-                    <span style="font-weight: 600;">NISM</span>
-                    <span style="color: ${data.nism ? '#2ecc71' : '#e74c3c'};">
-                        : ${data.nism || '❌ Tidak dapat di-generate'}
-                    </span>
                 </div>
                 <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
                     <i class="bi bi-lightbulb-fill me-1"></i>
@@ -17660,7 +17673,6 @@ window.simpanDataBaru = async () => {
         });
 
         if (!lanjutkan) {
-            // Arahkan fokus ke field yang kosong
             if (!data.tgl_masuk || data.tgl_masuk.length < 10) {
                 document.getElementById('tdTglMasuk')?.focus();
             } else if (!data.kode_absen) {
@@ -17669,12 +17681,12 @@ window.simpanDataBaru = async () => {
             return;
         }
     }
-    // ⬆️⬆️⬆️ ===== AKHIR SOLUSI 3 ===== ⬆️⬆️⬆️
 
-    // ===== ✅ VALIDASI NISN (10 DIGIT), NIK & KK (16 DIGIT) =====
+    // ===== VALIDASI NISN =====
     const isNisnValid = await validateNISN(data.nisn, 'NISN', 'tdNisn');
     if (!isNisnValid) return;
 
+    // ===== VALIDASI NIK & KK =====
     const nikKkFields = [
         { value: data.nik,       label: 'NIK Santri',    fieldId: 'tdNik' },
         { value: data.nik_ayah,  label: 'NIK Ayah',      fieldId: 'tdNikAyah' },
@@ -17688,15 +17700,24 @@ window.simpanDataBaru = async () => {
         const isValid = await validateNIK(f.value, f.label, f.fieldId);
         if (!isValid) return;
     }
-    // ===== SELESAI VALIDASI NISN, NIK, KK =====
 
-    // ===== ✅ VALIDASI NPSN (8 DIGIT) & NSPP (12 DIGIT) =====
+    // ===== VALIDASI NPSN & NSPP =====
     const isNpsnValid = await validateNPSN(data.npsn_asal, 'NPSN Asal', 'tdNpsnAsal');
     if (!isNpsnValid) return;
 
     const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'tdNsppAsal');
     if (!isNsppValid) return;
-    // ===== SELESAI VALIDASI NPSN & NSPP =====
+
+    // ===== ✅ VALIDASI WAJIB ISI NO. IJAZAH/MUTASI =====
+    const cekNoIjazah = await cekWajibNoIjazah({
+        statAkhir: data.stat_akhir,
+        noIjazah: data.no_ijazah,
+        namaSantri: data.nama,
+        fieldIdNoIjazah: 'tdNoIjazah',
+        context: 'modal'
+    });
+    if (!cekNoIjazah.valid) return;
+    // ===== SELESAI VALIDASI NO. IJAZAH =====
 
     // ===== VALIDASI: WAJIB ISI MINIMAL SALAH SATU NIK ATAU NISN =====
     if (!data.nik && !data.nisn) {
@@ -17792,6 +17813,8 @@ window.simpanDataBaru = async () => {
                 <span style="font-weight: 600;">NISN</span><span>: ${data.nisn || '-'}</span>
                 <span style="font-weight: 600;">NIS</span><span style="color: ${data.nis ? '#2ecc71' : '#e74c3c'};">: ${data.nis || '❌ Kosong'}</span>
                 <span style="font-weight: 600;">NISM</span><span style="color: ${data.nism ? '#2ecc71' : '#e74c3c'};">: ${data.nism || '❌ Kosong'}</span>
+                <span style="font-weight: 600;">Status Akhir</span><span>: ${data.stat_akhir || 'Aktif'}</span>
+                <span style="font-weight: 600;">No. Ijazah/Mutasi</span><span style="color: ${(data.stat_akhir === 'Lulus' || data.stat_akhir === 'Mutasi') ? (data.no_ijazah ? '#2ecc71' : '#e74c3c') : '#6c757d'};">: ${data.no_ijazah || '-'}</span>
             </div>
         `,
         type: 'success',
@@ -17831,7 +17854,6 @@ window.simpanDataBaru = async () => {
 
         document.getElementById('formTambahData').reset();
 
-        // Reset juga field NIS/NISM setelah form di-reset
         const nisEl = document.getElementById('tdNis');
         const nismEl = document.getElementById('tdNism');
         if (nisEl) nisEl.value = '';
@@ -18284,7 +18306,7 @@ window.simpanEditData = async () => {
         return;
     }
 
-    // ===== VALIDASI SEMUA TANGGAL DENGAN MODAL =====
+    // ===== VALIDASI SEMUA TANGGAL =====
     const tanggalFields = [
         { id: 'edTglLahir', label: 'Tanggal Lahir', field: 'tgl_lahir' },
         { id: 'edTglMasuk', label: 'Tanggal Masuk', field: 'tgl_masuk' },
@@ -18309,10 +18331,11 @@ window.simpanEditData = async () => {
 
     if (!allDatesValid) return;
 
-    // ===== ✅ VALIDASI NISN (10 DIGIT), NIK & KK (16 DIGIT) =====
+    // ===== VALIDASI NISN =====
     const isNisnValid = await validateNISN(data.nisn, 'NISN', 'edNisn');
     if (!isNisnValid) return;
 
+    // ===== VALIDASI NIK & KK =====
     const nikKkFields = [
         { value: data.nik,       label: 'NIK Santri',    fieldId: 'edNik' },
         { value: data.nik_ayah,  label: 'NIK Ayah',      fieldId: 'edNikAyah' },
@@ -18326,15 +18349,24 @@ window.simpanEditData = async () => {
         const isValid = await validateNIK(f.value, f.label, f.fieldId);
         if (!isValid) return;
     }
-    // ===== SELESAI VALIDASI NISN, NIK, KK =====
 
-    // ===== ✅ VALIDASI NPSN (8 DIGIT) & NSPP (12 DIGIT) =====
+    // ===== VALIDASI NPSN & NSPP =====
     const isNpsnValid = await validateNPSN(data.npsn_asal, 'NPSN Asal', 'edNpsnAsal');
     if (!isNpsnValid) return;
 
     const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'edNsppAsal');
     if (!isNsppValid) return;
-    // ===== SELESAI VALIDASI NPSN & NSPP =====
+
+    // ===== ✅ VALIDASI WAJIB ISI NO. IJAZAH/MUTASI =====
+    const cekNoIjazah = await cekWajibNoIjazah({
+        statAkhir: data.stat_akhir,
+        noIjazah: data.no_ijazah,
+        namaSantri: data.nama,
+        fieldIdNoIjazah: 'edNoIjazah',
+        context: 'modal'
+    });
+    if (!cekNoIjazah.valid) return;
+    // ===== SELESAI VALIDASI NO. IJAZAH =====
 
     // ===== VALIDASI: WAJIB ISI MINIMAL SALAH SATU NIK ATAU NISN =====
     if (!data.nik && !data.nisn) {
@@ -18360,7 +18392,7 @@ window.simpanEditData = async () => {
         }
     }
 
-    // ===== CEK DUPLIKASI BERDASARKAN NIK & NISN (KECUALI DIRI SENDIRI) =====
+    // ===== CEK DUPLIKASI =====
     const duplicates = [];
     let duplicateNames = [];
 
@@ -18434,6 +18466,8 @@ window.simpanEditData = async () => {
                 <span style="font-weight: 600;">Jenjang</span><span>: ${data.jenjang || '-'}</span>
                 <span style="font-weight: 600;">NIK</span><span>: ${data.nik || '-'}</span>
                 <span style="font-weight: 600;">NISN</span><span>: ${data.nisn || '-'}</span>
+                <span style="font-weight: 600;">Status Akhir</span><span>: ${data.stat_akhir || 'Aktif'}</span>
+                <span style="font-weight: 600;">No. Ijazah/Mutasi</span><span style="color: ${(data.stat_akhir === 'Lulus' || data.stat_akhir === 'Mutasi') ? (data.no_ijazah ? '#2ecc71' : '#e74c3c') : '#6c757d'};">: ${data.no_ijazah || '-'}</span>
             </div>
         `,
         type: 'info',
@@ -18616,6 +18650,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     toggleDashboardView(true);
 
+    // ============================================================
+    // ===== SEMBUNYIKAN TOMBOL BULK MOVE BERDASARKAN TAB AKTIF =====
+    // ============================================================
+    // Fungsi: Menyembunyikan tombol "Luluskan" saat di tab Data Lulus,
+    // dan menyembunyikan tombol "Mutasi" saat di tab Data Mutasi.
+    // ============================================================
+window.updateBulkMoveButtonsVisibility = function() {
+    const activeTab = document.querySelector('.tab-pane.active');
+    const tabId = activeTab ? activeTab.id : '';
+
+    // Reset dulu — hapus semua class pembungkus
+    document.body.classList.remove('hide-bulk-luluskan', 'hide-bulk-mutasi');
+
+    // ===== LOGIKA BARU =====
+    // Di tab "Data Lulus"  → sembunyikan "Luluskan" DAN "Mutasi"
+    // Di tab "Data Mutasi" → sembunyikan "Luluskan" DAN "Mutasi"
+    // ============================================================
+    if (tabId === 'tab-lulus' || tabId === 'tab-mutasi') {
+        document.body.classList.add('hide-bulk-luluskan');
+        document.body.classList.add('hide-bulk-mutasi');
+    }
+};
+
+    // Pasang listener ke semua tombol tab
+    document.querySelectorAll('#myTab button[data-bs-toggle="tab"]').forEach(tabBtn => {
+        tabBtn.addEventListener('shown.bs.tab', function() {
+            updateBulkMoveButtonsVisibility();
+        });
+    });
+
+    // Panggil sekali saat halaman pertama kali dimuat
+    updateBulkMoveButtonsVisibility();
+
     document.querySelectorAll('#formTambahKelulusan input').forEach(input => {
         input.addEventListener('input', updateKelPreview);
     });
@@ -18635,6 +18702,112 @@ document.addEventListener('DOMContentLoaded', () => {
         attachEmptyDetection(id);
         attachIdentityGuard(id);
     });
+
+    // ============================================================
+    // ===== TAHAP 6: VALIDASI TABEL =====
+    // ===== OTOMATIS: STATUS AKHIR → NO. IJAZAH =====
+    // Saat user ubah stat_akhir menjadi Lulus/Mutasi di tabel,
+    // cek apakah no_ijazah sudah diisi. Jika belum, munculkan modal.
+    // ============================================================
+    ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(tbodyId => {
+        const tbody = document.getElementById(tbodyId);
+        if (!tbody) return;
+
+        tbody.addEventListener('change', async function(e) {
+            if (!e.target.matches('select[data-field="stat_akhir"]')) return;
+
+            const row = e.target.closest('tr');
+            if (!row) return;
+
+            const statusBaru = e.target.value;
+            const noIjazahInput = row.querySelector('[data-field="no_ijazah"]');
+            const namaInput = row.querySelector('[data-field="nama"]');
+            const namaSantri = (namaInput?.value || '').trim() || 'Santri ini';
+
+            if (statusBaru !== 'Lulus' && statusBaru !== 'Mutasi') {
+                if (noIjazahInput) {
+                    noIjazahInput.classList.remove('wajib-isi');
+                }
+                return;
+            }
+
+            const noIjazah = (noIjazahInput?.value || '').trim();
+            if (noIjazah !== '') {
+                if (noIjazahInput) noIjazahInput.classList.remove('wajib-isi');
+                return;
+            }
+
+            if (noIjazahInput) {
+                noIjazahInput.classList.add('wajib-isi');
+            }
+
+            await cekWajibNoIjazah({
+                statAkhir: statusBaru,
+                noIjazah: noIjazah,
+                namaSantri: namaSantri,
+                context: 'tabel'
+            });
+
+            if (noIjazahInput) {
+                noIjazahInput.focus();
+                noIjazahInput.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
+        });
+    });
+
+    // ============================================================
+    // ===== TAHAP 7: VALIDASI MODAL TAMBAH DATA =====
+    // ===== STATUS AKHIR → NO. IJAZAH =====
+    // ============================================================
+    const tdStatAkhirEl = document.getElementById('tdStatAkhir');
+    if (tdStatAkhirEl) {
+        tdStatAkhirEl.addEventListener('change', async function() {
+            const statusBaru = this.value;
+            const noIjazahEl = document.getElementById('tdNoIjazah');
+            const namaEl = document.getElementById('tdNama');
+            const namaSantri = (namaEl?.value || '').trim() || 'Santri ini';
+
+            if (statusBaru !== 'Lulus' && statusBaru !== 'Mutasi') return;
+
+            const noIjazah = (noIjazahEl?.value || '').trim();
+            if (noIjazah !== '') return;
+
+            await cekWajibNoIjazah({
+                statAkhir: statusBaru,
+                noIjazah: noIjazah,
+                namaSantri: namaSantri,
+                fieldIdNoIjazah: 'tdNoIjazah',
+                context: 'modal'
+            });
+        });
+    }
+
+    // ============================================================
+    // ===== TAHAP 7: VALIDASI MODAL EDIT DATA =====
+    // ===== STATUS AKHIR → NO. IJAZAH =====
+    // ============================================================
+    const edStatAkhirEl = document.getElementById('edStatAkhir');
+    if (edStatAkhirEl) {
+        edStatAkhirEl.addEventListener('change', async function() {
+            const statusBaru = this.value;
+            const noIjazahEl = document.getElementById('edNoIjazah');
+            const namaEl = document.getElementById('edNama');
+            const namaSantri = (namaEl?.value || '').trim() || 'Santri ini';
+
+            if (statusBaru !== 'Lulus' && statusBaru !== 'Mutasi') return;
+
+            const noIjazah = (noIjazahEl?.value || '').trim();
+            if (noIjazah !== '') return;
+
+            await cekWajibNoIjazah({
+                statAkhir: statusBaru,
+                noIjazah: noIjazah,
+                namaSantri: namaSantri,
+                fieldIdNoIjazah: 'edNoIjazah',
+                context: 'modal'
+            });
+        });
+    }
 
     // ===== AUTO-FILTER INPUT HANYA ANGKA UNTUK NISN, NIK, KK, NPSN, NSPP DI TABEL =====
     const numericFields = [
@@ -18697,9 +18870,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ⬇️⬇️⬇️ ===== TAMBAHKAN BLOK INI (SOLUSI 4) ===== ⬇️⬇️⬇️
-    // ============================================================
-    // ===== SOLUSI 4: EVENT LISTENER AUTO-GENERATE NIS/NISM =====
+    // ⬇️⬇️⬇️ ===== SOLUSI 4: EVENT LISTENER AUTO-GENERATE NIS/NISM ===== ⬇️⬇️⬇️
     // ============================================================
 
     // ----- MODAL TAMBAH DATA -----
@@ -18753,6 +18924,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ⬆️⬆️⬆️ ===== AKHIR SOLUSI 4 ===== ⬆️⬆️⬆️
 
 }); // ← AKHIR DOMContentLoaded PERTAMA
+
 
 
         // ===== REGISTER FUNGSI KTS KE WINDOW =====
@@ -19089,7 +19261,7 @@ const dataWithAge = dataArray.map(item => {
                 'NO. KK', 'AYAH', 'STATUS AYAH', 'NIK AYAH', 'PEND. AYAH', 'PEK. AYAH', 'GAJI AYAH', 'HP AYAH',
                 'THN AYAH', 'IBU', 'STATUS IBU', 'NIK IBU', 'PEND. IBU', 'PEK. IBU', 'GAJI IBU', 'HP IBU', 'THN IBU',
                 'ALAMAT ORANGTUA', 'KK WALI', 'NIK WALI', 'NAMA WALI', 'HUB. WALI', 'PEND. WALI', 'PEK. WALI',
-                'GAJI WALI', 'HP WALI', 'THN WALI', 'ALAMAT WALI', 'KETERANGAN', 'STATUS AKHIR', 'TGL AKHIR', 'NO. IJAZAH'
+                'GAJI WALI', 'HP WALI', 'THN WALI', 'ALAMAT WALI', 'KETERANGAN', 'STATUS AKHIR', 'TGL AKHIR', 'NO. IJAZAH/MUTASI'
             ];
 
             const templateData = [headers];
@@ -19271,7 +19443,7 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                     return labels[c.type] || c.type;
                 }).join(' + ');
 
-                // Ambil data existing dari Firestore
+                // ===== AMBIL DATA EXISTING DARI FIRESTORE =====
                 const snapshot = await getDocs(collection(db, "data_santri"));
                 const santriMap = {};
                 snapshot.forEach(doc => {
@@ -19299,10 +19471,16 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                 });
 
                 const rows = jsonData.slice(1);
-                let foundCount = 0;
-                let notFoundCount = 0;
+
+                // ===== COUNTER =====
+                let foundCount = 0;         // data yang benar-benar akan diupdate
+                let notFoundCount = 0;      // data yang tidak ditemukan di DB
+                let noChangeCount = 0;      // data ditemukan tapi tidak ada perubahan
+                let duplicateCount = 0;     // data duplikat dalam file
+
                 let notFoundList = [];
                 let foundList = [];
+                let noChangeList = [];
                 let duplicateList = [];
 
                 const updates = [];
@@ -19312,6 +19490,7 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                     let foundData = null;
                     let foundDocId = null;
 
+                    // ===== CARI DATA DI DATABASE =====
                     for (const config of identifierConfig) {
                         const identifier = String(row[config.index] || '').trim();
                         if (!identifier) continue;
@@ -19327,78 +19506,101 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                         }
                     }
 
-                    if (foundData && foundDocId) {
-                        if (processedIdentifiers.has(foundDocId)) {
-                            duplicateList.push(`Baris ${idx + 2}: ${foundData.nama || 'Tanpa Nama'} - duplikat data`);
-                            return;
-                        }
-
-                        processedIdentifiers.add(foundDocId);
-                        foundCount++;
-                        foundList.push(`Baris ${idx + 2}: ${foundData.nama || 'Tanpa Nama'}`);
-
-                        const rowData = {};
-
-                        headers.forEach((header, colIndex) => {
-                            const value = row[colIndex];
-                            if (value !== undefined && value !== '' && value !== null) {
-                                const fieldName = mapHeaderToField(header);
-                                if (fieldName) {
-                                    if (fieldName.includes('tgl') || fieldName.includes('tanggal')) {
-                                        let val = value;
-                                         // Jika Date object dari XLSX dengan cellDates: true
-                                        if (val instanceof Date && !isNaN(val.getTime())) {
-                                            val = `${String(val.getDate()).padStart(2,'0')}/${String(val.getMonth()+1).padStart(2,'0')}/${val.getFullYear()}`;
-                                        } else {
-                                 val = convertToDMY(val);
-                                        }
-                                        rowData[fieldName] = val;
-                                     }
-                                }
-                            }
-                        });
-
-                        const mergedData = { ...foundData };
-                        let hasChanges = false;
-
-                        Object.keys(rowData).forEach(key => {
-                            if (rowData[key] !== undefined && rowData[key] !== '' && rowData[key] !== null) {
-                                if (key === 'nama' && !rowData[key]) return;
-                                if (key === 'nik'  && !rowData[key]) return;
-                                if (key === 'nisn' && !rowData[key]) return;
-
-                                const currentValue = mergedData[key] || '';
-                                const newValue = rowData[key];
-                                if (String(currentValue).trim() !== String(newValue).trim()) {
-                                    mergedData[key] = newValue;
-                                    hasChanges = true;
-                                }
-                            }
-                        });
-
-                        if (hasChanges) {
-                            mergedData.updated_at = new Date().toISOString();
-                            
-                            // 🔥 PERBAIKAN: Hitung ulang umur jika tgl_lahir ada
-                            if (mergedData.tgl_lahir) {
-                                const hitungUmur = hitungUmurDariTanggal(mergedData.tgl_lahir);
-                                if (hitungUmur) {
-                                    mergedData.umur = hitungUmur;
-                                }
-                            }
-                            
-                            updates.push({
-                                docId: foundDocId,
-                                data: mergedData
-                            });
-                        } else {
-                            foundCount--;
-                        }
-                    } else {
+                    // ===== JIKA TIDAK DITEMUKAN =====
+                    if (!foundData || !foundDocId) {
                         notFoundCount++;
-                        const identifierValue = identifierConfig.map(c => row[c.index] || '').filter(v => v).join(' / ');
+                        const identifierValue = identifierConfig
+                            .map(c => row[c.index] || '')
+                            .filter(v => v)
+                            .join(' / ');
                         notFoundList.push(`Baris ${idx + 2}: "${identifierValue || 'kosong'}" tidak ditemukan di database`);
+                        return;
                     }
+
+                    // ===== CEK DUPLIKAT DALAM FILE =====
+                    if (processedIdentifiers.has(foundDocId)) {
+                        duplicateCount++;
+                        duplicateList.push(`Baris ${idx + 2}: ${foundData.nama || 'Tanpa Nama'} - duplikat data dalam file`);
+                        return;
+                    }
+                    processedIdentifiers.add(foundDocId);
+
+                    // ===== BANGUN rowData DARI EXCEL =====
+                    const rowData = {};
+
+                    headers.forEach((header, colIndex) => {
+                        const value = row[colIndex];
+
+                        // Skip nilai kosong
+                        if (value === undefined || value === '' || value === null) return;
+
+                        const fieldName = mapHeaderToField(header);
+                        if (!fieldName) return;
+
+                        // ===== FIELD TANGGAL =====
+                        if (fieldName.includes('tgl') || fieldName.includes('tanggal')) {
+                            let val = value;
+
+                            // Date object dari XLSX
+                            if (val instanceof Date && !isNaN(val.getTime())) {
+                                val = `${String(val.getDate()).padStart(2,'0')}/${String(val.getMonth()+1).padStart(2,'0')}/${val.getFullYear()}`;
+                            } else {
+                                val = convertToDMY(val);
+                            }
+
+                            // Hanya simpan kalau formatnya valid dd/mm/yyyy
+                            if (val && /^\d{2}\/\d{2}\/\d{4}$/.test(val)) {
+                                rowData[fieldName] = val;
+                            }
+                        }
+                        // ===== FIELD BIASA (INI YANG SEBELUMNYA HILANG / BUG) =====
+                        else {
+                            rowData[fieldName] = value;
+                        }
+                    });
+
+                    // ===== BANDINGKAN DENGAN DATA EXISTING =====
+                    const mergedData = { ...foundData };
+                    let hasChanges = false;
+
+                    Object.keys(rowData).forEach(key => {
+                        // Jangan overwrite identifier (nama/nik/nisn) dari Excel kalau kosong
+                        if (key === 'nama' && !rowData[key]) return;
+                        if (key === 'nik'  && !rowData[key]) return;
+                        if (key === 'nisn' && !rowData[key]) return;
+
+                        const currentValue = String(mergedData[key] || '').trim();
+                        const newValue = String(rowData[key] || '').trim();
+
+                        if (currentValue !== newValue) {
+                            mergedData[key] = rowData[key];
+                            hasChanges = true;
+                        }
+                    });
+
+                    // ===== JIKA TIDAK ADA PERUBAHAN =====
+                    if (!hasChanges) {
+                        noChangeCount++;
+                        noChangeList.push(`Baris ${idx + 2}: ${foundData.nama || 'Tanpa Nama'} - nilai sudah sama`);
+                        return;
+                    }
+
+                    // ===== ADA PERUBAHAN → MASUKKAN KE UPDATES =====
+                    mergedData.updated_at = new Date().toISOString();
+
+                    // Hitung ulang umur jika tgl_lahir ada
+                    if (mergedData.tgl_lahir) {
+                        const hitungUmur = hitungUmurDariTanggal(mergedData.tgl_lahir);
+                        if (hitungUmur) mergedData.umur = hitungUmur;
+                    }
+
+                    updates.push({
+                        docId: foundDocId,
+                        data: mergedData
+                    });
+
+                    foundCount++;
+                    foundList.push(`Baris ${idx + 2}: ${foundData.nama || 'Tanpa Nama'}`);
                 });
 
                 loader.style.display = 'none';
@@ -19409,12 +19611,28 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                         <div style="display: grid; grid-template-columns: 1fr auto; gap: 6px 16px;">
                             <span style="font-weight: 600;">🔍 Identifier</span>
                             <span style="font-weight: 700;">${identifierLabel}</span>
-                            <span style="font-weight: 600;">✅ Data Ditemukan</span>
+                            <span style="font-weight: 600;">✅ Akan Diupdate</span>
                             <span style="color: #2ecc71; font-weight: 700;">${foundCount} data</span>
+                            <span style="font-weight: 600;">🟡 Tidak Ada Perubahan</span>
+                            <span style="color: #f39c12; font-weight: 700;">${noChangeCount} data</span>
                             <span style="font-weight: 600;">❌ Tidak Ditemukan</span>
                             <span style="color: #e74c3c; font-weight: 700;">${notFoundCount} data</span>
+                            ${duplicateCount > 0 ? `
+                            <span style="font-weight: 600;">⚠️ Duplikat</span>
+                            <span style="color: #f39c12; font-weight: 700;">${duplicateCount} data</span>
+                            ` : ''}
                         </div>
                     `;
+
+                    if (noChangeList.length > 0) {
+                        detailHtml += `
+                            <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.78rem; color: #856404; max-height: 100px; overflow-y: auto;">
+                                <strong>Contoh data tanpa perubahan:</strong><br>
+                                ${noChangeList.slice(0, 5).join('<br>')}
+                                ${noChangeList.length > 5 ? `<br>... dan ${noChangeList.length - 5} lainnya` : ''}
+                            </div>
+                        `;
+                    }
 
                     if (notFoundList.length > 0) {
                         detailHtml += `
@@ -19426,9 +19644,19 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                         `;
                     }
 
+                    if (duplicateList.length > 0) {
+                        detailHtml += `
+                            <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.78rem; color: #856404; max-height: 80px; overflow-y: auto;">
+                                <strong>Contoh duplikat:</strong><br>
+                                ${duplicateList.slice(0, 3).join('<br>')}
+                                ${duplicateList.length > 3 ? `<br>... dan ${duplicateList.length - 3} lainnya` : ''}
+                            </div>
+                        `;
+                    }
+
                     await showAlertModal({
                         title: 'Tidak Ada Data untuk Diupdate',
-                        message: 'Tidak ditemukan perubahan nilai pada file Excel, atau semua data tidak ditemukan di database.',
+                        message: 'Tidak ditemukan perubahan nilai pada file Excel. Periksa kembali file Anda.',
                         details: detailHtml,
                         type: 'warning',
                         okText: 'OK',
@@ -19445,15 +19673,17 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                     <span style="font-weight: 600;">🔍 Identifier</span>
                     <span style="font-weight: 700;">${identifierLabel}</span>
                     <span style="font-weight: 600;">✅ Akan Diupdate</span>
-                    <span style="color: #2ecc71; font-weight: 700;">${updates.length} data</span>
+                    <span style="color: #2ecc71; font-weight: 700;">${foundCount} data</span>
+                    <span style="font-weight: 600;">🟡 Tidak Ada Perubahan</span>
+                    <span style="color: #f39c12; font-weight: 700;">${noChangeCount} data</span>
                     <span style="font-weight: 600;">❌ Tidak Ditemukan</span>
                     <span style="color: #e74c3c; font-weight: 700;">${notFoundCount} data</span>
                 `;
 
-                if (duplicateList.length > 0) {
+                if (duplicateCount > 0) {
                     detailsHtml += `
                         <span style="font-weight: 600;">⚠️ Duplikat</span>
-                        <span style="color: #f39c12; font-weight: 700;">${duplicateList.length} data</span>
+                        <span style="color: #f39c12; font-weight: 700;">${duplicateCount} data</span>
                     `;
                 }
 
@@ -19469,6 +19699,16 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                     `;
                 }
 
+                if (noChangeCount > 0) {
+                    detailsHtml += `
+                        <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.78rem; color: #856404; max-height: 80px; overflow-y: auto;">
+                            <strong>Data ditemukan tapi tidak ada perubahan (dilewati):</strong><br>
+                            ${noChangeList.slice(0, 3).join('<br>')}
+                            ${noChangeList.length > 3 ? `<br>... dan ${noChangeList.length - 3} lainnya` : ''}
+                        </div>
+                    `;
+                }
+
                 if (notFoundCount > 0) {
                     detailsHtml += `
                         <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.78rem; color: #721c24; max-height: 80px; overflow-y: auto;">
@@ -19479,7 +19719,7 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                     `;
                 }
 
-                if (duplicateList.length > 0) {
+                if (duplicateCount > 0) {
                     detailsHtml += `
                         <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.78rem; color: #856404; max-height: 80px; overflow-y: auto;">
                             <strong>Contoh duplikat (dilewati):</strong><br>
@@ -19534,6 +19774,7 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                         // Toast sukses
                         let toastMsg = `${successCount} data santri berhasil diupdate di database.`;
                         if (notFoundCount > 0) toastMsg += ` (${notFoundCount} data tidak ditemukan dilewati)`;
+                        if (noChangeCount > 0) toastMsg += ` (${noChangeCount} data tanpa perubahan)`;
 
                         showToast({
                             title: '✅ Import Update Berhasil',
@@ -19574,94 +19815,166 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
 });
 
 
-        // ===== MAP HEADER KE FIELD =====
-        function mapHeaderToField(header) {
-            const headerLower = header.toLowerCase().trim();
-            
-            const mapping = {
-                'kode absen': 'kode_absen',
-                'kode_absen': 'kode_absen',
-                'nama santri': 'nama',
-                'nama': 'nama',
-                'nama lengkap': 'nama',
-                'tempat lahir': 'tmp_lahir',
-                'tanggal lahir': 'tgl_lahir',
-                'tgl lahir': 'tgl_lahir',
-                'umur': 'umur',
-                'jenis kelamin': 'jk',
-                'jk': 'jk',
-                'status anak': 'stat_anak',
-                'anak ke': 'anak_ke',
-                'nik': 'nik',
-                'alamat': 'alamat',
-                'desa': 'desa',
-                'kecamatan': 'kec',
-                'kec': 'kec',
-                'kabupaten': 'kab',
-                'kab': 'kab',
-                'provinsi': 'prov',
-                'prov': 'prov',
-                'kode pos': 'pos',
-                'nisn': 'nisn',
-                'status awal': 'stat_awal',
-                'kelas awal': 'kls_awal',
-                'kelas berjalan': 'kls_now',
-                'semester awal': 'sem_awal',
-                'sem awal': 'sem_awal',
-                'tanggal masuk': 'tgl_masuk',
-                'tgl masuk': 'tgl_masuk',
-                'nis': 'nis',
-                'nism': 'nism',
-                'program': 'program',
-                'jenjang': 'jenjang',
-                'sekolah asal': 'sekolah_asal',
-                'npsn asal': 'npsn_asal',
-                'nspp asal': 'nspp_asal',
-                'alamat asal': 'alamat_asal',
-                'status tinggal': 'stat_tinggal',
-                'no kk': 'no_kk',
-                'ayah': 'ayah',
-                'status ayah': 'stat_ayah',
-                'nik ayah': 'nik_ayah',
-                'pendidikan ayah': 'pen_ayah',
-                'pen ayah': 'pen_ayah',
-                'pekerjaan ayah': 'pek_ayah',
-                'gaji ayah': 'gaji_ayah',
-                'hp ayah': 'hp_ayah',
-                'thn ayah': 'thn_ayah',
-                'ibu': 'ibu',
-                'status ibu': 'stat_ibu',
-                'nik ibu': 'nik_ibu',
-                'pendidikan ibu': 'pen_ibu',
-                'pen ibu': 'pen_ibu',
-                'pekerjaan ibu': 'pek_ibu',
-                'gaji ibu': 'gaji_ibu',
-                'hp ibu': 'hp_ibu',
-                'thn ibu': 'thn_ibu',
-                'alamat orangtua': 'almt_ortu',
-                'alamat orang tua': 'almt_ortu',
-                'kk wali': 'kk_wali',
-                'nik wali': 'nik_wali',
-                'nama wali': 'nama_wali',
-                'hubungan wali': 'hub_wali',
-                'hub wali': 'hub_wali',
-                'pendidikan wali': 'pen_wali',
-                'pen wali': 'pen_wali',
-                'pekerjaan wali': 'pek_wali',
-                'gaji wali': 'gaji_wali',
-                'hp wali': 'hp_wali',
-                'thn wali': 'thn_wali',
-                'alamat wali': 'almt_wali',
-                'keterangan': 'ket',
-                'status akhir': 'stat_akhir',
-                'tgl akhir': 'tgl_akhir',
-                'tanggal akhir': 'tgl_akhir',
-                'no ijazah': 'no_ijazah',
-                'no. ijazah': 'no_ijazah'
-            };
-            
-            return mapping[headerLower] || null;
-        }
+// ===== MAP HEADER KE FIELD (VERSI PINTAR - FUZZY MATCHING) =====
+function mapHeaderToField(header) {
+    const h = String(header).toLowerCase().trim()
+        .replace(/[._\-]+/g, ' ')      // normalisasi pemisah
+        .replace(/\s+/g, ' ');          // normalisasi spasi
+
+    // ============================================================
+    // ATURAN KHUSUS DULU (paling spesifik)
+    // ============================================================
+    
+    // NISN
+    if (h === 'nisn') return 'nisn';
+    
+    // NIK / KK — urutan penting! Cek yang paling spesifik dulu
+    if (h.includes('no') && h.includes('kk') && h.includes('wali')) return 'kk_wali';
+    if (h.includes('no') && h.includes('kk')) return 'no_kk';
+    if (h.includes('nik') && h.includes('wali')) return 'nik_wali';
+    if (h.includes('nik') && h.includes('ayah')) return 'nik_ayah';
+    if (h.includes('nik') && h.includes('ibu'))  return 'nik_ibu';
+    if (h.includes('nik')) return 'nik';   // NIK santri (fallback)
+    
+    // Nama (yang paling spesifik dulu)
+    if (h.includes('nama') && h.includes('wali')) return 'nama_wali';
+    if (h.includes('nama') && h.includes('ayah')) return 'ayah';
+    if (h.includes('nama') && h.includes('ibu'))  return 'ibu';
+    if (h.includes('nama') && (h.includes('lengkap') || h.includes('santri'))) return 'nama';
+    if (h === 'nama') return 'nama';
+    
+    // Kode Absen
+    if (h.includes('kode') && h.includes('absen')) return 'kode_absen';
+    
+    // Foto
+    if (h === 'foto' || h.includes('foto')) return 'foto';
+    
+    // Tempat & Tanggal Lahir
+    if (h.includes('tempat') && h.includes('lahir')) return 'tmp_lahir';
+    if ((h.includes('tanggal') || h.includes('tgl')) && h.includes('lahir')) return 'tgl_lahir';
+    
+    // Umur
+    if (h === 'umur') return 'umur';
+    
+    // Jenis Kelamin
+    if (h.includes('jenis') && h.includes('kelamin')) return 'jk';
+    if (h === 'jk') return 'jk';
+    
+    // Status Anak
+    if (h.includes('status') && h.includes('anak')) return 'stat_anak';
+    if (h.includes('anak') && h.includes('ke')) return 'anak_ke';
+    
+    // Alamat
+    if (h.includes('alamat') && h.includes('orangtua')) return 'almt_ortu';
+    if (h.includes('alamat') && h.includes('orang') && h.includes('tua')) return 'almt_ortu';
+    if (h.includes('alamat') && h.includes('wali')) return 'almt_wali';
+    if (h.includes('alamat') && h.includes('asal')) return 'alamat_asal';
+    if (h === 'alamat' || (h.includes('alamat') && !h.includes('asal') && !h.includes('wali') && !h.includes('tua'))) return 'alamat';
+    
+    // Desa/Kelurahan
+    if (h.includes('desa') || h.includes('kelurahan') || h.includes('kel.')) return 'desa';
+    
+    // Kecamatan
+    if (h.includes('kecamatan') || h === 'kec' || h === 'kec.') return 'kec';
+    
+    // Kabupaten/Kota
+    if (h.includes('kabupaten') || h.includes('kab.') || h.includes('kota') || h === 'kab') return 'kab';
+    
+    // Provinsi
+    if (h.includes('provinsi') || h === 'prov' || h === 'prov.') return 'prov';
+    
+    // Kode Pos
+    if (h.includes('kode') && h.includes('pos')) return 'pos';
+    
+    // Status Awal
+    if (h.includes('status') && h.includes('awal')) return 'stat_awal';
+    
+    // Kelas Awal
+    if (h.includes('kelas') && h.includes('awal')) return 'kls_awal';
+    
+    // Kelas Berjalan
+    if (h.includes('kelas') && (h.includes('berjalan') || h.includes('sekarang') || h.includes('now'))) return 'kls_now';
+    
+    // Semester Awal
+    if (h.includes('semester') && h.includes('awal')) return 'sem_awal';
+    if (h.includes('sem') && h.includes('awal')) return 'sem_awal';
+    
+    // Tanggal Masuk
+    if ((h.includes('tanggal') || h.includes('tgl')) && h.includes('masuk')) return 'tgl_masuk';
+    
+    // NIS & NISM (urutan penting: NISM dulu karena mengandung "nis")
+    if (h === 'nism' || (h.includes('nism'))) return 'nism';
+    if (h === 'nis' || (h === 'no induk' || h.includes('nomor induk'))) return 'nis';
+    
+    // Program
+    if (h === 'program' || h.includes('program')) return 'program';
+    
+    // Jenjang
+    if (h === 'jenjang' || h.includes('jenjang')) return 'jenjang';
+    
+    // Sekolah Asal
+    if (h.includes('sekolah') && h.includes('asal')) return 'sekolah_asal';
+    
+    // NPSN Asal
+    if (h.includes('npsn')) return 'npsn_asal';
+    
+    // NSPP Asal
+    if (h.includes('nspp')) return 'nspp_asal';
+    
+    // Status Tinggal
+    if (h.includes('status') && h.includes('tinggal')) return 'stat_tinggal';
+    
+    // Ayah
+    if (h.includes('status') && h.includes('ayah')) return 'stat_ayah';
+    if (h.includes('pendidikan') && h.includes('ayah')) return 'pen_ayah';
+    if (h.includes('pend') && h.includes('ayah')) return 'pen_ayah';
+    if (h.includes('pekerjaan') && h.includes('ayah')) return 'pek_ayah';
+    if (h.includes('pek') && h.includes('ayah')) return 'pek_ayah';
+    if (h.includes('gaji') && h.includes('ayah')) return 'gaji_ayah';
+    if (h.includes('hp') && h.includes('ayah')) return 'hp_ayah';
+    if (h.includes('thn') && h.includes('ayah')) return 'thn_ayah';
+    if (h.includes('tahun') && h.includes('ayah')) return 'thn_ayah';
+    if (h === 'ayah' || (h.includes('ayah') && !h.includes('nik') && !h.includes('status'))) return 'ayah';
+    
+    // Ibu
+    if (h.includes('status') && h.includes('ibu')) return 'stat_ibu';
+    if (h.includes('pendidikan') && h.includes('ibu')) return 'pen_ibu';
+    if (h.includes('pend') && h.includes('ibu')) return 'pen_ibu';
+    if (h.includes('pekerjaan') && h.includes('ibu')) return 'pek_ibu';
+    if (h.includes('pek') && h.includes('ibu')) return 'pek_ibu';
+    if (h.includes('gaji') && h.includes('ibu')) return 'gaji_ibu';
+    if (h.includes('hp') && h.includes('ibu')) return 'hp_ibu';
+    if (h.includes('thn') && h.includes('ibu')) return 'thn_ibu';
+    if (h.includes('tahun') && h.includes('ibu')) return 'thn_ibu';
+    if (h === 'ibu' || (h.includes('ibu') && !h.includes('nik') && !h.includes('status'))) return 'ibu';
+    
+    // Wali
+    if (h.includes('hubungan') && h.includes('wali')) return 'hub_wali';
+    if (h.includes('hub') && h.includes('wali')) return 'hub_wali';
+    if (h.includes('pendidikan') && h.includes('wali')) return 'pen_wali';
+    if (h.includes('pend') && h.includes('wali')) return 'pen_wali';
+    if (h.includes('pekerjaan') && h.includes('wali')) return 'pek_wali';
+    if (h.includes('pek') && h.includes('wali')) return 'pek_wali';
+    if (h.includes('gaji') && h.includes('wali')) return 'gaji_wali';
+    if (h.includes('hp') && h.includes('wali')) return 'hp_wali';
+    if (h.includes('thn') && h.includes('wali')) return 'thn_wali';
+    if (h.includes('tahun') && h.includes('wali')) return 'thn_wali';
+    
+    // Keterangan
+    if (h === 'keterangan' || h.includes('keterangan')) return 'ket';
+    
+    // Status Akhir
+    if (h.includes('status') && h.includes('akhir')) return 'stat_akhir';
+    
+    // Tanggal Akhir
+    if ((h.includes('tanggal') || h.includes('tgl')) && h.includes('akhir')) return 'tgl_akhir';
+    
+    // No Ijazah / Mutasi
+    if (h.includes('ijazah')) return 'no_ijazah';
+    if (h.includes('no') && h.includes('mutasi')) return 'no_ijazah';
+    
+    return null;
+}
 
 
 // ===== DETEKSI FIELD KOSONG PADA MODAL TAMBAH & EDIT =====
@@ -19733,6 +20046,7 @@ if (modalEdit) {
     });
 }
 
+
 // Panggil juga saat pertama kali halaman dimuat
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
@@ -19798,6 +20112,82 @@ document.addEventListener('DOMContentLoaded', function() {
                 collLabelEl.style.color = '';
             }
         });
+    }
+
+    // ------------------------------------------------------------
+    // ===== AUTO-UPDATE UMUR DI MODAL TAMBAH DATA =====
+    // ------------------------------------------------------------
+    const tdTglLahirEl = document.getElementById('tdTglLahir');
+    const tdUmurEl    = document.getElementById('tdUmur');
+
+    if (tdTglLahirEl && tdUmurEl) {
+        const updateUmurTambah = function() {
+            const tglValue = (tdTglLahirEl.value || '').trim();
+
+            // Jika tanggal lahir kosong atau belum lengkap → kosongkan umur
+            if (!tglValue || tglValue.length < 10) {
+                tdUmurEl.value = '';
+                return;
+            }
+
+            // Hitung umur pakai fungsi global yang sudah ada
+            const umur = (typeof hitungUmurDariTanggal === 'function')
+                ? hitungUmurDariTanggal(tglValue)
+                : '';
+
+            tdUmurEl.value = umur || '';
+        };
+
+        // Pasang event listener
+        tdTglLahirEl.addEventListener('input', updateUmurTambah);
+        tdTglLahirEl.addEventListener('change', updateUmurTambah);
+        tdTglLahirEl.addEventListener('blur', updateUmurTambah);
+
+        // Hitung ulang saat modal tambah dibuka
+        const modalTambahEl = document.getElementById('modalTambahData');
+        if (modalTambahEl) {
+            modalTambahEl.addEventListener('shown.bs.modal', function() {
+                setTimeout(updateUmurTambah, 100);
+            });
+        }
+    }
+
+    // ------------------------------------------------------------
+    // ===== AUTO-UPDATE UMUR DI MODAL EDIT DATA =====
+    // ------------------------------------------------------------
+    const edTglLahirEl = document.getElementById('edTglLahir');
+    const edUmurEl    = document.getElementById('edUmur');
+
+    if (edTglLahirEl && edUmurEl) {
+        const updateUmurEdit = function() {
+            const tglValue = (edTglLahirEl.value || '').trim();
+
+            // Jika tanggal lahir kosong atau belum lengkap → kosongkan umur
+            if (!tglValue || tglValue.length < 10) {
+                edUmurEl.value = '';
+                return;
+            }
+
+            // Hitung umur pakai fungsi global yang sudah ada
+            const umur = (typeof hitungUmurDariTanggal === 'function')
+                ? hitungUmurDariTanggal(tglValue)
+                : '';
+
+            edUmurEl.value = umur || '';
+        };
+
+        // Pasang event listener
+        edTglLahirEl.addEventListener('input', updateUmurEdit);
+        edTglLahirEl.addEventListener('change', updateUmurEdit);
+        edTglLahirEl.addEventListener('blur', updateUmurEdit);
+
+        // Hitung ulang saat modal edit dibuka (setelah data terisi)
+        const modalEditEl2 = document.getElementById('modalEditData');
+        if (modalEditEl2) {
+            modalEditEl2.addEventListener('shown.bs.modal', function() {
+                setTimeout(updateUmurEdit, 200);
+            });
+        }
     }
 });
     </script>
