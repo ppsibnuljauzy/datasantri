@@ -681,6 +681,45 @@
         transition: background var(--transition-speed), color var(--transition-speed);
     }
 
+
+/* ===== PERBAIKAN: HILANGKAN RUANG KOSONG DI BAWAH TAB ===== */
+html, body {
+    min-height: auto !important;
+    height: auto !important;
+}
+
+.tab-content {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+.tab-pane {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+.tab-pane.active {
+    display: block !important;
+}
+
+/* Pastikan container-fluid tidak memaksa tinggi */
+.container-fluid {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+/* Pastikan app-wrapper tidak memaksa tinggi */
+.app-wrapper {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+.app-wrapper.visible {
+    display: block;
+    min-height: 0 !important;
+    height: auto !important;
+}
+
 .kop-surat {
     background: linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #1976d2 100%);
     color: white;
@@ -1510,15 +1549,16 @@
         box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
     }
 
-    .table-container {
-        background: var(--bg-card);
-        border-radius: 0 0 12px 12px;
-        box-shadow: var(--card-shadow);
-        overflow-x: auto;
-        height: 60vh;
-        margin: 0 10px 0 10px;
-        transition: background var(--transition-speed), box-shadow var(--transition-speed);
-    }
+.table-container {
+    background: var(--bg-card);
+    border-radius: 0 0 12px 12px;
+    box-shadow: var(--card-shadow);
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 60vh;
+    margin: 0 10px 0 10px;
+    transition: background var(--transition-speed), box-shadow var(--transition-speed);
+}
 
     .editable-table {
         margin-bottom: 0;
@@ -1647,20 +1687,20 @@
         background: var(--secondary-color) !important;
     }
 
-    .pagination-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-        padding: 14px 20px;
-        background: var(--bg-card);
-        border-radius: 0 0 12px 12px;
-        margin: 0 10px 20px 10px;
-        box-shadow: var(--card-shadow);
-        border-top: 1px solid var(--border-color);
-        flex-wrap: wrap;
-        transition: background var(--transition-speed), border-color var(--transition-speed);
-    }
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: var(--bg-card);
+    border-radius: 0 0 12px 12px;
+    margin: 0 10px 0 10px;
+    box-shadow: var(--card-shadow);
+    border-top: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    transition: background var(--transition-speed), border-color var(--transition-speed);
+}
 
     .page-num {
         min-width: 34px;
@@ -2095,6 +2135,76 @@
         color: var(--gold-color);
     }
 
+
+/* ===== SUB-NAVIGASI TAB ANALISIS ===== */
+#analisisSubTab.nav-tabs {
+    border-bottom: none;
+    gap: 4px;
+    padding: 0;
+    margin-bottom: 20px;
+    background: transparent;
+}
+
+#analisisSubTab .nav-link {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 24px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6c757d;
+    background: transparent;
+    transition: all 0.25s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#analisisSubTab .nav-link i {
+    font-size: 1rem;
+    color: #adb5bd;
+    transition: color 0.25s ease;
+    margin-right: 0;
+}
+
+#analisisSubTab .nav-link:hover {
+    color: var(--primary-color);
+    background: rgba(26, 38, 57, 0.05);
+}
+
+#analisisSubTab .nav-link:hover i {
+    color: var(--accent-color);
+}
+
+#analisisSubTab .nav-link.active {
+    background: var(--bg-card) !important;
+    color: var(--primary-color) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-weight: 700;
+}
+
+#analisisSubTab .nav-link.active i {
+    color: var(--gold-color);
+}
+
+/* Dark mode sub-tab analisis */
+[data-theme="dark"] #analisisSubTab .nav-link {
+    color: var(--text-muted) !important;
+}
+[data-theme="dark"] #analisisSubTab .nav-link:hover {
+    color: var(--text-primary) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+[data-theme="dark"] #analisisSubTab .nav-link.active {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+[data-theme="dark"] #analisisSubTab .nav-link.active i {
+    color: var(--gold-color) !important;
+}
+
+
     /* Dark mode sub-tab */
     [data-theme="dark"] #trenSubTab .nav-link {
         color: var(--text-muted) !important;
@@ -2233,15 +2343,21 @@
         display: none !important;
     }
 
-    body.on-dashboard .filter-section,
-    body.on-dashboard .filter-section-wrapper,
-    body.on-dashboard .filter-toggle-btn,
-    body.on-dashboard .pagination-container,
-    body.on-dashboard .table-container,
-    body.on-dashboard .btn-group,
-    body.on-dashboard #draggable-fab {
-        display: none !important;
-    }
+body.on-dashboard .filter-section,
+body.on-dashboard .filter-section-wrapper,
+body.on-dashboard .filter-toggle-btn,
+body.on-dashboard .pagination-container,
+body.on-dashboard .table-container,
+body.on-dashboard .btn-group,
+body.on-dashboard #draggable-fab {
+    display: none !important;
+}
+
+/* Pastikan tab-content tidak punya ruang ekstra */
+body.on-dashboard .tab-content {
+    min-height: 0 !important;
+    height: auto !important;
+}
 
     .card-dashboard {
         border: none;
@@ -5216,6 +5332,256 @@ body.hide-bulk-luluskan.hide-bulk-mutasi #filterSectionWrapper button[onclick*="
 body.hide-bulk-luluskan.hide-bulk-mutasi .filter-section-wrapper button[onclick*="bulkMoveData"] {
     display: none !important;
 }
+
+
+/* ===== MONITORING KELENGKAPAN IDENTITAS ===== */
+.monitoring-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+}
+
+.monitoring-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.10);
+}
+
+.monitoring-card .card-body {
+    padding: 20px 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Progress bar untuk kelengkapan */
+.progress-kelengkapan {
+    height: 10px;
+    border-radius: 6px;
+    background: #e9ecef;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-kelengkapan .bar {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Status badge */
+.badge-lengkap {
+    background: linear-gradient(135deg, #d4edda, #b7e4c7);
+    color: #155724;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.badge-kurang {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.badge-sebagian {
+    background: linear-gradient(135deg, #fff3cd, #ffe69b);
+    color: #856404;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+/* Tabel monitoring */
+#tableMonitoringIdentitas {
+    font-size: 0.85rem;
+}
+
+#tableMonitoringIdentitas thead th {
+    background: var(--secondary-color);
+    color: white;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 8px;
+    text-align: center;
+    vertical-align: middle;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#tableMonitoringIdentitas tbody td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    border-color: var(--border-color);
+    text-align: center;
+}
+
+#tableMonitoringIdentitas tbody tr:hover {
+    background: var(--bg-card-hover);
+}
+
+#tableMonitoringIdentitas tbody tr.row-kurang-identitas {
+    background: #fff8e1;
+}
+
+#tableMonitoringIdentitas tbody tr.row-kurang-identitas:hover {
+    background: #fff3cd;
+}
+
+[data-theme="dark"] #tableMonitoringIdentitas tbody tr.row-kurang-identitas {
+    background: rgba(243, 156, 18, 0.08);
+}
+
+[data-theme="dark"] #tableMonitoringIdentitas tbody tr.row-kurang-identitas:hover {
+    background: rgba(243, 156, 18, 0.15);
+}
+
+.monitoring-filter-bar {
+    background: var(--bg-card);
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.monitoring-filter-bar .form-select,
+.monitoring-filter-bar .form-control {
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 0.85rem;
+}
+
+.stat-mini-box {
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    box-shadow: var(--card-shadow);
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.stat-mini-box:hover {
+    transform: translateY(-3px);
+}
+
+.stat-mini-box .stat-mini-number {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.stat-mini-box .stat-mini-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+
+/* ============================================================
+   ===== PERBAIKAN: HILANGKAN RUANG KOSONG DI TAB =====
+   ============================================================ */
+
+/* Tab Input, Lulus, Mutasi - pastikan tinggi mengikuti konten */
+#tab-input,
+#tab-lulus,
+#tab-mutasi {
+    display: flex;
+    flex-direction: column;
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+/* Tab Cetak KTS, Struktur, Surat - pastikan tinggi mengikuti konten */
+#tab-cetak-kts,
+#tab-struktur,
+#tab-surat {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+/* Tab Dashboard & Analisis - biarkan seperti semula (sudah benar) */
+#tab-dashboard,
+#tab-analisis {
+    min-height: 0 !important;
+}
+
+/* Pastikan tab-pane yang tidak aktif tidak mengambil ruang */
+.tab-pane:not(.active) {
+    display: none !important;
+}
+
+/* Container-fluid pembungkus - hilangkan padding berlebih */
+.container-fluid {
+    padding-bottom: 0 !important;
+}
+
+/* App wrapper - pastikan tidak ada min-height */
+.app-wrapper {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+/* Body - hilangkan min-height jika ada */
+body {
+    min-height: 0 !important;
+    height: auto !important;
+    overflow-x: hidden;
+}
+
+html {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+/* ============================================================
+   ===== KHUSUS: PASTIKAN TAB INPUT/LULUS/MUTASI TIDAK ADA RUANG =====
+   ============================================================ */
+
+/* Wrapper utama tab input/lulus/mutasi */
+#tab-input > *:last-child,
+#tab-lulus > *:last-child,
+#tab-mutasi > *:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Hapus margin bawah pada tab-pane */
+.tab-pane {
+    padding-bottom: 0 !important;
+}
+
+/* Hapus margin bawah pada tab-content */
+.tab-content {
+    padding-bottom: 0 !important;
+}
+
+/* ============================================================
+   ===== PERBAIKAN: TAB-TAB YANG MENGGUNAKAN TABLE-CONTAINER =====
+   ============================================================ */
+
+/* Pastikan pagination tidak menempel ke bawah */
+.table-container + .pagination-container {
+    margin-top: 0 !important;
+}
+
+/* Pastikan tab-toolbar tidak ada margin berlebih */
+.tab-toolbar {
+    margin-bottom: 0 !important;
+}
 </style>
 </head>
 <body>
@@ -5311,7 +5677,7 @@ body.hide-bulk-luluskan.hide-bulk-mutasi .filter-section-wrapper button[onclick*
                 <li class="nav-item">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-input" type="button"
                             onclick="toggleDashboardView(false); currentTab='tab-input'; loadDataPaging('data_santri', 'tbodySantri', 0)">
-                        <i class="bi bi-person-plus"></i> Entry Data
+                        <i class="bi bi-person-plus"></i> Input Data
                     </button>
                 </li>
                 <li class="nav-item">
@@ -5339,14 +5705,15 @@ body.hide-bulk-luluskan.hide-bulk-mutasi .filter-section-wrapper button[onclick*
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-tren" type="button"
-                            onclick="toggleDashboardView(false); loadTrenTahunan(); toggleElementsForTab('tab-tren')">
-                        <i class="bi bi-graph-up-arrow"></i> Tren                    </button>
-                </li>
-                <li class="nav-item">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-surat" type="button"
                             onclick="toggleDashboardView(false); siapkanCetakSurat(); toggleElementsForTab('tab-surat')">
                         <i class="bi bi-printer"></i> Cetak Surat
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-analisis" type="button"
+                            onclick="toggleDashboardView(false); loadTabAnalisis(); toggleElementsForTab('tab-analisis')">
+                        <i class="bi bi-bar-chart-line"></i> Analisis
                     </button>
                 </li>
             </ul>
@@ -5917,359 +6284,8 @@ body.hide-bulk-luluskan.hide-bulk-mutasi .filter-section-wrapper button[onclick*
                         <div id="printArea" style="display: none;"></div>
                     </div>
                 </div>
-
-                <!-- ===== TAB TREN (GABUNGAN) ===== -->
-                <div class="tab-pane fade" id="tab-tren" role="tabpanel">
-                    <div class="dashboard-container">
-                        <!-- HEADER -->
-                        <div class="dashboard-header">
-                            <h4><i class="bi bi-graph-up-arrow"></i> Tren Perkembangan & Kelulusan Santri</h4>
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge-date">
-                                    <i class="bi bi-calendar3 me-1"></i>
-                                    <span>Data Historis</span>
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- SUB NAVIGASI UNTUK TREN -->
-                        <ul class="nav nav-tabs" id="trenSubTab" role="tablist" style="border-bottom: none; gap: 4px; padding: 0; margin-bottom: 20px;">
-                            <li class="nav-item">
-                                <button class="nav-link active" id="sub-tren-pertumbuhan" data-bs-toggle="tab" data-bs-target="#sub-tren-pertumbuhan-pane" type="button" onclick="switchTrenSubTab('pertumbuhan')">
-                                    <i class="bi bi-graph-up-arrow me-1"></i> Pertumbuhan Santri
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" id="sub-tren-kelulusan" data-bs-toggle="tab" data-bs-target="#sub-tren-kelulusan-pane" type="button" onclick="switchTrenSubTab('kelulusan')">
-                                    <i class="bi bi-trophy me-1"></i> Tren Kelulusan
-                                </button>
-                            </li>
-                        </ul>
-
-                        <!-- CONTENT SUB TAB -->
-                        <div class="tab-content" id="trenSubTabContent">
-                            <!-- ===== SUB TAB PERTUMBUHAN SANTRI ===== -->
-                            <div class="tab-pane fade show active" id="sub-tren-pertumbuhan-pane" role="tabpanel">
-                                <!-- Tombol Aksi -->
-                                <div class="d-flex gap-2 mb-3 flex-wrap">
-                                    <button class="btn btn-sm btn-success" onclick="simpanDataTren()">
-                                        <i class="bi bi-cloud-arrow-up"></i> Simpan Data
-                                    </button>
-                                    <button class="btn btn-sm btn-primary" onclick="tambahBarisTren()">
-                                        <i class="bi bi-plus-lg"></i> Tambah Tahun
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" onclick="hapusBarisTren()">
-                                        <i class="bi bi-trash"></i> Hapus Tahun Terpilih
-                                    </button>
-                                    <button class="btn btn-sm btn-info text-white" onclick="exportTrenToExcel()">
-                                        <i class="bi bi-file-earmark-excel"></i> Export Excel
-                                    </button>
-                                    <button class="btn btn-sm btn-secondary" onclick="importTrenFromExcel()">
-                                        <i class="bi bi-file-earmark-arrow-up"></i> Import Excel
-                                    </button>
-                                    <input type="file" id="importTrenFile" hidden accept=".xlsx, .xls" onchange="processImportTrenExcel(event)">
-                                    
-                                    <!-- Toggle Chart Type -->
-                                    <button class="btn btn-sm btn-outline-primary" id="btnTrenToggleChart" onclick="toggleTrenChartType()">
-                                        <i class="bi bi-bar-chart-fill"></i> <span id="trenChartTypeLabel">Bar</span>
-                                    </button>
-                                </div>
-
-                                <!-- Filter Tahun -->
-                                <div class="row g-2 mb-3">
-                                    <div class="col-md-12">
-                                        <div class="card-dashboard-premium card-gradient-white" style="padding: 12px 20px; border-radius: 12px; background: var(--bg-card);">
-                                            <div class="d-flex align-items-center gap-3 flex-wrap">
-                                                <label class="fw-bold mb-0" style="font-size: 0.85rem;">
-                                                    <i class="bi bi-funnel me-1"></i> Filter Tahun Ajaran:
-                                                </label>
-                                                <select id="filterTrenTahun" class="form-select form-select-sm" style="width: auto; min-width: 180px;" onchange="applyTrenFilter()">
-                                                    <option value="all">-- Semua Tahun --</option>
-                                                </select>
-                                                <div class="d-flex gap-2">
-                                                    <span class="badge bg-secondary text-white" id="trenFilterCount" style="padding: 6px 14px; font-size: 0.75rem;">
-                                                        Menampilkan: <span id="trenFilteredCount">0</span> dari <span id="trenTotalCount">0</span> data
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Kartu Ringkasan -->
-                                <div class="row g-4 mb-4">
-                                    <div class="col-md-3">
-                                        <div class="card-dashboard-premium card-gradient-primary">
-                                            <div class="card-body">
-                                                <div class="stat-label">Total Seluruh Santri</div>
-                                                <div class="stat-number" id="tren-total-semua">0</div>
-                                                <i class="bi bi-people-fill stat-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card-dashboard-premium card-gradient-gold">
-                                            <div class="card-body">
-                                                <div class="stat-label">Rata-rata Santri/Tahun</div>
-                                                <div class="stat-number" id="tren-rata-rata">0</div>
-                                                <i class="bi bi-calculator-fill stat-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card-dashboard-premium card-gradient-green">
-                                            <div class="card-body">
-                                                <div class="stat-label">Tahun dengan Santri Terbanyak</div>
-                                                <div class="stat-number" id="tren-tahun-terbanyak">-</div>
-                                                <i class="bi bi-trophy-fill stat-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card-dashboard-premium card-gradient-blue">
-                                            <div class="card-body">
-                                                <div class="stat-label">Jumlah Tahun Ajaran</div>
-                                                <div class="stat-number" id="tren-jumlah-tahun">0</div>
-                                                <i class="bi bi-clock-history stat-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Grafik -->
-                                <div class="row g-4">
-                                    <div class="col-lg-6">
-                                        <div class="card-dashboard-premium card-gradient-white" style="height: 100%; background: var(--bg-card);">
-                                            <div class="card-body">
-                                                <div class="stat-label" style="color: var(--text-muted);">Komposisi Putra / Putri</div>
-                                                <div style="position: relative; height: 250px; margin-top: 10px;" class="chart-wrapper" id="trenChartGenderWrapper">
-                                                    <canvas id="trenChartGender"></canvas>
-                                                    <button class="btn-zoom-chart" onclick="zoomChart('trenChartGender', 'Komposisi Putra / Putri - Tren Tahunan')">
-                                                        <i class="bi bi-arrows-fullscreen"></i> Zoom
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="card-dashboard-premium card-gradient-white" style="height: 100%; background: var(--bg-card);">
-                                            <div class="card-body">
-                                                <div class="stat-label" style="color: var(--text-muted);">Komposisi Jenjang SMP / SMA</div>
-                                                <div style="position: relative; height: 250px; margin-top: 10px;" class="chart-wrapper" id="trenChartJenjangWrapper">
-                                                    <canvas id="trenChartJenjang"></canvas>
-                                                    <button class="btn-zoom-chart" onclick="zoomChart('trenChartJenjang', 'Komposisi Jenjang SMP / SMA - Tren Tahunan')">
-                                                        <i class="bi bi-arrows-fullscreen"></i> Zoom
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Tabel Data Pertumbuhan -->
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card);">
-                                            <div class="card-body">
-                                                <div class="stat-label" style="color: var(--text-muted);">
-                                                    Data Detail per Tahun Ajaran 
-                                                    <span class="text-muted small">(Klik sel untuk mengedit)</span>
-                                                </div>
-                                                <div style="max-height: 400px; overflow: auto; margin-top: 10px;">
-                                                    <table class="table table-sm table-bordered table-striped" id="trenTable">
-                                                        <thead class="table-dark">
-                                                            <tr>
-                                                                <th style="min-width: 100px;">Tahun Ajaran</th>
-                                                                <th style="min-width: 60px;">Putra</th>
-                                                                <th style="min-width: 60px;">Putri</th>
-                                                                <th style="min-width: 60px;">SMP</th>
-                                                                <th style="min-width: 60px;">SMA</th>
-                                                                <th style="min-width: 60px;">Kls 7 Pa</th>
-                                                                <th style="min-width: 60px;">Kls 7 Pi</th>
-                                                                <th style="min-width: 60px;">Kls 8 Pa</th>
-                                                                <th style="min-width: 60px;">Kls 8 Pi</th>
-                                                                <th style="min-width: 60px;">Kls 9 Pa</th>
-                                                                <th style="min-width: 60px;">Kls 9 Pi</th>
-                                                                <th style="min-width: 60px;">Kls 10 Pa</th>
-                                                                <th style="min-width: 60px;">Kls 10 Pi</th>
-                                                                <th style="min-width: 60px;">Kls 11 Pa</th>
-                                                                <th style="min-width: 60px;">Kls 11 Pi</th>
-                                                                <th style="min-width: 60px;">Kls 12 Pa</th>
-                                                                <th style="min-width: 60px;">Kls 12 Pi</th>
-                                                                <th style="min-width: 70px; font-weight: bold; background-color: #2c3e50;">Total</th>
-                                                                <th style="min-width: 40px; background-color: #2c3e50;">Pilih</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="trenTableBody">
-                                                            <tr><td colspan="19" class="text-center text-muted">Memuat data...</td></tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- ===== SUB TAB KELULUSAN ===== -->
-                            <div class="tab-pane fade" id="sub-tren-kelulusan-pane" role="tabpanel">
-                                <!-- Tombol Aksi -->
-                                <div class="d-flex gap-2 mb-3 flex-wrap">
-                                    <button class="btn btn-sm btn-success" onclick="simpanDataTrenKelulusan()">
-                                        <i class="bi bi-cloud-arrow-up"></i> Simpan Data
-                                    </button>
-                                    <button class="btn btn-sm btn-primary" onclick="tambahDataKelulusan()">
-                                        <i class="bi bi-plus-lg"></i> Tambah Tahun
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" onclick="hapusDataKelulusan()">
-                                        <i class="bi bi-trash"></i> Hapus Terpilih
-                                    </button>
-                                    <button class="btn btn-sm btn-info text-white" onclick="exportTrenKelulusanExcel()">
-                                        <i class="bi bi-file-earmark-excel"></i> Export Excel
-                                    </button>
-                                    <button class="btn btn-sm btn-secondary" onclick="importTrenKelulusanExcel()">
-                                        <i class="bi bi-file-earmark-arrow-up"></i> Import Excel
-                                    </button>
-                                    <input type="file" id="importKelulusanFile" hidden accept=".xlsx, .xls" onchange="processImportKelulusanExcel(event)">
-                                    
-                                    <!-- Toggle Chart Type -->
-                                    <button class="btn btn-sm btn-outline-primary" id="btnKelToggleChart" onclick="toggleKelChartType()">
-                                        <i class="bi bi-bar-chart-fill"></i> <span id="kelChartTypeLabel">Bar</span>
-                                    </button>
-                                </div>
-
-                                <!-- Filter Tahun -->
-                                <div class="row g-2 mb-3">
-                                    <div class="col-md-12">
-                                        <div class="card-dashboard-premium card-gradient-white" style="padding: 12px 20px; border-radius: 12px; background: var(--bg-card);">
-                                            <div class="d-flex align-items-center gap-3 flex-wrap">
-                                                <label class="fw-bold mb-0" style="font-size: 0.85rem;">
-                                                    <i class="bi bi-funnel me-1"></i> Filter Tahun Ajaran:
-                                                </label>
-                                                <select id="filterKelulusanTahun" class="form-select form-select-sm" style="width: auto; min-width: 180px;" onchange="applyFilterKelulusan()">
-                                                    <option value="all">-- Semua Tahun --</option>
-                                                </select>
-                                                <div class="d-flex gap-2">
-                                                    <span class="badge bg-secondary text-white" id="kelulusanFilterCount" style="padding: 6px 14px; font-size: 0.75rem;">
-                                                        Menampilkan: <span id="kelulusanFilteredCount">0</span> dari <span id="kelulusanTotalCount">0</span> data
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Kartu Ringkasan -->
-                                <div class="row g-4 mb-4">
-                                    <div class="col-md-3">
-                                        <div class="card-dashboard-premium card-gradient-primary">
-                                            <div class="card-body">
-                                                <div class="stat-label">Total Lulusan</div>
-                                                <div class="stat-number" id="kel-total-lulusan">0</div>
-                                                <i class="bi bi-mortarboard-fill stat-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card-dashboard-premium card-gradient-gold">
-                                            <div class="card-body">
-                                                <div class="stat-label">Rata-rata Lulusan/Tahun</div>
-                                                <div class="stat-number" id="kel-rata-rata">0</div>
-                                                <i class="bi bi-calculator-fill stat-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card-dashboard-premium card-gradient-green">
-                                            <div class="card-body">
-                                                <div class="stat-label">Tahun Lulusan Terbanyak</div>
-                                                <div class="stat-number" id="kel-tahun-terbanyak" style="font-size: 1.6rem;">-</div>
-                                                <i class="bi bi-trophy-fill stat-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card-dashboard-premium card-gradient-blue">
-                                            <div class="card-body">
-                                                <div class="stat-label">Jumlah Tahun Data</div>
-                                                <div class="stat-number" id="kel-jumlah-tahun">0</div>
-                                                <i class="bi bi-clock-history stat-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Grafik Kelulusan -->
-                                <div class="row g-4">
-                                    <div class="col-lg-6">
-                                        <div class="card-dashboard-premium card-gradient-white" style="height: 100%; background: var(--bg-card);">
-                                            <div class="card-body">
-                                                <div class="stat-label" style="color: var(--text-muted);">Tren Kelulusan Putra / Putri</div>
-                                                <div style="position: relative; height: 250px; margin-top: 10px;" class="chart-wrapper" id="kelChartGenderWrapper">
-                                                    <canvas id="kelChartGender"></canvas>
-                                                    <button class="btn-zoom-chart" onclick="zoomChart('kelChartGender', 'Tren Kelulusan Putra / Putri')">
-                                                        <i class="bi bi-arrows-fullscreen"></i> Zoom
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="card-dashboard-premium card-gradient-white" style="height: 100%; background: var(--bg-card);">
-                                            <div class="card-body">
-                                                <div class="stat-label" style="color: var(--text-muted);">Tren Kelulusan SMP / SMA</div>
-                                                <div style="position: relative; height: 250px; margin-top: 10px;" class="chart-wrapper" id="kelChartJenjangWrapper">
-                                                    <canvas id="kelChartJenjang"></canvas>
-                                                    <button class="btn-zoom-chart" onclick="zoomChart('kelChartJenjang', 'Tren Kelulusan SMP / SMA')">
-                                                        <i class="bi bi-arrows-fullscreen"></i> Zoom
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Tabel Data Kelulusan -->
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card);">
-                                            <div class="card-body">
-                                                <div class="stat-label" style="color: var(--text-muted);">
-                                                    Data Detail Kelulusan per Tahun Ajaran
-                                                    <span class="text-muted small">(Klik sel untuk mengedit)</span>
-                                                </div>
-                                                <div style="max-height: 450px; overflow: auto; margin-top: 10px;">
-                                                    <table class="table table-sm table-bordered table-striped" id="kelTable">
-                                                        <thead class="table-dark">
-                                                            <tr>
-                                                                <th style="min-width: 100px;">Tahun Ajaran</th>
-                                                                <th style="min-width: 60px;">Lulus Putra</th>
-                                                                <th style="min-width: 60px;">Lulus Putri</th>
-                                                                <th style="min-width: 60px;">Lulus SMP</th>
-                                                                <th style="min-width: 60px;">Lulus SMA</th>
-                                                                <th style="min-width: 60px;">SMP Putra</th>
-                                                                <th style="min-width: 60px;">SMP Putri</th>
-                                                                <th style="min-width: 60px;">SMA Putra</th>
-                                                                <th style="min-width: 60px;">SMA Putri</th>
-                                                                <th style="min-width: 70px; font-weight: bold; background-color: #2c3e50;">Total</th>
-                                                                <th style="min-width: 40px; background-color: #2c3e50;">Pilih</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="kelTableBody">
-                                                            <tr><td colspan="11" class="text-center text-muted">Memuat data...</td></tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-<!-- TAB STRUKTUR -->
+                
+                <!-- TAB STRUKTUR -->
 <div class="tab-pane fade" id="tab-struktur" role="tabpanel">
     <div class="container bg-white p-4 rounded-4 shadow-sm" style="max-width: 800px; margin-top: 20px;">
         <h5 class="fw-bold mb-3 text-uppercase text-primary"><i class="bi bi-person-badge me-2"></i> Pengaturan Penandatangan PDF</h5>
@@ -6504,6 +6520,542 @@ body.hide-bulk-luluskan.hide-bulk-mutasi .filter-section-wrapper button[onclick*
                 </div>
             </div>
         </div>
+
+                <!-- ===== TAB ANALISIS (GABUNGAN TREN + MONITORING) ===== -->
+<div class="tab-pane fade" id="tab-analisis" role="tabpanel">
+    <div class="dashboard-container">
+        <!-- HEADER -->
+        <div class="dashboard-header">
+            <h4><i class="bi bi-bar-chart-line"></i> Analisis Data Santri</h4>
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge-date">
+                    <i class="bi bi-calendar3 me-1"></i>
+                    <span>Data Historis & Monitoring</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- SUB NAVIGASI ANALISIS -->
+        <ul class="nav nav-tabs" id="analisisSubTab" role="tablist" style="border-bottom: none; gap: 4px; padding: 0; margin-bottom: 20px;">
+            <li class="nav-item">
+                <button class="nav-link active" id="sub-analisis-pertumbuhan" data-bs-toggle="tab" 
+                        data-bs-target="#sub-analisis-pertumbuhan-pane" type="button" 
+                        onclick="switchAnalisisSubTab('pertumbuhan')">
+                    <i class="bi bi-graph-up-arrow me-1"></i> Tren Pertumbuhan
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="sub-analisis-kelulusan" data-bs-toggle="tab" 
+                        data-bs-target="#sub-analisis-kelulusan-pane" type="button" 
+                        onclick="switchAnalisisSubTab('kelulusan')">
+                    <i class="bi bi-trophy me-1"></i> Tren Kelulusan
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="sub-analisis-monitoring" data-bs-toggle="tab" 
+                        data-bs-target="#sub-analisis-monitoring-pane" type="button" 
+                        onclick="switchAnalisisSubTab('monitoring')">
+                    <i class="bi bi-clipboard2-check me-1"></i> Monitoring Identitas
+                </button>
+            </li>
+        </ul>
+
+        <!-- CONTENT SUB TAB -->
+        <div class="tab-content" id="analisisSubTabContent">
+            
+            <!-- ============================================ -->
+            <!-- ===== SUB TAB 1: TREN PERTUMBUHAN ===== -->
+            <!-- ============================================ -->
+            <div class="tab-pane fade show active" id="sub-analisis-pertumbuhan-pane" role="tabpanel">
+                <!-- Tombol Aksi -->
+                <div class="d-flex gap-2 mb-3 flex-wrap">
+                    <button class="btn btn-sm btn-success" onclick="simpanDataTren()">
+                        <i class="bi bi-cloud-arrow-up"></i> Simpan Data
+                    </button>
+                    <button class="btn btn-sm btn-primary" onclick="tambahBarisTren()">
+                        <i class="bi bi-plus-lg"></i> Tambah Tahun
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="hapusBarisTren()">
+                        <i class="bi bi-trash"></i> Hapus Tahun Terpilih
+                    </button>
+                    <button class="btn btn-sm btn-info text-white" onclick="exportTrenToExcel()">
+                        <i class="bi bi-file-earmark-excel"></i> Export Excel
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="importTrenFromExcel()">
+                        <i class="bi bi-file-earmark-arrow-up"></i> Import Excel
+                    </button>
+                    <input type="file" id="importTrenFile" hidden accept=".xlsx, .xls" onchange="processImportTrenExcel(event)">
+                    
+                    <button class="btn btn-sm btn-outline-primary" id="btnTrenToggleChart" onclick="toggleTrenChartType()">
+                        <i class="bi bi-bar-chart-fill"></i> <span id="trenChartTypeLabel">Bar</span>
+                    </button>
+                </div>
+
+                <!-- Filter Tahun -->
+                <div class="row g-2 mb-3">
+                    <div class="col-md-12">
+                        <div class="card-dashboard-premium card-gradient-white" style="padding: 12px 20px; border-radius: 12px; background: var(--bg-card);">
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <label class="fw-bold mb-0" style="font-size: 0.85rem;">
+                                    <i class="bi bi-funnel me-1"></i> Filter Tahun Ajaran:
+                                </label>
+                                <select id="filterTrenTahun" class="form-select form-select-sm" style="width: auto; min-width: 180px;" onchange="applyTrenFilter()">
+                                    <option value="all">-- Semua Tahun --</option>
+                                </select>
+                                <div class="d-flex gap-2">
+                                    <span class="badge bg-secondary text-white" id="trenFilterCount" style="padding: 6px 14px; font-size: 0.75rem;">
+                                        Menampilkan: <span id="trenFilteredCount">0</span> dari <span id="trenTotalCount">0</span> data
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kartu Ringkasan -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="card-dashboard-premium card-gradient-primary">
+                            <div class="card-body">
+                                <div class="stat-label">Total Seluruh Santri</div>
+                                <div class="stat-number" id="tren-total-semua">0</div>
+                                <i class="bi bi-people-fill stat-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-dashboard-premium card-gradient-gold">
+                            <div class="card-body">
+                                <div class="stat-label">Rata-rata Santri/Tahun</div>
+                                <div class="stat-number" id="tren-rata-rata">0</div>
+                                <i class="bi bi-calculator-fill stat-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-dashboard-premium card-gradient-green">
+                            <div class="card-body">
+                                <div class="stat-label">Tahun dengan Santri Terbanyak</div>
+                                <div class="stat-number" id="tren-tahun-terbanyak">-</div>
+                                <i class="bi bi-trophy-fill stat-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-dashboard-premium card-gradient-blue">
+                            <div class="card-body">
+                                <div class="stat-label">Jumlah Tahun Ajaran</div>
+                                <div class="stat-number" id="tren-jumlah-tahun">0</div>
+                                <i class="bi bi-clock-history stat-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grafik -->
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="card-dashboard-premium card-gradient-white" style="height: 100%; background: var(--bg-card);">
+                            <div class="card-body">
+                                <div class="stat-label" style="color: var(--text-muted);">Komposisi Putra / Putri</div>
+                                <div style="position: relative; height: 250px; margin-top: 10px;" class="chart-wrapper" id="trenChartGenderWrapper">
+                                    <canvas id="trenChartGender"></canvas>
+                                    <button class="btn-zoom-chart" onclick="zoomChart('trenChartGender', 'Komposisi Putra / Putri - Tren Tahunan')">
+                                        <i class="bi bi-arrows-fullscreen"></i> Zoom
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card-dashboard-premium card-gradient-white" style="height: 100%; background: var(--bg-card);">
+                            <div class="card-body">
+                                <div class="stat-label" style="color: var(--text-muted);">Komposisi Jenjang SMP / SMA</div>
+                                <div style="position: relative; height: 250px; margin-top: 10px;" class="chart-wrapper" id="trenChartJenjangWrapper">
+                                    <canvas id="trenChartJenjang"></canvas>
+                                    <button class="btn-zoom-chart" onclick="zoomChart('trenChartJenjang', 'Komposisi Jenjang SMP / SMA - Tren Tahunan')">
+                                        <i class="bi bi-arrows-fullscreen"></i> Zoom
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabel Data Pertumbuhan -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card);">
+                            <div class="card-body">
+                                <div class="stat-label" style="color: var(--text-muted);">
+                                    Data Detail per Tahun Ajaran 
+                                    <span class="text-muted small">(Klik sel untuk mengedit)</span>
+                                </div>
+                                <div style="max-height: 400px; overflow: auto; margin-top: 10px;">
+                                    <table class="table table-sm table-bordered table-striped" id="trenTable">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th style="min-width: 100px;">Tahun Ajaran</th>
+                                                <th style="min-width: 60px;">Putra</th>
+                                                <th style="min-width: 60px;">Putri</th>
+                                                <th style="min-width: 60px;">SMP</th>
+                                                <th style="min-width: 60px;">SMA</th>
+                                                <th style="min-width: 60px;">Kls 7 Pa</th>
+                                                <th style="min-width: 60px;">Kls 7 Pi</th>
+                                                <th style="min-width: 60px;">Kls 8 Pa</th>
+                                                <th style="min-width: 60px;">Kls 8 Pi</th>
+                                                <th style="min-width: 60px;">Kls 9 Pa</th>
+                                                <th style="min-width: 60px;">Kls 9 Pi</th>
+                                                <th style="min-width: 60px;">Kls 10 Pa</th>
+                                                <th style="min-width: 60px;">Kls 10 Pi</th>
+                                                <th style="min-width: 60px;">Kls 11 Pa</th>
+                                                <th style="min-width: 60px;">Kls 11 Pi</th>
+                                                <th style="min-width: 60px;">Kls 12 Pa</th>
+                                                <th style="min-width: 60px;">Kls 12 Pi</th>
+                                                <th style="min-width: 70px; font-weight: bold; background-color: #2c3e50;">Total</th>
+                                                <th style="min-width: 40px; background-color: #2c3e50;">Pilih</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="trenTableBody">
+                                            <tr><td colspan="19" class="text-center text-muted">Memuat data...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- ===== SUB TAB 2: TREN KELULUSAN ===== -->
+            <!-- ============================================ -->
+            <div class="tab-pane fade" id="sub-analisis-kelulusan-pane" role="tabpanel">
+                <!-- Tombol Aksi -->
+                <div class="d-flex gap-2 mb-3 flex-wrap">
+                    <button class="btn btn-sm btn-success" onclick="simpanDataTrenKelulusan()">
+                        <i class="bi bi-cloud-arrow-up"></i> Simpan Data
+                    </button>
+                    <button class="btn btn-sm btn-primary" onclick="tambahDataKelulusan()">
+                        <i class="bi bi-plus-lg"></i> Tambah Tahun
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="hapusDataKelulusan()">
+                        <i class="bi bi-trash"></i> Hapus Terpilih
+                    </button>
+                    <button class="btn btn-sm btn-info text-white" onclick="exportTrenKelulusanExcel()">
+                        <i class="bi bi-file-earmark-excel"></i> Export Excel
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="importTrenKelulusanExcel()">
+                        <i class="bi bi-file-earmark-arrow-up"></i> Import Excel
+                    </button>
+                    <input type="file" id="importKelulusanFile" hidden accept=".xlsx, .xls" onchange="processImportKelulusanExcel(event)">
+                    
+                    <button class="btn btn-sm btn-outline-primary" id="btnKelToggleChart" onclick="toggleKelChartType()">
+                        <i class="bi bi-bar-chart-fill"></i> <span id="kelChartTypeLabel">Bar</span>
+                    </button>
+                </div>
+
+                <!-- Filter Tahun -->
+                <div class="row g-2 mb-3">
+                    <div class="col-md-12">
+                        <div class="card-dashboard-premium card-gradient-white" style="padding: 12px 20px; border-radius: 12px; background: var(--bg-card);">
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <label class="fw-bold mb-0" style="font-size: 0.85rem;">
+                                    <i class="bi bi-funnel me-1"></i> Filter Tahun Ajaran:
+                                </label>
+                                <select id="filterKelulusanTahun" class="form-select form-select-sm" style="width: auto; min-width: 180px;" onchange="applyFilterKelulusan()">
+                                    <option value="all">-- Semua Tahun --</option>
+                                </select>
+                                <div class="d-flex gap-2">
+                                    <span class="badge bg-secondary text-white" id="kelulusanFilterCount" style="padding: 6px 14px; font-size: 0.75rem;">
+                                        Menampilkan: <span id="kelulusanFilteredCount">0</span> dari <span id="kelulusanTotalCount">0</span> data
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kartu Ringkasan -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="card-dashboard-premium card-gradient-primary">
+                            <div class="card-body">
+                                <div class="stat-label">Total Lulusan</div>
+                                <div class="stat-number" id="kel-total-lulusan">0</div>
+                                <i class="bi bi-mortarboard-fill stat-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-dashboard-premium card-gradient-gold">
+                            <div class="card-body">
+                                <div class="stat-label">Rata-rata Lulusan/Tahun</div>
+                                <div class="stat-number" id="kel-rata-rata">0</div>
+                                <i class="bi bi-calculator-fill stat-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-dashboard-premium card-gradient-green">
+                            <div class="card-body">
+                                <div class="stat-label">Tahun Lulusan Terbanyak</div>
+                                <div class="stat-number" id="kel-tahun-terbanyak" style="font-size: 1.6rem;">-</div>
+                                <i class="bi bi-trophy-fill stat-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-dashboard-premium card-gradient-blue">
+                            <div class="card-body">
+                                <div class="stat-label">Jumlah Tahun Data</div>
+                                <div class="stat-number" id="kel-jumlah-tahun">0</div>
+                                <i class="bi bi-clock-history stat-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grafik Kelulusan -->
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="card-dashboard-premium card-gradient-white" style="height: 100%; background: var(--bg-card);">
+                            <div class="card-body">
+                                <div class="stat-label" style="color: var(--text-muted);">Tren Kelulusan Putra / Putri</div>
+                                <div style="position: relative; height: 250px; margin-top: 10px;" class="chart-wrapper" id="kelChartGenderWrapper">
+                                    <canvas id="kelChartGender"></canvas>
+                                    <button class="btn-zoom-chart" onclick="zoomChart('kelChartGender', 'Tren Kelulusan Putra / Putri')">
+                                        <i class="bi bi-arrows-fullscreen"></i> Zoom
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card-dashboard-premium card-gradient-white" style="height: 100%; background: var(--bg-card);">
+                            <div class="card-body">
+                                <div class="stat-label" style="color: var(--text-muted);">Tren Kelulusan SMP / SMA</div>
+                                <div style="position: relative; height: 250px; margin-top: 10px;" class="chart-wrapper" id="kelChartJenjangWrapper">
+                                    <canvas id="kelChartJenjang"></canvas>
+                                    <button class="btn-zoom-chart" onclick="zoomChart('kelChartJenjang', 'Tren Kelulusan SMP / SMA')">
+                                        <i class="bi bi-arrows-fullscreen"></i> Zoom
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabel Data Kelulusan -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card);">
+                            <div class="card-body">
+                                <div class="stat-label" style="color: var(--text-muted);">
+                                    Data Detail Kelulusan per Tahun Ajaran
+                                    <span class="text-muted small">(Klik sel untuk mengedit)</span>
+                                </div>
+                                <div style="max-height: 450px; overflow: auto; margin-top: 10px;">
+                                    <table class="table table-sm table-bordered table-striped" id="kelTable">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th style="min-width: 100px;">Tahun Ajaran</th>
+                                                <th style="min-width: 60px;">Lulus Putra</th>
+                                                <th style="min-width: 60px;">Lulus Putri</th>
+                                                <th style="min-width: 60px;">Lulus SMP</th>
+                                                <th style="min-width: 60px;">Lulus SMA</th>
+                                                <th style="min-width: 60px;">SMP Putra</th>
+                                                <th style="min-width: 60px;">SMP Putri</th>
+                                                <th style="min-width: 60px;">SMA Putra</th>
+                                                <th style="min-width: 60px;">SMA Putri</th>
+                                                <th style="min-width: 70px; font-weight: bold; background-color: #2c3e50;">Total</th>
+                                                <th style="min-width: 40px; background-color: #2c3e50;">Pilih</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="kelTableBody">
+                                            <tr><td colspan="11" class="text-center text-muted">Memuat data...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- ===== SUB TAB 3: MONITORING IDENTITAS ===== -->
+            <!-- ============================================ -->
+            <div class="tab-pane fade" id="sub-analisis-monitoring-pane" role="tabpanel">
+                <!-- Header dengan tombol aksi -->
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <h5 class="fw-bold mb-0" style="color: var(--text-primary);">
+                        <i class="bi bi-clipboard2-check me-2" style="color: var(--gold-color);"></i>
+                        Monitoring Kelengkapan Identitas Santri
+                    </h5>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-sm btn-success" onclick="exportMonitoringIdentitas()">
+                            <i class="bi bi-file-earmark-excel"></i> Export Excel
+                        </button>
+                        <button class="btn btn-sm btn-primary" onclick="loadMonitoringIdentitas()">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KARTU RINGKASAN -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-mini-box" style="border-left: 4px solid #3498db;">
+                            <div class="stat-mini-number" id="mon-total" style="color: #3498db;">0</div>
+                            <div class="stat-mini-label">Total Santri Aktif</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-mini-box" style="border-left: 4px solid #2ecc71;">
+                            <div class="stat-mini-number" id="mon-lengkap" style="color: #2ecc71;">0</div>
+                            <div class="stat-mini-label">Lengkap (NIK + NISN)</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-mini-box" style="border-left: 4px solid #f39c12;">
+                            <div class="stat-mini-number" id="mon-sebagian" style="color: #f39c12;">0</div>
+                            <div class="stat-mini-label">Sebagian (Salah Satu)</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-mini-box" style="border-left: 4px solid #e74c3c;">
+                            <div class="stat-mini-number" id="mon-kosong" style="color: #e74c3c;">0</div>
+                            <div class="stat-mini-label">Kosong (Tidak Ada)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROGRESS BAR KELENGKAPAN -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card);">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="stat-label" style="color: var(--text-muted);">
+                                        <i class="bi bi-person-vcard me-1" style="color: #3498db;"></i>
+                                        Kelengkapan NIK Santri
+                                    </span>
+                                    <span class="fw-bold" id="mon-nik-persen" style="font-size: 1.3rem; color: #3498db;">0%</span>
+                                </div>
+                                <div class="progress-kelengkapan">
+                                    <div class="bar" id="mon-nik-bar" style="width: 0%; background: linear-gradient(90deg, #3498db, #5dade2);"></div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2" style="font-size: 0.75rem; color: var(--text-muted);">
+                                    <span>Terisi: <strong id="mon-nik-terisi">0</strong></span>
+                                    <span>Kosong: <strong id="mon-nik-kosong" style="color: #e74c3c;">0</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card);">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="stat-label" style="color: var(--text-muted);">
+                                        <i class="bi bi-123 me-1" style="color: #9b59b6;"></i>
+                                        Kelengkapan NISN Santri
+                                    </span>
+                                    <span class="fw-bold" id="mon-nisn-persen" style="font-size: 1.3rem; color: #9b59b6;">0%</span>
+                                </div>
+                                <div class="progress-kelengkapan">
+                                    <div class="bar" id="mon-nisn-bar" style="width: 0%; background: linear-gradient(90deg, #9b59b6, #bb8fce);"></div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2" style="font-size: 0.75rem; color: var(--text-muted);">
+                                    <span>Terisi: <strong id="mon-nisn-terisi">0</strong></span>
+                                    <span>Kosong: <strong id="mon-nisn-kosong" style="color: #e74c3c;">0</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FILTER BAR -->
+                <div class="monitoring-filter-bar">
+                    <div style="flex: 1; min-width: 200px;">
+                        <label class="form-label small fw-bold mb-1">Filter Kelas</label>
+                        <select id="monFilterKelas" class="form-select form-select-sm" onchange="renderMonitoringTable()">
+                            <option value="">-- Semua Kelas --</option>
+                            <option value="7">Kelas 7</option>
+                            <option value="8">Kelas 8</option>
+                            <option value="9">Kelas 9</option>
+                            <option value="10">Kelas 10</option>
+                            <option value="11">Kelas 11</option>
+                            <option value="12">Kelas 12</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <label class="form-label small fw-bold mb-1">Filter Jenjang</label>
+                        <select id="monFilterJenjang" class="form-select form-select-sm" onchange="renderMonitoringTable()">
+                            <option value="">-- Semua Jenjang --</option>
+                            <option value="Wustha">Wustha</option>
+                            <option value="Ulya">Ulya</option>
+                            <option value="SMP">SMP</option>
+                            <option value="SMA">SMA</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <label class="form-label small fw-bold mb-1">Status Kelengkapan</label>
+                        <select id="monFilterStatus" class="form-select form-select-sm" onchange="renderMonitoringTable()">
+                            <option value="all">-- Semua Status --</option>
+                            <option value="lengkap">✅ Lengkap (NIK + NISN)</option>
+                            <option value="sebagian">⚠️ Sebagian (Salah Satu)</option>
+                            <option value="kosong">❌ Kosong (Tidak Ada)</option>
+                            <option value="nik_kosong">🔴 NIK Kosong</option>
+                            <option value="nisn_kosong">🟣 NISN Kosong</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2; min-width: 250px;">
+                        <label class="form-label small fw-bold mb-1">Cari Nama Santri</label>
+                        <input type="text" id="monSearchNama" class="form-control form-control-sm" 
+                               placeholder="🔍 Ketik nama santri..." oninput="renderMonitoringTable()">
+                    </div>
+                </div>
+
+                <!-- TABEL MONITORING -->
+                <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="stat-label" style="color: var(--text-muted); margin-bottom: 0;">
+                                <i class="bi bi-table me-1"></i> Detail Kelengkapan Identitas
+                            </div>
+                            <div>
+                                <span class="badge bg-secondary" id="monShowingInfo">Menampilkan: 0 data</span>
+                            </div>
+                        </div>
+                        <div style="max-height: 500px; overflow: auto;">
+                            <table class="table table-sm table-bordered" id="tableMonitoringIdentitas">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width: 40px;">No</th>
+                                        <th style="min-width: 200px;">Nama Santri</th>
+                                        <th style="min-width: 70px;">Kelas</th>
+                                        <th style="min-width: 80px;">Jenjang</th>
+                                        <th style="min-width: 150px;">NIK Santri</th>
+                                        <th style="min-width: 120px;">NISN</th>
+                                        <th style="min-width: 110px;">Status</th>
+                                        <th style="min-width: 90px;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableMonitoringBody">
+                                    <tr><td colspan="8" class="text-center text-muted py-4">
+                                        Memuat data... Silakan tunggu.
+                                    </td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>      
 
         <!-- FLOATING ACTION BUTTON -->
         <div id="draggable-fab">
@@ -8359,6 +8911,20 @@ body.hide-bulk-luluskan.hide-bulk-mutasi .filter-section-wrapper button[onclick*
         darkModeToggle.addEventListener('click', toggleDarkMode);
         loadTheme();
 
+
+window.refreshMonitoringIfActive = function() {
+    // Cek apakah sub-tab monitoring sedang aktif
+    const monitoringPane = document.getElementById('sub-analisis-monitoring-pane');
+    const analisisTab = document.getElementById('tab-analisis');
+    
+    if (analisisTab && analisisTab.classList.contains('active') && 
+        monitoringPane && monitoringPane.classList.contains('active')) {
+        if (typeof loadMonitoringIdentitas === 'function') {
+            loadMonitoringIdentitas();
+        }
+    }
+};
+
         // ===== FUNGSI UPDATE TEKS SKBB =====
         window.updateSKBBText = function() {
             const kategori = document.getElementById('kategoriSkbb').value;
@@ -8721,20 +9287,23 @@ window.loadFilterPanelState = function() {
 
 
         // ===== DASHBOARD =====
-        window.toggleDashboardView = (isDashboard) => {
-            if (isDashboard) {
-                document.body.classList.add('on-dashboard');
-                renderDashboard();
-            } else {
-                document.body.classList.remove('on-dashboard');
-            }
-            const activeTab = document.querySelector('.tab-pane.active')?.id;
-            if (activeTab === 'tab-struktur' || activeTab === 'tab-surat' || activeTab === 'tab-cetak-kts' || activeTab === 'tab-tren') {
-                document.body.classList.add('hide-elements');
-            } else {
-                document.body.classList.remove('hide-elements');
-            }
-        };
+window.toggleDashboardView = (isDashboard) => {
+    if (isDashboard) {
+        document.body.classList.add('on-dashboard');
+        renderDashboard();
+    } else {
+        document.body.classList.remove('on-dashboard');
+    }
+    const activeTab = document.querySelector('.tab-pane.active')?.id;
+    if (activeTab === 'tab-struktur' || activeTab === 'tab-surat' || activeTab === 'tab-cetak-kts' || 
+        activeTab === 'tab-tren' || activeTab === 'tab-monitoring' || 
+        activeTab === 'tab-analisis') {
+        document.body.classList.add('hide-elements');
+    } else {
+        document.body.classList.remove('hide-elements');
+    }
+};
+
 
         // ===== FUNGSI RENDER GENDER PER KELAS =====
         function renderGenderPerKelas(data) {
@@ -10886,6 +11455,7 @@ window.hapusFotoDariKoleksi = async (santriId) => {
             event.target.value = '';
         };
 
+
         window.switchTrenSubTab = async function(tab) {
             const loader = document.getElementById('loader');
             loader.style.display = 'flex';
@@ -10903,7 +11473,35 @@ window.hapusFotoDariKoleksi = async (santriId) => {
             }
         };
 
-        // ===== RENDER HEADER =====
+
+// ===== LOAD TAB ANALISIS =====
+window.loadTabAnalisis = function() {
+    // Default load sub-tab pertumbuhan
+    loadTrenTahunan();
+};
+
+// ===== SWITCH SUB TAB ANALISIS =====
+window.switchAnalisisSubTab = async function(tab) {
+    const loader = document.getElementById('loader');
+    if (loader) loader.style.display = 'flex';
+    
+    try {
+        if (tab === 'pertumbuhan') {
+            await loadTrenTahunan();
+        } else if (tab === 'kelulusan') {
+            await loadTrenKelulusan();
+        } else if (tab === 'monitoring') {
+            await loadMonitoringIdentitas();
+        }
+    } catch (error) {
+        console.error("Error switching analisis sub-tab:", error);
+    } finally {
+        if (loader) loader.style.display = 'none';
+    }
+};
+
+   
+     // ===== RENDER HEADER =====
         function createHeader() {
             const tables = [
                 { headerId: 'hInput', tbodyId: 'tbodySantri' },
@@ -11058,7 +11656,23 @@ window.hapusFotoDariKoleksi = async (santriId) => {
         };
 
 
+// ===== GUARD FLAG UNTUK MENCEGAH RACE CONDITION =====
+let isLoadingPaging = {
+    'tbodySantri': false,
+    'tbodyLulus': false,
+    'tbodyMutasi': false
+};
+
 window.loadDataPaging = async (collName, tbodyId, direction = 0, goToPage = null, isSearch = false) => {
+    // ============================================================
+    // ===== GUARD: Cegah eksekusi bersamaan untuk tbody yang sama =====
+    // ============================================================
+    if (isLoadingPaging[tbodyId]) {
+        console.log(`⏭️ Skip loadDataPaging untuk ${tbodyId} - sedang loading`);
+        return;
+    }
+    isLoadingPaging[tbodyId] = true;
+
     const loader = document.getElementById('loader');
     if (!isSearch) {
         loader.style.display = 'flex';
@@ -11124,22 +11738,20 @@ window.loadDataPaging = async (collName, tbodyId, direction = 0, goToPage = null
         const pageDocs = docs.slice(start, end);
         
         const tbody = document.getElementById(tbodyId);
+        
+        // ============================================================
+        // ===== KOSONGKAN TBODY SEBELUM RENDER (ANTI-DUPLIKAT) =====
+        // ============================================================
         tbody.innerHTML = '';
         
         // ============================================================
         // ===== AMBIL FOTO DARI KOLEKSI TERPISAH SECARA PARALEL =====
         // ============================================================
-        // Cek dulu apakah ada data yang perlu foto di-load
         const docsNeedFoto = pageDocs.filter(docSnap => {
             const data = docSnap.data();
-            // Foto perlu di-load jika:
-            // 1. Tidak ada field foto sama sekali
-            // 2. Field foto ada tapi bukan base64 (misal kosong atau placeholder)
             return !data.foto || !data.foto.startsWith('data:image');
         });
 
-        // Load semua foto yang dibutuhkan secara paralel (Promise.all)
-        // Ini jauh lebih cepat daripada sequential await di dalam loop
         const fotoMap = {};
         if (docsNeedFoto.length > 0 && collName === 'data_santri') {
             try {
@@ -11170,7 +11782,6 @@ window.loadDataPaging = async (collName, tbodyId, direction = 0, goToPage = null
         pageDocs.forEach((docSnap, index) => {
             const data = docSnap.data();
             
-            // Gabungkan foto dari koleksi terpisah jika ada
             if (fotoMap[docSnap.id]) {
                 data.foto = fotoMap[docSnap.id];
             }
@@ -11181,7 +11792,7 @@ window.loadDataPaging = async (collName, tbodyId, direction = 0, goToPage = null
         // ===== UPDATE SEL KOSONG & TANDAI BARIS TANPA IDENTITAS =====
         updateEmptyCells(tbodyId);
         markRowsWithoutIdentity(tbodyId);        
-        markRowsBelumTersimpan(tbodyId);   // ← TAMBAHKAN BARIS INI
+        markRowsBelumTersimpan(tbodyId);
         updateSortHeaderUI(tbodyId);
         updatePaginationUI(tbodyId);
         updateFilterCountBadge();
@@ -11190,6 +11801,10 @@ window.loadDataPaging = async (collName, tbodyId, direction = 0, goToPage = null
         console.error("Error load data: ", error);
         alert("Gagal memuat data.");
     } finally {
+        // ============================================================
+        // ===== LEPAS GUARD FLAG =====
+        // ============================================================
+        isLoadingPaging[tbodyId] = false;
         loader.style.display = 'none';
     }
 };
@@ -11879,162 +12494,170 @@ window.attachEmptyDetection = function(tbodyId) {
 };
 
 
-        window.addRow = function(targetId, data = {}, rowNumber = null) {
-            const tbody = document.getElementById(targetId);
-            const row = document.createElement('tr');
-            row.dataset.id = data.id || "";
-            const coll = targetId === 'tbodySantri' ? 'data_santri' : (targetId === 'tbodyLulus' ? 'data_santri_lulus' : 'data_santri_mutasi');
+window.addRow = function(targetId, data = {}, rowNumber = null) {
+    const tbody = document.getElementById(targetId);
+    
+    // ============================================================
+    // ===== CEK DUPLIKAT BERDASARKAN docId (SAFETY NET) =====
+    // ============================================================
+    if (data.id) {
+        const existingRow = tbody.querySelector(`tr[data-id="${data.id}"]`);
+        if (existingRow) {
+            console.warn(`⚠️ Duplikat terdeteksi: ${data.id}, skip render`);
+            return existingRow;
+        }
+    }
+    
+    const row = document.createElement('tr');
+    row.dataset.id = data.id || "";
+    const coll = targetId === 'tbodySantri' ? 'data_santri' : (targetId === 'tbodyLulus' ? 'data_santri_lulus' : 'data_santri_mutasi');
 
-            const dateFields = ['tgl_lahir', 'tgl_masuk', 'tgl_akhir'];
-            dateFields.forEach(field => {
-                if (data[field]) {
-                    data[field] = typeof convertToDMY === 'function' ? convertToDMY(data[field]) : data[field];
-                }
-            });
+    const dateFields = ['tgl_lahir', 'tgl_masuk', 'tgl_akhir'];
+    dateFields.forEach(field => {
+        if (data[field]) {
+            data[field] = typeof convertToDMY === 'function' ? convertToDMY(data[field]) : data[field];
+        }
+    });
 
-            let cells = `<td class="sticky-col-check"><input type="checkbox" class="row-check"></td>
-                         <td class="sticky-col-action text-center">
-                            <div class="action-buttons">
-                                <button class="btn-edit-row" onclick="openEditModal(this, '${coll}')" title="Edit Data">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                                <button class="btn-delete-row" onclick="deleteRow(this, '${coll}')" title="Hapus Data">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                           </td>
-                           <td style="min-width: 30px; max-width: 40px; width: 30px; text-align: center; vertical-align: middle;">
-                            <input type="text" class="input-cell no-cell" value="${rowNumber || tbody.rows.length + 1}" 
-                                   oninput="updateNIS(this.closest('tr'))" 
-                                   style="width: 25px; min-width: 20px; max-width: 35px; padding: 2px 4px; text-align: center; font-size: 0.7rem; border: none; background: transparent;">
-                           </td>`;
+    let cells = `<td class="sticky-col-check"><input type="checkbox" class="row-check"></td>
+                 <td class="sticky-col-action text-center">
+                    <div class="action-buttons">
+                        <button class="btn-edit-row" onclick="openEditModal(this, '${coll}')" title="Edit Data">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn-delete-row" onclick="deleteRow(this, '${coll}')" title="Hapus Data">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                   </td>
+                   <td style="min-width: 30px; max-width: 40px; width: 30px; text-align: center; vertical-align: middle;">
+                    <input type="text" class="input-cell no-cell" value="${rowNumber || tbody.rows.length + 1}" 
+                           oninput="updateNIS(this.closest('tr'))" 
+                           style="width: 25px; min-width: 20px; max-width: 35px; padding: 2px 4px; text-align: center; font-size: 0.7rem; border: none; background: transparent;">
+                   </td>`;
 
-            const alamatFields = ['alamat', 'desa', 'kec', 'kab', 'prov', 'pos', 'alamat_asal', 'almt_ortu', 'almt_wali'];
+    const alamatFields = ['alamat', 'desa', 'kec', 'kab', 'prov', 'pos', 'alamat_asal', 'almt_ortu', 'almt_wali'];
 
-            columnMapping.forEach(col => {
-                let val = data[col] || '';
-                let inputHtml = '';
+    columnMapping.forEach(col => {
+        let val = data[col] || '';
+        let inputHtml = '';
 
-                if (col === 'updated_at' || col === 'created_at') {
-                    const displayTime = val ? formatDate(val) : formatDate(new Date());
-                    inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${displayTime}" readonly style="background-color: #f1f3f5; cursor: not-allowed; font-style: italic; color: #6c757d; font-size: 0.7rem; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; width: 100%; min-width: 80px;" placeholder="-">`;
-                } else if (col === 'foto') {
-                    const hasPhoto = val && val.startsWith('data:image');
-                    inputHtml = `
-                        <div class="text-center p-1" style="display: flex; align-items: center; justify-content: center;">
-                            <input type="file" class="photo-input" hidden accept="image/*" onchange="handleRowPhoto(this)">
-                            <img src="${hasPhoto ? val : 'https://via.placeholder.com/40x50?text=FOTO'}" 
-                                 class="photo-preview ${hasPhoto ? '' : 'photo-empty'}" 
-                                 onclick="this.previousElementSibling.click()" 
-                                 style="cursor: pointer; border-radius: 4px; border: 1px solid var(--border-color);">
-                            <input type="hidden" data-field="foto" value="${val}">
-                        </div>`;
-                } else if (col === 'kode_absen') {
-                    inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${val}" style="width: 90px; min-width: 70px; max-width: 110px; padding: 6px 8px; text-align: center; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input);">`;
-                } else if (col === 'nama') {
-                    inputHtml = `<input type="text" class="input-cell input-nama-santri" data-field="${col}" value="${val}" 
-                                            style="min-width: 290px; max-width: 480px; width: 100%; padding: 6px 12px; 
-                                                   font-size: 0.8rem; font-weight: 500; color: var(--primary-color); 
-                                                   background: #fafafa; border: 1px solid var(--border-color); border-radius: 6px;
-                                                   border-left: 3px solid var(--gold-color);
-                                                   transition: all 0.2s ease; letter-spacing: 0.3px;"
-                                            placeholder="Nama Lengkap Santri..." 
-                                            onfocus="this.style.background='#ffffff'; this.style.borderColor='var(--accent-color)'; this.style.boxShadow='0 0 0 3px rgba(52,152,219,0.12)'; this.style.borderLeft='3px solid var(--accent-color)';"
-                                            onblur="this.style.background='#fafafa'; this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'; this.style.borderLeft='3px solid var(--gold-color)';">`;
-                } else if (col === 'umur') {
-                    inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${val}" readonly style="width: 50px; min-width: 40px; max-width: 60px; padding: 6px 8px; text-align: center; font-size: 0.8rem; background-color: #f8f9fa; font-weight: bold; color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 4px;">`;
-                } else if (col === 'tgl_lahir') {
-                    const formattedVal = typeof convertToDMY === 'function' ? convertToDMY(val) : val;
-                    inputHtml = `<input type="text" class="input-cell date-input" data-field="${col}" placeholder="dd/mm/yyyy" maxlength="10" value="${formattedVal}" oninput="formatTgl(this); calculateAge(this.closest('tr'))" style="width: 115px; min-width: 100px; max-width: 135px; padding: 6px 8px; font-size: 0.8rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input);">`;
-                } else if (alamatFields.includes(col)) {
-                    inputHtml = `<input type="text" class="input-cell input-alamat" data-field="${col}" value="${val}" style="min-width: 200px; max-width: 400px; width: 350px; padding: 6px 10px; font-size: 0.8rem; white-space: normal; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input);">`;
-                } else if (dropdownOptions[col]) {
-                    inputHtml = `<select class="input-cell" data-field="${col}" style="padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input); min-width: 100px; font-size: 0.8rem; color: var(--text-primary);">
-                                    <option value="">-- Pilih --</option>
-                                    ${dropdownOptions[col].map(opt => `<option value="${opt}" ${val == opt ? 'selected' : ''}>${opt}</option>`).join('')}
-                                 </select>`;
-                } else if (col === 'nism') {
-                    inputHtml = `<input type="text" class="input-cell input-nism" data-field="${col}" value="${val}" 
-                                            readonly 
-                                            style="min-width: 170px; max-width: 230px; width: 200px; padding: 6px 10px; 
-                                                   font-size: 0.75rem; font-weight: 600; color: #2c3e50; 
-                                                   background-color: #eef2f7; border: 1px solid var(--border-color); 
-                                                   border-radius: 4px; cursor: not-allowed; 
-                                                   font-family: 'Courier New', monospace; letter-spacing: 0.5px; 
-                                                   text-align: center;"
-                                            placeholder="NISM otomatis">`;
-                } else if (col === 'nis') {
-                    inputHtml = `<input type="text" class="input-cell input-nis" data-field="${col}" value="${val}" 
-                                            readonly 
-                                            style="min-width: 130px; max-width: 180px; width: 150px; padding: 6px 10px; 
-                                                   font-size: 0.75rem; font-weight: 600; color: #2c3e50; 
-                                                   background-color: #eef2f7; border: 1px solid var(--border-color); 
-                                                   border-radius: 4px; cursor: not-allowed; 
-                                                   font-family: 'Courier New', monospace; letter-spacing: 0.5px; 
-                                                   text-align: center;"
-                                            placeholder="NIS otomatis">`;
-                } else if (col.toLowerCase().includes('tgl') || col.toLowerCase().includes('tanggal')) {
-                    const formattedVal = typeof convertToDMY === 'function' ? convertToDMY(val) : val;
-                    const triggerAuto = (col === 'tgl_masuk' || col === 'tanggal_masuk') ? 'updateNIS(this.closest("tr"))' : '';
-                    inputHtml = `<input type="text" class="input-cell date-input" data-field="${col}" placeholder="dd/mm/yyyy" maxlength="10" value="${formattedVal}" oninput="formatTgl(this); ${triggerAuto}" style="font-size: 0.7rem; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; width: 115px; min-width: 100px; background: var(--bg-input);">`;
-                } else {
-                    inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${val}" style="padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; min-width: 80px; font-size: 0.8rem; background: var(--bg-input);">`;
-                }
+        if (col === 'updated_at' || col === 'created_at') {
+            const displayTime = val ? formatDate(val) : formatDate(new Date());
+            inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${displayTime}" readonly style="background-color: #f1f3f5; cursor: not-allowed; font-style: italic; color: #6c757d; font-size: 0.7rem; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; width: 100%; min-width: 80px;" placeholder="-">`;
+        } else if (col === 'foto') {
+            const hasPhoto = val && val.startsWith('data:image');
+            inputHtml = `
+                <div class="text-center p-1" style="display: flex; align-items: center; justify-content: center;">
+                    <input type="file" class="photo-input" hidden accept="image/*" onchange="handleRowPhoto(this)">
+                    <img src="${hasPhoto ? val : 'https://via.placeholder.com/40x50?text=FOTO'}" 
+                         class="photo-preview ${hasPhoto ? '' : 'photo-empty'}" 
+                         onclick="this.previousElementSibling.click()" 
+                         style="cursor: pointer; border-radius: 4px; border: 1px solid var(--border-color);">
+                    <input type="hidden" data-field="foto" value="${val}">
+                </div>`;
+        } else if (col === 'kode_absen') {
+            inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${val}" style="width: 90px; min-width: 70px; max-width: 110px; padding: 6px 8px; text-align: center; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input);">`;
+        } else if (col === 'nama') {
+            inputHtml = `<input type="text" class="input-cell input-nama-santri" data-field="${col}" value="${val}" 
+                                    style="min-width: 290px; max-width: 480px; width: 100%; padding: 6px 12px; 
+                                           font-size: 0.8rem; font-weight: 500; color: var(--primary-color); 
+                                           background: #fafafa; border: 1px solid var(--border-color); border-radius: 6px;
+                                           border-left: 3px solid var(--gold-color);
+                                           transition: all 0.2s ease; letter-spacing: 0.3px;"
+                                    placeholder="Nama Lengkap Santri..." 
+                                    onfocus="this.style.background='#ffffff'; this.style.borderColor='var(--accent-color)'; this.style.boxShadow='0 0 0 3px rgba(52,152,219,0.12)'; this.style.borderLeft='3px solid var(--accent-color)';"
+                                    onblur="this.style.background='#fafafa'; this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'; this.style.borderLeft='3px solid var(--gold-color)';">`;
+        } else if (col === 'umur') {
+            inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${val}" readonly style="width: 50px; min-width: 40px; max-width: 60px; padding: 6px 8px; text-align: center; font-size: 0.8rem; background-color: #f8f9fa; font-weight: bold; color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 4px;">`;
+        } else if (col === 'tgl_lahir') {
+            const formattedVal = typeof convertToDMY === 'function' ? convertToDMY(val) : val;
+            inputHtml = `<input type="text" class="input-cell date-input" data-field="${col}" placeholder="dd/mm/yyyy" maxlength="10" value="${formattedVal}" oninput="formatTgl(this); calculateAge(this.closest('tr'))" style="width: 115px; min-width: 100px; max-width: 135px; padding: 6px 8px; font-size: 0.8rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input);">`;
+        } else if (alamatFields.includes(col)) {
+            inputHtml = `<input type="text" class="input-cell input-alamat" data-field="${col}" value="${val}" style="min-width: 200px; max-width: 400px; width: 350px; padding: 6px 10px; font-size: 0.8rem; white-space: normal; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input);">`;
+        } else if (dropdownOptions[col]) {
+            inputHtml = `<select class="input-cell" data-field="${col}" style="padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input); min-width: 100px; font-size: 0.8rem; color: var(--text-primary);">
+                            <option value="">-- Pilih --</option>
+                            ${dropdownOptions[col].map(opt => `<option value="${opt}" ${val == opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                         </select>`;
+        } else if (col === 'nism') {
+            inputHtml = `<input type="text" class="input-cell input-nism" data-field="${col}" value="${val}" 
+                                    readonly 
+                                    style="min-width: 170px; max-width: 230px; width: 200px; padding: 6px 10px; 
+                                           font-size: 0.75rem; font-weight: 600; color: #2c3e50; 
+                                           background-color: #eef2f7; border: 1px solid var(--border-color); 
+                                           border-radius: 4px; cursor: not-allowed; 
+                                           font-family: 'Courier New', monospace; letter-spacing: 0.5px; 
+                                           text-align: center;"
+                                    placeholder="NISM otomatis">`;
+        } else if (col === 'nis') {
+            inputHtml = `<input type="text" class="input-cell input-nis" data-field="${col}" value="${val}" 
+                                    readonly 
+                                    style="min-width: 130px; max-width: 180px; width: 150px; padding: 6px 10px; 
+                                           font-size: 0.75rem; font-weight: 600; color: #2c3e50; 
+                                           background-color: #eef2f7; border: 1px solid var(--border-color); 
+                                           border-radius: 4px; cursor: not-allowed; 
+                                           font-family: 'Courier New', monospace; letter-spacing: 0.5px; 
+                                           text-align: center;"
+                                    placeholder="NIS otomatis">`;
+        } else if (col.toLowerCase().includes('tgl') || col.toLowerCase().includes('tanggal')) {
+            const formattedVal = typeof convertToDMY === 'function' ? convertToDMY(val) : val;
+            const triggerAuto = (col === 'tgl_masuk' || col === 'tanggal_masuk') ? 'updateNIS(this.closest("tr"))' : '';
+            inputHtml = `<input type="text" class="input-cell date-input" data-field="${col}" placeholder="dd/mm/yyyy" maxlength="10" value="${formattedVal}" oninput="formatTgl(this); ${triggerAuto}" style="font-size: 0.7rem; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; width: 115px; min-width: 100px; background: var(--bg-input);">`;
+        } else {
+            inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${val}" style="padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; min-width: 80px; font-size: 0.8rem; background: var(--bg-input);">`;
+        }
 
-                const tdClass = col === 'nama' ? 'col-nama-santri' : (col === 'nism' ? 'col-nism' : (col === 'nis' ? 'col-nis' : ''));
-                const tdStyle = col === 'nama' ? 'min-width: 320px; max-width: 500px; width: 380px; padding: 4px 8px;' : 
-                                col === 'nism' ? 'min-width: 170px; max-width: 230px; width: 200px; padding: 4px 6px;' :
-                                col === 'nis' ? 'min-width: 130px; max-width: 180px; width: 150px; padding: 4px 6px;' :
-                                'padding: 4px 6px;';
-                cells += `<td class="${tdClass}" style="${tdStyle}">${inputHtml}</td>`;
-            });
+        const tdClass = col === 'nama' ? 'col-nama-santri' : (col === 'nism' ? 'col-nism' : (col === 'nis' ? 'col-nis' : ''));
+        const tdStyle = col === 'nama' ? 'min-width: 320px; max-width: 500px; width: 380px; padding: 4px 8px;' : 
+                        col === 'nism' ? 'min-width: 170px; max-width: 230px; width: 200px; padding: 4px 6px;' :
+                        col === 'nis' ? 'min-width: 130px; max-width: 180px; width: 150px; padding: 4px 6px;' :
+                        'padding: 4px 6px;';
+        cells += `<td class="${tdClass}" style="${tdStyle}">${inputHtml}</td>`;
+    });
 
-            row.innerHTML = cells;
-            tbody.appendChild(row);
+    row.innerHTML = cells;
+    tbody.appendChild(row);
 
-            const container = tbody.closest('.table-container');
-            if (container) {
-                setTimeout(() => container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' }), 50);
+    const container = tbody.closest('.table-container');
+    if (container) {
+        setTimeout(() => container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' }), 50);
+    }
+
+    // ✅ PERBAIKAN: Selalu panggil calculateAge & updateNIS
+    setTimeout(() => {
+        calculateAge(row);
+        updateNIS(row);
+    }, 100);
+    
+    // ===== DETEKSI SEL KOSONG UNTUK ROW INI =====
+    setTimeout(() => {
+        row.querySelectorAll('[data-field]').forEach(input => {
+            const value = (input.value || '').trim();
+            if (value === '') {
+                input.classList.add('is-empty');
             }
-
-// ✅ PERBAIKAN: Selalu panggil calculateAge & updateNIS
-// calculateAge akan otomatis mengosongkan umur jika tgl_lahir kosong
-// updateNIS akan otomatis mengosongkan NIS/NISM jika tgl_masuk/kode_absen kosong
-setTimeout(() => {
-    calculateAge(row);  // Selalu dipanggil, handle kosong/tidak
-    updateNIS(row);     // Selalu dipanggil, handle kosong/tidak
-}, 100);
-            
-            // ===== DETEKSI SEL KOSONG UNTUK ROW INI =====
-            setTimeout(() => {
-                row.querySelectorAll('[data-field]').forEach(input => {
-                    const value = (input.value || '').trim();
-                    if (value === '') {
-                        input.classList.add('is-empty');
-                    }
-                });
-                
-                // Cek foto
-                const photoPreview = row.querySelector('.photo-preview');
-                if (photoPreview) {
-                    const src = photoPreview.getAttribute('src') || '';
-                    if (!src || src.includes('via.placeholder') || src.includes('No+Foto')) {
-                        photoPreview.classList.add('photo-empty');
-                    }
-                }
-                
-                // Tandai baris tanpa identitas
-                const nik = (row.querySelector('[data-field="nik"]')?.value || '').trim();
-                const nisn = (row.querySelector('[data-field="nisn"]')?.value || '').trim();
-                if (!nik && !nisn) {
-                    row.classList.add('row-no-identity');
-                } else {
-                    row.classList.remove('row-no-identity');
-                }
-            }, 50);
-            
-            return row;
-        };
+        });
+        
+        const photoPreview = row.querySelector('.photo-preview');
+        if (photoPreview) {
+            const src = photoPreview.getAttribute('src') || '';
+            if (!src || src.includes('via.placeholder') || src.includes('No+Foto')) {
+                photoPreview.classList.add('photo-empty');
+            }
+        }
+        
+        const nik = (row.querySelector('[data-field="nik"]')?.value || '').trim();
+        const nisn = (row.querySelector('[data-field="nisn"]')?.value || '').trim();
+        if (!nik && !nisn) {
+            row.classList.add('row-no-identity');
+        } else {
+            row.classList.remove('row-no-identity');
+        }
+    }, 50);
+    
+    return row;
+};
 
 
 // ===== IMPORT EXCEL (LANGSUNG SIMPAN KE FIRESTORE) - FIXED =====
@@ -13048,6 +13671,8 @@ window.saveAllData = async () => {
         });
         
         loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri']);
+
+refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
         
     } catch (error) {
         console.error("Error saving data: ", error);
@@ -13527,6 +14152,9 @@ window.deleteRow = async (btn, coll) => {
                 duration: 3000,
                 icon: 'bi-check-circle-fill'
             });
+
+refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
+
         } catch (error) {
             showAlertModal({
                 title: 'Gagal Menghapus Data',
@@ -13638,7 +14266,9 @@ window.bulkDelete = async () => {
         if (document.querySelector('#tab-dashboard').classList.contains('active')) {
             renderDashboard();
         }
-        
+
+refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
+
     } catch (error) {
         showAlertModal({
             title: 'Gagal Menghapus Data',
@@ -14641,17 +15271,17 @@ window.bulkBatalNaikKelas = async () => {
     if (tbodyId !== 'tbodySantri') {
         return showAlertModal({
             title: 'Tab Tidak Sesuai',
-            message: 'Untuk membatalkan kenaikan kelas, silakan buka tab "Entry Data" terlebih dahulu dan pilih santri yang akan dibatalkan.',
+            message: 'Untuk membatalkan kenaikan kelas, silakan buka tab "Input Data" terlebih dahulu dan pilih santri yang akan dibatalkan.',
             details: `
                 <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
                     <span style="font-weight: 600;">Tab Saat Ini</span>
                     <span style="color: #e74c3c;">: ${tbodyId.replace('tbody', 'Data ')}</span>
                     <span style="font-weight: 600;">Tab Diperlukan</span>
-                    <span style="color: #2ecc71;">: Entry Data (Data Aktif)</span>
+                    <span style="color: #2ecc71;">: Input Data (Data Aktif)</span>
                 </div>
                 <div style="margin-top: 10px; padding: 8px 12px; background: #e8f4fd; border-radius: 8px; border-left: 3px solid #3498db; font-size: 0.8rem; color: #1a5276;">
                     <i class="bi bi-info-circle-fill me-1"></i>
-                    <strong>Cara:</strong> Klik tab <strong>Entry Data</strong> di menu navigasi, lalu centang santri yang akan dibatalkan kenaikan kelasnya.
+                    <strong>Cara:</strong> Klik tab <strong>Input Data</strong> di menu navigasi, lalu centang santri yang akan dibatalkan kenaikan kelasnya.
                 </div>
             `,
             type: 'warning',
@@ -16268,26 +16898,15 @@ window.validateAndFixAllDates = async () => {
 };
 
 
-        // ===== TOGGLE ELEMENTS FOR TAB =====
-        window.toggleElementsForTab = (tabId) => {
-            if (tabId === 'tab-struktur' || tabId === 'tab-surat' || tabId === 'tab-cetak-kts' || 
-                tabId === 'tab-tren' || tabId === 'tab-tren-kelulusan') {
-                document.body.classList.add('hide-elements');
-            } else {
-                document.body.classList.remove('hide-elements');
-            }
-        };
-
-
-        // ===== TOGGLE ELEMENTS FOR TAB =====
-        window.toggleElementsForTab = (tabId) => {
-            if (tabId === 'tab-struktur' || tabId === 'tab-surat' || tabId === 'tab-cetak-kts' || 
-                tabId === 'tab-tren' || tabId === 'tab-tren-kelulusan') {
-                document.body.classList.add('hide-elements');
-            } else {
-                document.body.classList.remove('hide-elements');
-            }
-        };
+window.toggleElementsForTab = (tabId) => {
+    if (tabId === 'tab-struktur' || tabId === 'tab-surat' || tabId === 'tab-cetak-kts' || 
+        tabId === 'tab-tren' || tabId === 'tab-tren-kelulusan' || 
+        tabId === 'tab-monitoring' || tabId === 'tab-analisis') {
+        document.body.classList.add('hide-elements');
+    } else {
+        document.body.classList.remove('hide-elements');
+    }
+};
 
 
         // ===== CETAK KTS =====
@@ -17865,6 +18484,8 @@ window.simpanDataBaru = async () => {
             renderDashboard();
         }
 
+refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
+
     } catch (error) {
         console.error("Error menambah data:", error);
         alert('❌ Gagal menambahkan data: ' + error.message);
@@ -18033,7 +18654,7 @@ window.openEditModal = async (btn, collName) => {
             kelasSantriEl.textContent = `• Kelas ${kelas}${jenjang ? ` (${jenjang})` : ''}`;
         }
         
-        // Label sumber data (Entry Data / Data Lulus / Data Mutasi)
+        // Label sumber data (Input Data / Data Lulus / Data Mutasi)
         if (collLabelEl) {
             let labelText = 'Data Aktif';
             let labelColor = '#2ecc71';
@@ -18512,6 +19133,8 @@ window.simpanEditData = async () => {
             renderDashboard();
         }
 
+refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
+
     } catch (error) {
         console.error("Error mengupdate data:", error);
         await showAlertModal({
@@ -18650,28 +19273,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     toggleDashboardView(true);
 
-    // ============================================================
-    // ===== SEMBUNYIKAN TOMBOL BULK MOVE BERDASARKAN TAB AKTIF =====
-    // ============================================================
-    // Fungsi: Menyembunyikan tombol "Luluskan" saat di tab Data Lulus,
-    // dan menyembunyikan tombol "Mutasi" saat di tab Data Mutasi.
-    // ============================================================
+
 window.updateBulkMoveButtonsVisibility = function() {
     const activeTab = document.querySelector('.tab-pane.active');
     const tabId = activeTab ? activeTab.id : '';
 
-    // Reset dulu — hapus semua class pembungkus
     document.body.classList.remove('hide-bulk-luluskan', 'hide-bulk-mutasi');
 
-    // ===== LOGIKA BARU =====
-    // Di tab "Data Lulus"  → sembunyikan "Luluskan" DAN "Mutasi"
-    // Di tab "Data Mutasi" → sembunyikan "Luluskan" DAN "Mutasi"
-    // ============================================================
-    if (tabId === 'tab-lulus' || tabId === 'tab-mutasi') {
+    if (tabId === 'tab-lulus' || tabId === 'tab-mutasi' || tabId === 'tab-analisis') {
         document.body.classList.add('hide-bulk-luluskan');
         document.body.classList.add('hide-bulk-mutasi');
     }
 };
+
 
     // Pasang listener ke semua tombol tab
     document.querySelectorAll('#myTab button[data-bs-toggle="tab"]').forEach(tabBtn => {
@@ -20190,6 +20804,548 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+
+// ============================================================
+// ===== MONITORING KELENGKAPAN IDENTITAS SANTRI =====
+// ============================================================
+
+let monitoringDataCache = [];
+
+window.loadMonitoringIdentitas = async function() {
+    const loader = document.getElementById('loader');
+    if (loader) loader.style.display = 'flex';
+
+    try {
+        const snapshot = await getDocs(collection(db, "data_santri"));
+        monitoringDataCache = [];
+
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const nik = (data.nik || '').trim();
+            const nisn = (data.nisn || '').trim();
+            const nama = (data.nama || 'Tanpa Nama').trim();
+            const kelas = (data.kls_now || '-').trim();
+            const jenjang = (data.jenjang || '-').trim();
+
+            // Tentukan status kelengkapan
+            let status = 'kosong';
+            let statusLabel = 'Kosong';
+            let statusClass = 'badge-kurang';
+
+            const hasNik = nik !== '' && nik !== '-';
+            const hasNisn = nisn !== '' && nisn !== '-';
+
+            if (hasNik && hasNisn) {
+                status = 'lengkap';
+                statusLabel = '✅ Lengkap';
+                statusClass = 'badge-lengkap';
+            } else if (hasNik || hasNisn) {
+                status = 'sebagian';
+                statusLabel = hasNik ? '⚠️ NISN Kosong' : '⚠️ NIK Kosong';
+                statusClass = 'badge-sebagian';
+            } else {
+                status = 'kosong';
+                statusLabel = '❌ Kosong';
+                statusClass = 'badge-kurang';
+            }
+
+            monitoringDataCache.push({
+                docId: docSnap.id,
+                nama,
+                kelas,
+                jenjang,
+                nik: hasNik ? nik : '',
+                nisn: hasNisn ? nisn : '',
+                hasNik,
+                hasNisn,
+                status,
+                statusLabel,
+                statusClass
+            });
+        });
+
+        // Update ringkasan statistik
+        updateMonitoringSummary();
+
+        // Render tabel
+        renderMonitoringTable();
+
+    } catch (error) {
+        console.error("Error load monitoring:", error);
+        if (typeof showAlertModal === 'function') {
+            await showAlertModal({
+                title: 'Gagal Memuat Data',
+                message: 'Terjadi kesalahan saat memuat data monitoring identitas.',
+                details: `Error: ${error.message}`,
+                type: 'danger',
+                okText: 'OK',
+                icon: 'bi-x-circle-fill'
+            });
+        }
+    } finally {
+        if (loader) loader.style.display = 'none';
+    }
+};
+
+function updateMonitoringSummary() {
+    const total = monitoringDataCache.length;
+    const lengkap = monitoringDataCache.filter(d => d.status === 'lengkap').length;
+    const sebagian = monitoringDataCache.filter(d => d.status === 'sebagian').length;
+    const kosong = monitoringDataCache.filter(d => d.status === 'kosong').length;
+
+    const nikTerisi = monitoringDataCache.filter(d => d.hasNik).length;
+    const nisnTerisi = monitoringDataCache.filter(d => d.hasNisn).length;
+    const nikKosong = total - nikTerisi;
+    const nisnKosong = total - nisnTerisi;
+
+    const nikPersen = total > 0 ? Math.round((nikTerisi / total) * 100) : 0;
+    const nisnPersen = total > 0 ? Math.round((nisnTerisi / total) * 100) : 0;
+
+    // Update angka
+    const el = (id) => document.getElementById(id);
+    if (el('mon-total')) el('mon-total').textContent = total;
+    if (el('mon-lengkap')) el('mon-lengkap').textContent = lengkap;
+    if (el('mon-sebagian')) el('mon-sebagian').textContent = sebagian;
+    if (el('mon-kosong')) el('mon-kosong').textContent = kosong;
+
+    if (el('mon-nik-persen')) el('mon-nik-persen').textContent = `${nikPersen}%`;
+    if (el('mon-nisn-persen')) el('mon-nisn-persen').textContent = `${nisnPersen}%`;
+    if (el('mon-nik-terisi')) el('mon-nik-terisi').textContent = nikTerisi;
+    if (el('mon-nik-kosong')) el('mon-nik-kosong').textContent = nikKosong;
+    if (el('mon-nisn-terisi')) el('mon-nisn-terisi').textContent = nisnTerisi;
+    if (el('mon-nisn-kosong')) el('mon-nisn-kosong').textContent = nisnKosong;
+
+    // Update progress bar
+    if (el('mon-nik-bar')) el('mon-nik-bar').style.width = `${nikPersen}%`;
+    if (el('mon-nisn-bar')) el('mon-nisn-bar').style.width = `${nisnPersen}%`;
+}
+
+window.renderMonitoringTable = function() {
+    const tbody = document.getElementById('tableMonitoringBody');
+    if (!tbody) return;
+
+    const filterKelas = document.getElementById('monFilterKelas')?.value || '';
+    const filterJenjang = document.getElementById('monFilterJenjang')?.value || '';
+    const filterStatus = document.getElementById('monFilterStatus')?.value || 'all';
+    const searchNama = (document.getElementById('monSearchNama')?.value || '').toLowerCase().trim();
+
+    let filtered = [...monitoringDataCache];
+
+    // Filter kelas
+    if (filterKelas) {
+        filtered = filtered.filter(d => d.kelas === filterKelas);
+    }
+
+    // Filter jenjang
+    if (filterJenjang) {
+        filtered = filtered.filter(d => d.jenjang === filterJenjang);
+    }
+
+    // Filter status kelengkapan
+    if (filterStatus !== 'all') {
+        if (filterStatus === 'nik_kosong') {
+            filtered = filtered.filter(d => !d.hasNik);
+        } else if (filterStatus === 'nisn_kosong') {
+            filtered = filtered.filter(d => !d.hasNisn);
+        } else {
+            filtered = filtered.filter(d => d.status === filterStatus);
+        }
+    }
+
+    // Filter pencarian nama
+    if (searchNama) {
+        filtered = filtered.filter(d => d.nama.toLowerCase().includes(searchNama));
+    }
+
+    // Sort: yang belum lengkap di atas
+    const statusPriority = { 'kosong': 1, 'sebagian': 2, 'lengkap': 3 };
+    filtered.sort((a, b) => {
+        const pA = statusPriority[a.status] || 99;
+        const pB = statusPriority[b.status] || 99;
+        if (pA !== pB) return pA - pB;
+        return a.nama.localeCompare(b.nama);
+    });
+
+    // Update info jumlah
+    const infoEl = document.getElementById('monShowingInfo');
+    if (infoEl) {
+        infoEl.textContent = `Menampilkan: ${filtered.length} dari ${monitoringDataCache.length} data`;
+    }
+
+    // Render tabel
+    if (filtered.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                    Tidak ada data yang sesuai filter
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    let html = '';
+    filtered.forEach((d, idx) => {
+        const rowClass = d.status !== 'lengkap' ? 'row-kurang-identitas' : '';
+
+        // Tampilkan NIK dengan warna
+        const nikDisplay = d.hasNik
+            ? `<span style="font-family: 'Courier New', monospace; font-size: 0.75rem; color: #2ecc71; font-weight: 600;">${d.nik}</span>`
+            : `<span class="badge bg-danger" style="font-size: 0.65rem;">KOSONG</span>`;
+
+        const nisnDisplay = d.hasNisn
+            ? `<span style="font-family: 'Courier New', monospace; font-size: 0.75rem; color: #9b59b6; font-weight: 600;">${d.nisn}</span>`
+            : `<span class="badge bg-danger" style="font-size: 0.65rem;">KOSONG</span>`;
+
+        html += `
+            <tr class="${rowClass}">
+                <td style="font-weight: 600; color: var(--text-muted);">${idx + 1}</td>
+                <td style="text-align: left; font-weight: 600; color: var(--text-primary);">
+                    <i class="bi bi-person-fill me-1" style="color: var(--gold-color); font-size: 0.7rem;"></i>
+                    ${d.nama}
+                </td>
+                <td><span class="badge bg-secondary" style="font-size: 0.7rem;">${d.kelas}</span></td>
+                <td><span style="font-size: 0.75rem; color: var(--text-muted);">${d.jenjang}</span></td>
+                <td>${nikDisplay}</td>
+                <td>${nisnDisplay}</td>
+                <td><span class="${d.statusClass}">${d.statusLabel}</span></td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary" 
+                            onclick="editSantriDariMonitoring('${d.docId}')"
+                            title="Edit Data Santri"
+                            style="font-size: 0.7rem; padding: 2px 8px; border-radius: 6px;">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = html;
+};
+
+
+window.editSantriDariMonitoring = function(docId) {
+    // ============================================================
+    // ===== CARI BARIS DI TABEL UTAMA =====
+    // ============================================================
+    const mainRow = document.querySelector(`#tbodySantri tr[data-id="${docId}"]`);
+    
+    if (mainRow) {
+        // ✅ Baris ditemukan di halaman aktif
+        // Panggil openEditModal LANGSUNG, bukan via .click()
+        // Ini menghindari event bubbling & listener ganda
+        const editBtn = mainRow.querySelector('.btn-edit-row');
+        if (editBtn) {
+            // Panggil langsung dengan konteks tombol
+            openEditModal(editBtn, 'data_santri');
+            return;
+        }
+    }
+
+    // ============================================================
+    // ===== BARIS TIDAK DITEMUKAN DI HALAMAN AKTIF =====
+    // ============================================================
+    // Cek apakah data ada di cache monitoring
+    const dataMonitor = monitoringDataCache.find(d => d.docId === docId);
+    if (!dataMonitor) {
+        if (typeof showAlertModal === 'function') {
+            showAlertModal({
+                title: 'Data Tidak Ditemukan',
+                message: 'Data santri tidak ditemukan di cache monitoring.',
+                type: 'warning',
+                okText: 'OK',
+                icon: 'bi-exclamation-triangle-fill'
+            });
+        } else {
+            alert('Data tidak ditemukan.');
+        }
+        return;
+    }
+
+    // Buka modal edit langsung dengan data dari Firestore
+    bukaModalEditDariMonitoring(docId);
+};
+
+
+window.bukaModalEditDariMonitoring = async function(docId) {
+    const loader = document.getElementById('loader');
+    if (loader) loader.style.display = 'flex';
+
+    try {
+        const docSnap = await getDoc(doc(db, "data_santri", docId));
+        if (!docSnap.exists()) {
+            if (typeof showAlertModal === 'function') {
+                await showAlertModal({
+                    title: 'Data Tidak Ditemukan',
+                    message: 'Data santri tidak ditemukan di database.',
+                    type: 'danger',
+                    okText: 'OK',
+                    icon: 'bi-x-circle-fill'
+                });
+            } else {
+                alert('Data tidak ditemukan di database.');
+            }
+            return;
+        }
+
+        const data = docSnap.data();
+
+        // ===== SET JUDUL HEADER =====
+        document.getElementById('edDocId').value = docId;
+        document.getElementById('edCollection').value = 'data_santri';
+
+        const namaSantriEl = document.getElementById('editNamaSantriText');
+        const kelasSantriEl = document.getElementById('editKelasSantriText');
+        const collLabelEl = document.getElementById('editCollectionLabel');
+
+        if (namaSantriEl) namaSantriEl.textContent = data.nama || 'Tanpa Nama';
+        if (kelasSantriEl) {
+            const kelas = data.kls_now || '-';
+            const jenjang = data.jenjang || '';
+            kelasSantriEl.textContent = `• Kelas ${kelas}${jenjang ? ` (${jenjang})` : ''}`;
+        }
+        if (collLabelEl) {
+            collLabelEl.innerHTML = `<i class="bi bi-database-fill me-1"></i>Data Aktif`;
+            collLabelEl.style.color = '#2ecc71';
+        }
+
+        // ===== MAPPING FIELD =====
+        const timestampValue = data.updated_at || data.created_at || new Date().toISOString();
+        const formattedTimestamp = formatTimestamp(timestampValue);
+
+        const fieldMapping = {
+            'edKodeAbsen': data.kode_absen || '',
+            'edNama': data.nama || '',
+            'edTmpLahir': data.tmp_lahir || '',
+            'edTglLahir': data.tgl_lahir || '',
+            'edUmur': data.umur || '',
+            'edJk': data.jk || '',
+            'edStatAnak': data.stat_anak || '',
+            'edAnakKe': data.anak_ke || '',
+            'edNik': data.nik || '',
+            'edAlamat': data.alamat || '',
+            'edDesa': data.desa || '',
+            'edKec': data.kec || '',
+            'edKab': data.kab || '',
+            'edProv': data.prov || '',
+            'edPos': data.pos || '',
+            'edNisn': data.nisn || '',
+            'edStatAwal': data.stat_awal || '',
+            'edKlsAwal': data.kls_awal || '',
+            'edKlsNow': data.kls_now || '',
+            'edSemAwal': data.sem_awal || '',
+            'edTglMasuk': data.tgl_masuk || '',
+            'edNis': data.nis || '',
+            'edNism': data.nism || '',
+            'edProgram': data.program || '',
+            'edJenjang': data.jenjang || '',
+            'edSekolahAsal': data.sekolah_asal || '',
+            'edNpsnAsal': data.npsn_asal || '',
+            'edNsppAsal': data.nspp_asal || '',
+            'edAlamatAsal': data.alamat_asal || '',
+            'edStatTinggal': data.stat_tinggal || '',
+            'edNoKk': data.no_kk || '',
+            'edAyah': data.ayah || '',
+            'edStatAyah': data.stat_ayah || '',
+            'edNikAyah': data.nik_ayah || '',
+            'edPenAyah': data.pen_ayah || '',
+            'edPekAyah': data.pek_ayah || '',
+            'edGajiAyah': data.gaji_ayah || '',
+            'edHpAyah': data.hp_ayah || '',
+            'edThnAyah': data.thn_ayah || '',
+            'edIbu': data.ibu || '',
+            'edStatIbu': data.stat_ibu || '',
+            'edNikIbu': data.nik_ibu || '',
+            'edPenIbu': data.pen_ibu || '',
+            'edPekIbu': data.pek_ibu || '',
+            'edGajiIbu': data.gaji_ibu || '',
+            'edHpIbu': data.hp_ibu || '',
+            'edThnIbu': data.thn_ibu || '',
+            'edAlmtOrtu': data.almt_ortu || '',
+            'edKkWali': data.kk_wali || '',
+            'edNikWali': data.nik_wali || '',
+            'edNamaWali': data.nama_wali || '',
+            'edHubWali': data.hub_wali || '',
+            'edPenWali': data.pen_wali || '',
+            'edPekWali': data.pek_wali || '',
+            'edGajiWali': data.gaji_wali || '',
+            'edHpWali': data.hp_wali || '',
+            'edThnWali': data.thn_wali || '',
+            'edAlmtWali': data.almt_wali || '',
+            'edKet': data.ket || '',
+            'edStatAkhir': data.stat_akhir || 'Aktif',
+            'edTglAkhir': data.tgl_akhir || '',
+            'edNoIjazah': data.no_ijazah || '',
+            'edTimestamp': formattedTimestamp
+        };
+
+        Object.keys(fieldMapping).forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                if (el.tagName === 'SELECT') {
+                    el.value = fieldMapping[id];
+                } else {
+                    el.value = fieldMapping[id];
+                }
+            }
+        });
+
+        // ===== FOTO =====
+        const fotoPreview = document.getElementById('edFotoPreview');
+        const fotoInput = document.getElementById('edFoto');
+
+        if (fotoInput) fotoInput.value = '';
+
+        if (data.foto && data.foto.startsWith('data:image')) {
+            fotoPreview.src = data.foto;
+            fotoPreview.style.display = 'block';
+            fotoPreview.dataset.oldPhoto = data.foto;
+        } else {
+            // Coba ambil dari koleksi foto_santri
+            try {
+                const fotoDoc = await getDoc(doc(db, "foto_santri", docId));
+                if (fotoDoc.exists() && fotoDoc.data().foto) {
+                    fotoPreview.src = fotoDoc.data().foto;
+                    fotoPreview.style.display = 'block';
+                    fotoPreview.dataset.oldPhoto = fotoDoc.data().foto;
+                } else {
+                    fotoPreview.src = '';
+                    fotoPreview.style.display = 'none';
+                    fotoPreview.dataset.oldPhoto = '';
+                }
+            } catch (e) {
+                fotoPreview.src = '';
+                fotoPreview.style.display = 'none';
+                fotoPreview.dataset.oldPhoto = '';
+            }
+        }
+
+        // ===== TAMPILKAN MODAL =====
+        const modal = new bootstrap.Modal(document.getElementById('modalEditData'));
+        modal.show();
+
+    } catch (error) {
+        console.error("Error buka modal edit dari monitoring:", error);
+        if (typeof showAlertModal === 'function') {
+            await showAlertModal({
+                title: 'Gagal Membuka Edit',
+                message: 'Terjadi kesalahan saat memuat data untuk diedit.',
+                details: `Error: ${error.message}`,
+                type: 'danger',
+                okText: 'OK',
+                icon: 'bi-x-circle-fill'
+            });
+        } else {
+            alert("Gagal membuka modal edit: " + error.message);
+        }
+    } finally {
+        if (loader) loader.style.display = 'none';
+    }
+};
+
+
+window.exportMonitoringIdentitas = function() {
+    const filterKelas = document.getElementById('monFilterKelas')?.value || '';
+    const filterJenjang = document.getElementById('monFilterJenjang')?.value || '';
+    const filterStatus = document.getElementById('monFilterStatus')?.value || 'all';
+    const searchNama = (document.getElementById('monSearchNama')?.value || '').toLowerCase().trim();
+
+    let filtered = [...monitoringDataCache];
+
+    if (filterKelas) filtered = filtered.filter(d => d.kelas === filterKelas);
+    if (filterJenjang) filtered = filtered.filter(d => d.jenjang === filterJenjang);
+    if (filterStatus !== 'all') {
+        if (filterStatus === 'nik_kosong') filtered = filtered.filter(d => !d.hasNik);
+        else if (filterStatus === 'nisn_kosong') filtered = filtered.filter(d => !d.hasNisn);
+        else filtered = filtered.filter(d => d.status === filterStatus);
+    }
+    if (searchNama) filtered = filtered.filter(d => d.nama.toLowerCase().includes(searchNama));
+
+    if (filtered.length === 0) {
+        if (typeof showToast === 'function') {
+            showToast({
+                title: 'Tidak Ada Data',
+                message: 'Tidak ada data yang bisa diexport.',
+                type: 'warning',
+                duration: 3000,
+                icon: 'bi-info-circle-fill'
+            });
+        }
+        return;
+    }
+
+    // Sort
+    const statusPriority = { 'kosong': 1, 'sebagian': 2, 'lengkap': 3 };
+    filtered.sort((a, b) => {
+        const pA = statusPriority[a.status] || 99;
+        const pB = statusPriority[b.status] || 99;
+        if (pA !== pB) return pA - pB;
+        return a.nama.localeCompare(b.nama);
+    });
+
+    // Bangun data Excel
+    const headers = ['No', 'Nama Santri', 'Kelas', 'Jenjang', 'NIK Santri', 'NISN', 'Status Kelengkapan'];
+    const data = [headers];
+
+    filtered.forEach((d, idx) => {
+        data.push([
+            idx + 1,
+            d.nama,
+            d.kelas,
+            d.jenjang,
+            d.hasNik ? d.nik : '(Kosong)',
+            d.hasNisn ? d.nisn : '(Kosong)',
+            d.status === 'lengkap' ? 'Lengkap' :
+            d.status === 'sebagian' ? 'Sebagian' : 'Kosong'
+        ]);
+    });
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(data);
+
+    ws['!cols'] = [
+        { wch: 5 },   // No
+        { wch: 30 },  // Nama
+        { wch: 8 },   // Kelas
+        { wch: 10 },  // Jenjang
+        { wch: 20 },  // NIK
+        { wch: 15 },  // NISN
+        { wch: 18 }   // Status
+    ];
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Monitoring_Identitas');
+
+    const tanggal = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(wb, `Monitoring_Identitas_${tanggal}.xlsx`);
+
+    if (typeof showToast === 'function') {
+        showToast({
+            title: '✅ Export Berhasil',
+            message: `${filtered.length} data monitoring berhasil diexport ke Excel.`,
+            type: 'success',
+            duration: 3500,
+            icon: 'bi-file-earmark-excel'
+        });
+    }
+};
+
+// ===== DETEKSI OTOMATIS SAAT TAB MONITORING DIBUKA =====
+document.querySelector('button[data-bs-target="#tab-analisis"]')?.addEventListener('shown.bs.tab', function() {
+    loadTabAnalisis();
+});
+
+// ===== REFRESH OTOMATIS SETELAH SIMPAN/EDIT DATA =====
+// Hook ke fungsi simpanDataBaru, simpanEditData, saveAllData
+// untuk refresh monitoring jika tab monitoring sedang aktif
+function refreshMonitoringIfActive() {
+    const monitoringTab = document.getElementById('tab-monitoring');
+    if (monitoringTab && monitoringTab.classList.contains('active')) {
+        loadMonitoringIdentitas();
+    }
+}
     </script>
 </body>
 </html>
