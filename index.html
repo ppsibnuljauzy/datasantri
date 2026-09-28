@@ -19323,6 +19323,9 @@ window.simpanEditData = async () => {
     loader.style.display = 'flex';
 
     try {
+        // ============================================================
+        // ===== 1. SIMPAN FOTO (JIKA ADA) =====
+        // ============================================================
         if (fotoBaru && fotoBaru.startsWith('data:image')) {
             try {
                 await simpanFotoKeKoleksi(docId, fotoBaru);
@@ -19333,30 +19336,113 @@ window.simpanEditData = async () => {
 
         delete data.foto;
 
+        // ============================================================
+        // ===== 2. SIMPAN PERUBAHAN KE FIRESTORE =====
+        // ============================================================
         const docRef = doc(db, collName, docId);
         await updateDoc(docRef, data);
 
-        showToast({
-            title: '✅ Data Berhasil Diperbarui',
-            message: `Data santri "${data.nama}" berhasil diperbarui.`,
-            type: 'success',
-            duration: 3500,
-            icon: 'bi-check-circle-fill'
-        });
-
+        // ============================================================
+        // ===== 3. TUTUP MODAL EDIT =====
+        // ============================================================
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditData'));
         if (modal) modal.hide();
 
+        // ============================================================
+        // ===== 4. TENTUKAN TBODY ID =====
+        // ============================================================
         const tbodyId = collName === 'data_santri' ? 'tbodySantri' : 
                         (collName === 'data_santri_lulus' ? 'tbodyLulus' : 'tbodyMutasi');
-        await loadDataPaging(collName, tbodyId, 0, currentPage[tbodyId] || 1);
 
+        // ============================================================
+        // ===== 5. 🔥 FIX UTAMA: RESET SEMUA FILTER & SEARCH =====
+        // ============================================================
+        // Simpan nama santri yang baru diedit untuk auto-search nanti
+        const namaYangDiedit = data.nama;
+
+        // Reset semua dropdown filter ke default (kosong = semua)
+        const filterIds = ['fKls', 'fJj', 'fJk', 'fStat', 'fEmis', 'fProgram'];
+        filterIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+
+        // Reset search box
+        const searchEl = document.getElementById('globalSearch');
+        if (searchEl) searchEl.value = '';
+
+        // Reset sort state agar tidak menyembunyikan data
+        if (sortState[tbodyId]) {
+            sortState[tbodyId].field = null;
+            sortState[tbodyId].order = 'asc';
+        }
+
+        // Reset halaman ke 1
+        currentPage[tbodyId] = 1;
+
+        // Update badge filter count
+        if (typeof updateFilterCountBadge === 'function') {
+            updateFilterCountBadge();
+        }
+
+        // Update UI header sort (hapus tanda panah aktif)
+        if (typeof updateSortHeaderUI === 'function') {
+            updateSortHeaderUI(tbodyId);
+        }
+
+        // ============================================================
+        // ===== 6. 🔥 RELOAD TABEL DENGAN FORCE RELOAD =====
+        // ============================================================
+        // Paksa reload meskipun guard isLoadingPaging aktif
+        if (typeof isLoadingPaging !== 'undefined') {
+            isLoadingPaging[tbodyId] = false;
+        }
+
+        await loadDataPaging(collName, tbodyId, 0, 1);
+
+        // ============================================================
+        // ===== 7. 🔥 AUTO-SEARCH NAMA YANG BARU DIEDIT =====
+        // ============================================================
+        // Setelah reload, isi search box dengan nama yang diedit
+        // dan trigger pencarian agar user langsung melihat datanya
+        if (searchEl && namaYangDiedit) {
+            searchEl.value = namaYangDiedit;
+
+            // Tunggu reload selesai, baru trigger search
+            setTimeout(() => {
+                if (typeof debouncedSearch === 'function') {
+                    debouncedSearch();
+                }
+            }, 350);
+        }
+
+        // ============================================================
+        // ===== 8. SHOW TOAST SUKSES =====
+        // ============================================================
+        showToast({
+            title: '✅ Data Berhasil Diperbarui',
+            message: `Data santri "${data.nama}" berhasil diperbarui. Tabel otomatis menampilkan data yang diedit.`,
+            type: 'success',
+            duration: 4000,
+            icon: 'bi-check-circle-fill'
+        });
+
+        // ============================================================
+        // ===== 9. REFRESH DASHBOARD & KOMPONEN LAIN =====
+        // ============================================================
         if (document.querySelector('#tab-dashboard').classList.contains('active')) {
             renderDashboard();
         }
 
-refreshMonitoringIfActive();
-updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
+        // Refresh monitoring jika tab monitoring sedang aktif
+        if (typeof refreshMonitoringIfActive === 'function') {
+            refreshMonitoringIfActive();
+        }
+
+        // Update badge jumlah data di sub-tab
+        if (typeof updateDataSubTabBadges === 'function') {
+            updateDataSubTabBadges();
+        }
 
     } catch (error) {
         console.error("Error mengupdate data:", error);
