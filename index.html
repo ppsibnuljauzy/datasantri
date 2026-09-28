@@ -1335,6 +1335,9 @@ html, body {
         .nav-tabs {
             display: none !important;
         }
+        #strukturCetakSubTab {
+            display: none !important;
+        }
         .kop-surat {
             display: none !important;
         }
@@ -5582,6 +5585,81 @@ html {
 .tab-toolbar {
     margin-bottom: 0 !important;
 }
+
+
+/* ===== SUB-TAB DATA SANTRI ===== */
+#dataSubTab.nav-pills .nav-link {
+    background: var(--bg-card);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    transition: all 0.25s ease;
+}
+
+#dataSubTab.nav-pills .nav-link:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+#dataSubTab.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    color: white !important;
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(26, 38, 57, 0.25);
+}
+
+#dataSubTab.nav-pills .nav-link.active .badge {
+    background: rgba(255,255,255,0.25) !important;
+    color: white !important;
+}
+
+[data-theme="dark"] #dataSubTab.nav-pills .nav-link {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] #dataSubTab.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #1a2639, #2c3e50) !important;
+}
+
+/* Sembunyikan filter toggle saat di sub-tab lulus/mutasi (opsional) */
+body.hide-bulk-luluskan #filterSectionWrapper button[onclick*="bulkMoveData"][onclick*="Lulus"],
+body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][onclick*="Mutasi"] {
+    display: none !important;
+}
+
+
+/* ===== SUB-TAB STRUKTUR & CETAK ===== */
+#strukturCetakSubTab.nav-pills .nav-link {
+    background: var(--bg-card);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    transition: all 0.25s ease;
+}
+
+#strukturCetakSubTab.nav-pills .nav-link:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+#strukturCetakSubTab.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    color: white !important;
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(26, 38, 57, 0.25);
+}
+
+[data-theme="dark"] #strukturCetakSubTab.nav-pills .nav-link {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] #strukturCetakSubTab.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #1a2639, #2c3e50) !important;
+}
 </style>
 </head>
 <body>
@@ -5676,38 +5754,14 @@ html {
                 </li>
                 <li class="nav-item">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-input" type="button"
-                            onclick="toggleDashboardView(false); currentTab='tab-input'; loadDataPaging('data_santri', 'tbodySantri', 0)">
-                        <i class="bi bi-person-plus"></i> Input Data
+                            onclick="toggleDashboardView(false); currentTab='tab-input'; switchDataSubTab('aktif')">
+                        <i class="bi bi-people-fill"></i> Data Santri
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-lulus" type="button"
-                            onclick="toggleDashboardView(false); currentTab='tab-lulus'; loadDataPaging('data_santri_lulus', 'tbodyLulus', 0)">
-                        <i class="bi bi-mortarboard"></i> Data Lulus
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mutasi" type="button"
-                            onclick="toggleDashboardView(false); currentTab='tab-mutasi'; loadDataPaging('data_santri_mutasi', 'tbodyMutasi', 0)">
-                        <i class="bi bi-arrow-left-right"></i> Data Mutasi
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-struktur" type="button"
-                            onclick="toggleDashboardView(false); loadStrukturLembaga(); toggleElementsForTab('tab-struktur')">
-                        <i class="bi bi-person-badge"></i> Struktur & TTD
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-cetak-kts" type="button"
-                            onclick="toggleDashboardView(false); toggleElementsForTab('tab-cetak-kts')">
-                        <i class="bi bi-credit-card-2-front"></i> Cetak KTS
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-surat" type="button"
-                            onclick="toggleDashboardView(false); siapkanCetakSurat(); toggleElementsForTab('tab-surat')">
-                        <i class="bi bi-printer"></i> Cetak Surat
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-struktur-cetak" type="button"
+                            onclick="toggleDashboardView(false); loadStrukturLembaga(); toggleElementsForTab('tab-struktur-cetak')">
+                        <i class="bi bi-printer-fill"></i> Struktur & Cetak
                     </button>
                 </li>
                 <li class="nav-item">
@@ -6045,481 +6099,559 @@ html {
                     </div>
                 </div>
 
-                <!-- TAB INPUT DATA -->
-                <div class="tab-pane fade" id="tab-input" role="tabpanel">
-                    <div class="tab-toolbar">
-                        <div class="btn-group">
-                            <button class="btn btn-success" onclick="saveAllData()"><i class="bi bi-cloud-arrow-up"></i> Simpan</button>
-                            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalPromotion"><i class="bi bi-arrow-up-circle"></i> Kenaikan</button>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahData"><i class="bi bi-plus-lg"></i> Tambah</button>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="btn-group">
-                            <button class="btn btn-warning" onclick="document.getElementById('bulkPhotoInput').click()">
-                                <i class="bi bi-images"></i> Upload Foto
-                            </button>
-                            <input type="file" id="bulkPhotoInput" hidden accept=".zip" onchange="handleBulkPhotoUpload(this)">
-                            <button class="btn btn-secondary" onclick="downloadAllPhotos()"><i class="bi bi-download"></i> Backup Foto</button>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="btn-group">
-                            <button class="btn btn-info text-white" onclick="exportExcel('santriTable', 'Santri_Aktif')"><i class="bi bi-file-earmark-excel"></i> Export</button>
-                            <button class="btn btn-dark" onclick="exportAllFromFirestore('data_santri', 'Database_Santri_Total')"><i class="bi bi-download"></i> Export Semua</button>
-                            <label class="btn btn-warning mb-0" id="importBtnLabel">
-                                <i class="bi bi-file-earmark-arrow-up"></i> Import
-                                <input type="file" hidden id="importExcel" accept=".xlsx, .xls">
-                            </label>
-                            <label class="btn btn-primary mb-0" id="importUpdateBtnLabel">
-                                <i class="bi bi-arrow-repeat"></i> Import Update
-                                <input type="file" hidden id="importUpdateExcel" accept=".xlsx, .xls">
-                            </label>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="btn-group">
-                            <button class="btn btn-secondary" onclick="printSelectedBiodata()"><i class="bi bi-printer"></i> Cetak Biodata</button>
-                        </div>
-                    </div>
-                    <div class="table-container">
-                        <table class="table table-bordered editable-table" id="santriTable">
-                            <thead><tr id="hInput"></tr></thead>
-                            <tbody id="tbodySantri"></tbody>
-                        </table>
-                    </div>
-                    <div class="pagination-container" id="paginationSantri">
-                        <div class="d-flex align-items-center gap-2 me-3">
-                            <span class="small text-muted">Tampilkan:</span>
-                            <select class="form-select form-select-sm" style="width: auto;" onchange="updatePageSize(this.value, 'tbodySantri')">
-                                <option value="10" selected>10</option>
-                                <option value="20">20</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="200">200</option>
-                                <option value="500">500</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodySantri', -1)">
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
-                        <div id="pageNumbersSantri" class="d-flex gap-1"></div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodySantri', 1)">
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
-                        <span class="page-info ms-3" id="infoSantri">Halaman 1</span>
-                    </div>
+                <!-- TAB DATA SANTRI (GABUNGAN) -->
+<div class="tab-pane fade" id="tab-input" role="tabpanel">
+
+    <!-- SUB-TAB NAVIGASI -->
+    <ul class="nav nav-pills mb-3 px-3 pt-2" id="dataSubTab" role="tablist"
+        style="gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+        <li class="nav-item">
+            <button class="nav-link active" id="subtab-aktif-btn" data-bs-toggle="pill"
+                    data-bs-target="#subtab-aktif" type="button"
+                    onclick="switchDataSubTab('aktif')"
+                    style="border-radius: 10px; font-weight: 600; font-size: 0.85rem; padding: 8px 20px;">
+                <i class="bi bi-person-check-fill me-1"></i> Santri Aktif
+                <span class="badge bg-success ms-2" id="badge-count-aktif" style="font-size: 0.65rem;">0</span>
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="subtab-lulus-btn" data-bs-toggle="pill"
+                    data-bs-target="#subtab-lulus" type="button"
+                    onclick="switchDataSubTab('lulus')"
+                    style="border-radius: 10px; font-weight: 600; font-size: 0.85rem; padding: 8px 20px;">
+                <i class="bi bi-mortarboard-fill me-1"></i> Data Lulus
+                <span class="badge bg-primary ms-2" id="badge-count-lulus" style="font-size: 0.65rem;">0</span>
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="subtab-mutasi-btn" data-bs-toggle="pill"
+                    data-bs-target="#subtab-mutasi" type="button"
+                    onclick="switchDataSubTab('mutasi')"
+                    style="border-radius: 10px; font-weight: 600; font-size: 0.85rem; padding: 8px 20px;">
+                <i class="bi bi-arrow-left-right me-1"></i> Data Mutasi
+                <span class="badge bg-warning text-dark ms-2" id="badge-count-mutasi" style="font-size: 0.65rem;">0</span>
+            </button>
+        </li>
+    </ul>
+
+    <!-- SUB-TAB CONTENT -->
+    <div class="tab-content" id="dataSubTabContent">
+
+        <!-- ===== SUB-TAB 1: SANTRI AKTIF ===== -->
+        <div class="tab-pane fade show active" id="subtab-aktif" role="tabpanel">
+            <div class="tab-toolbar">
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveAllData()"><i class="bi bi-cloud-arrow-up"></i> Simpan</button>
+                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalPromotion"><i class="bi bi-arrow-up-circle"></i> Kenaikan</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahData"><i class="bi bi-plus-lg"></i> Tambah</button>
                 </div>
-
-                <!-- TAB DATA LULUS -->
-                <div class="tab-pane fade" id="tab-lulus" role="tabpanel">
-                    <div class="tab-toolbar">
-                        <div class="btn-group">
-                            <button class="btn btn-success" onclick="saveTabSpecificData('data_santri_lulus', 'tbodyLulus')"><i class="bi bi-cloud-arrow-up"></i> Simpan</button>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="btn-group">
-                            <button class="btn btn-info text-white" onclick="exportExcel('lulusTable', 'Santri_Lulus')"><i class="bi bi-file-earmark-excel"></i> Export Excel</button>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="btn-group">
-                            <button class="btn btn-secondary" onclick="printSelectedBiodata()"><i class="bi bi-printer"></i> Cetak Biodata</button>
-                        </div>
-                    </div>
-                    <div class="table-container">
-                        <table class="table table-bordered editable-table" id="lulusTable">
-                            <thead><tr id="hLulus"></tr></thead>
-                            <tbody id="tbodyLulus"></tbody>
-                        </table>
-                    </div>
-                    <div class="pagination-container" id="paginationLulus">
-                        <div class="d-flex align-items-center gap-2 me-3">
-                            <span class="small text-muted">Tampilkan:</span>
-                            <select class="form-select form-select-sm" style="width: auto;" onchange="updatePageSize(this.value, 'tbodyLulus')">
-                                <option value="10" selected>10</option>
-                                <option value="20">20</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="200">200</option>
-                                <option value="500">500</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodyLulus', -1)">
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
-                        <div id="pageNumbersLulus" class="d-flex gap-1"></div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodyLulus', 1)">
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
-                        <span class="page-info ms-3" id="infoLulus">Halaman 1</span>
-                    </div>
+                <div class="divider"></div>
+                <div class="btn-group">
+                    <button class="btn btn-warning" onclick="document.getElementById('bulkPhotoInput').click()">
+                        <i class="bi bi-images"></i> Upload Foto
+                    </button>
+                    <input type="file" id="bulkPhotoInput" hidden accept=".zip" onchange="handleBulkPhotoUpload(this)">
+                    <button class="btn btn-secondary" onclick="downloadAllPhotos()"><i class="bi bi-download"></i> Backup Foto</button>
                 </div>
-
-                <!-- TAB DATA MUTASI -->
-                <div class="tab-pane fade" id="tab-mutasi" role="tabpanel">
-                    <div class="tab-toolbar">
-                        <div class="btn-group">
-                            <button class="btn btn-success" onclick="saveTabSpecificData('data_santri_mutasi', 'tbodyMutasi')"><i class="bi bi-cloud-arrow-up"></i> Simpan</button>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="btn-group">
-                            <button class="btn btn-info text-white" onclick="exportExcel('mutasiTable', 'Santri_Mutasi')"><i class="bi bi-file-earmark-excel"></i> Export Excel</button>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="btn-group">
-                            <button class="btn btn-secondary" onclick="printSelectedBiodata()"><i class="bi bi-printer"></i> Cetak Biodata</button>
-                        </div>
-                    </div>
-                    <div class="table-container">
-                        <table class="table table-bordered editable-table" id="mutasiTable">
-                            <thead><tr id="hMutasi"></tr></thead>
-                            <tbody id="tbodyMutasi"></tbody>
-                        </table>
-                    </div>
-                    <div class="pagination-container" id="paginationMutasi">
-                        <div class="d-flex align-items-center gap-2 me-3">
-                            <span class="small text-muted">Tampilkan:</span>
-                            <select class="form-select form-select-sm" style="width: auto;" onchange="updatePageSize(this.value, 'tbodyMutasi')">
-                                <option value="10" selected>10</option>
-                                <option value="20">20</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="200">200</option>
-                                <option value="500">500</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodyMutasi', -1)">
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
-                        <div id="pageNumbersMutasi" class="d-flex gap-1"></div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodyMutasi', 1)">
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
-                        <span class="page-info ms-3" id="infoMutasi">Halaman 1</span>
-                    </div>
+                <div class="divider"></div>
+                <div class="btn-group">
+                    <button class="btn btn-info text-white" onclick="exportExcel('santriTable', 'Santri_Aktif')"><i class="bi bi-file-earmark-excel"></i> Export</button>
+                    <button class="btn btn-dark" onclick="exportAllFromFirestore('data_santri', 'Database_Santri_Total')"><i class="bi bi-download"></i> Export Semua</button>
+                    <label class="btn btn-warning mb-0" id="importBtnLabel">
+                        <i class="bi bi-file-earmark-arrow-up"></i> Import
+                        <input type="file" hidden id="importExcel" accept=".xlsx, .xls">
+                    </label>
+                    <label class="btn btn-primary mb-0" id="importUpdateBtnLabel">
+                        <i class="bi bi-arrow-repeat"></i> Import Update
+                        <input type="file" hidden id="importUpdateExcel" accept=".xlsx, .xls">
+                    </label>
                 </div>
-
-                <!-- TAB CETAK KTS -->
-                <div class="tab-pane fade" id="tab-cetak-kts" role="tabpanel">
-                    <div class="card-cetak-kts">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold text-primary mb-0"><i class="bi bi-credit-card-2-front me-2"></i> Cetak Kartu Tanda Santri (KTS)</h5>
-                            <div>
-                                <button class="btn btn-primary btn-sm me-2" onclick="previewKTS()">
-                                    <i class="bi bi-eye me-1"></i> Preview
-                                </button>
-                                <button class="btn btn-success btn-sm" onclick="printKTS()">
-                                    <i class="bi bi-printer me-1"></i> Cetak KTS
-                                </button>
-                                <button class="btn btn-secondary btn-sm" onclick="resetKTSFilter()">
-                                    <i class="bi bi-arrow-repeat me-1"></i> Reset
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <label class="form-label">Status Santri</label>
-                                <select id="ktsStatus" class="form-select" onchange="updateKTSData()">
-                                    <option value="all">Semua Status</option>
-                                    <option value="Aktif" selected>Aktif</option>
-                                    <option value="Lulus">Lulus</option>
-                                    <option value="Mutasi">Mutasi</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Filter Kelas</label>
-                                <select id="ktsKelas" class="form-select" onchange="updateKTSData()">
-                                    <option value="all">-- Semua Kelas --</option>
-                                    <option value="7">Kelas 7</option>
-                                    <option value="8">Kelas 8</option>
-                                    <option value="9">Kelas 9</option>
-                                    <option value="10">Kelas 10</option>
-                                    <option value="11">Kelas 11</option>
-                                    <option value="12">Kelas 12</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Filter Jenjang</label>
-                                <select id="ktsJenjang" class="form-select" onchange="updateKTSData()">
-                                    <option value="all">-- Semua Jenjang --</option>
-                                    <option value="Wustha">Wustha</option>
-                                    <option value="Ulya">Ulya</option>
-                                    <option value="SMP">SMP</option>
-                                    <option value="SMA">SMA</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Ukuran Kertas</label>
-                                <select id="ktsUkuran" class="form-select">
-                                    <option value="A4">A4 (8 KTS)</option>
-                                    <option value="F4">F4 (8 KTS)</option>
-                                </select>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Pilih Santri (opsional, kosongkan untuk semua)</label>
-                                <select id="ktsPilihSantri" class="form-select" onchange="updateKTSData()">
-                                    <option value="all">-- Semua Santri --</option>
-                                </select>
-                            </div>
-                            <div class="col-md-12 mt-2">
-                                <div class="alert alert-info small mb-0">
-                                    <i class="bi bi-info-circle me-2"></i>
-                                    <strong>Jumlah Santri:</strong> <span id="ktsJumlahSantri">0</span> orang akan dicetak.
-                                    Setiap lembar kertas berisi <strong>8 Kartu Tanda Santri</strong>.
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="my-4">
-
-                        <div class="kts-preview-wrapper" id="ktsPreviewWrapper">
-                            <div class="ornament orn-1">✦</div>
-                            <div class="ornament orn-2">✦</div>
-                            <div class="ornament orn-3">✦</div>
-                            <div class="text-muted text-center w-100 py-5" style="color: rgba(255,255,255,0.4) !important; position: relative; z-index: 2;">
-                                <i class="bi bi-credit-card-2-front fs-1 d-block mb-3" style="color: rgba(201, 168, 76, 0.3);"></i>
-                                <p style="color: rgba(255,255,255,0.5);">Pilih filter dan klik <strong style="color: rgba(201, 168, 76, 0.7);">Preview</strong> untuk melihat tampilan KTS</p>
-                                <p class="small" style="color: rgba(255,255,255,0.3);">Setiap KTS akan ditampilkan sesuai data santri yang dipilih</p>
-                            </div>
-                        </div>
-
-                        <div id="printArea" style="display: none;"></div>
-                    </div>
-                </div>
-                
-                <!-- TAB STRUKTUR -->
-<div class="tab-pane fade" id="tab-struktur" role="tabpanel">
-    <div class="container bg-white p-4 rounded-4 shadow-sm" style="max-width: 800px; margin-top: 20px;">
-        <h5 class="fw-bold mb-3 text-uppercase text-primary"><i class="bi bi-person-badge me-2"></i> Pengaturan Penandatangan PDF</h5>
-        <hr>
-        <form id="formStruktur" onsubmit="saveStrukturLembaga(event)">
-            <div class="row g-4">
-                <div class="col-12 border-bottom pb-4">
-                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-image me-2"></i> KOP SURAT LEMBAGA</h6>
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <label class="form-label small fw-bold">Upload Gambar Kop Surat</label>
-                            <input type="file" id="kopSuratInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewKopSurat')">
-                        </div>
-                        <div class="col-md-6">
-                            <div class="text-center border p-2 rounded-3" style="background: #fafafa; min-height: 80px;">
-                                <span class="small text-muted d-block mb-1">Pratinjau Kop Surat:</span>
-                                <img id="previewKopSurat" src="" alt="Belum ada Kop Surat" style="max-height: 70px; max-width: 100%; object-fit: contain;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 border-end">
-                    <h6 class="fw-bold text-dark mb-3">KEPALA LEMBAGA</h6>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Nama Lengkap & Gelar</label>
-                        <input type="text" id="namaKepala" class="form-control form-control-sm" placeholder="Dr. H. Ahmad, M.Pd" required>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label small fw-bold">Jabatan</label>
-                        <input type="text" id="jabatanKepala" class="form-control form-control-sm" placeholder="Kepala PPS. Ibnul Jauzy">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">NIK / NIP</label>
-                        <input type="text" id="nikKepala" class="form-control form-control-sm" placeholder="1207xxxxxxxxxxxx">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Upload Tanda Tangan (PNG)</label>
-                        <input type="file" id="ttdKepalaInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewTtdKepala')">
-                        <div class="mt-2 text-center border p-2 rounded-3" style="background: #fafafa; position: relative;">
-                            <span class="small text-muted d-block mb-1">Pratinjau TTD Kepala:</span>
-                            <div class="ttd-preview-wrapper">
-                                <img id="previewTtdKepala" src="" alt="Belum ada TTD" style="max-height: 80px; object-fit: contain;">
-                                <button type="button" class="btn-hapus-ttd" onclick="hapusTandaTangan('kepala')" title="Hapus Tanda Tangan">
-                                    <i class="bi bi-x-circle-fill"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <h6 class="fw-bold text-dark mb-3">STAFF / TATA USAHA</h6>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Nama Lengkap & Gelar</label>
-                        <input type="text" id="namaStaff" class="form-control form-control-sm" placeholder="Muhammad Rafli, S.Kom" required>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label small fw-bold">Jabatan</label>
-                        <input type="text" id="jabatanStaff" class="form-control form-control-sm" placeholder="Sekretaris Lembaga">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">NIK / NIP</label>
-                        <input type="text" id="nikStaff" class="form-control form-control-sm" placeholder="1207xxxxxxxxxxxx">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Upload Tanda Tangan (PNG)</label>
-                        <input type="file" id="ttdStaffInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewTtdStaff')">
-                        <div class="mt-2 text-center border p-2 rounded-3" style="background: #fafafa; position: relative;">
-                            <span class="small text-muted d-block mb-1">Pratinjau TTD Staff:</span>
-                            <div class="ttd-preview-wrapper">
-                                <img id="previewTtdStaff" src="" alt="Belum ada TTD" style="max-height: 80px; object-fit: contain;">
-                                <button type="button" class="btn-hapus-ttd" onclick="hapusTandaTangan('staff')" title="Hapus Tanda Tangan">
-                                    <i class="bi bi-x-circle-fill"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="divider"></div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="printSelectedBiodata()"><i class="bi bi-printer"></i> Cetak Biodata</button>
                 </div>
             </div>
-            <hr>
-            <div class="text-end">
-                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Simpan Struktur</button>
+            <div class="table-container">
+                <table class="table table-bordered editable-table" id="santriTable">
+                    <thead><tr id="hInput"></tr></thead>
+                    <tbody id="tbodySantri"></tbody>
+                </table>
             </div>
-        </form>
-        
-        <!-- ===== LOGO LOGIN SECTION ===== -->
-        <div class="mt-4 pt-3 border-top">
-            <h5 class="fw-bold mb-3 text-uppercase text-primary">
-                <i class="bi bi-image me-2"></i> Logo Halaman Login
-            </h5>
-            <hr>
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <label class="form-label small fw-bold">Upload Logo Login</label>
-                    <input type="file" id="logoLoginInput" class="form-control form-control-sm" accept="image/*" 
-                           onchange="uploadLogoLogin(event)">
-                    <small class="text-muted">Format: JPG, PNG, SVG | Maks: 500KB</small>
+            <div class="pagination-container" id="paginationSantri">
+                <div class="d-flex align-items-center gap-2 me-3">
+                    <span class="small text-muted">Tampilkan:</span>
+                    <select class="form-select form-select-sm" style="width: auto;" onchange="updatePageSize(this.value, 'tbodySantri')">
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                    </select>
                 </div>
-                <div class="col-md-6">
-                    <div class="text-center border p-2 rounded-3" style="background: #fafafa; min-height: 80px;">
-                        <span class="small text-muted d-block mb-1">Pratinjau Logo Login:</span>
-                        <img id="previewLogoLogin" src="" alt="Belum ada logo" 
-                             style="max-height: 70px; max-width: 100%; object-fit: contain; display: none;">
-                    </div>
-                </div>
-            </div>
-            
-            <!-- ===== TOMBOL HAPUS LOGO ===== -->
-            <div class="mt-2">
-                <button class="btn btn-sm btn-danger" onclick="hapusLogoLogin()">
-                    <i class="bi bi-trash me-1"></i> Hapus Logo
+                <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodySantri', -1)">
+                    <i class="bi bi-chevron-left"></i>
                 </button>
+                <div id="pageNumbersSantri" class="d-flex gap-1"></div>
+                <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodySantri', 1)">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+                <span class="page-info ms-3" id="infoSantri">Halaman 1</span>
             </div>
         </div>
+
+        <!-- ===== SUB-TAB 2: DATA LULUS ===== -->
+        <div class="tab-pane fade" id="subtab-lulus" role="tabpanel">
+            <div class="tab-toolbar">
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveTabSpecificData('data_santri_lulus', 'tbodyLulus')"><i class="bi bi-cloud-arrow-up"></i> Simpan</button>
+                </div>
+                <div class="divider"></div>
+                <div class="btn-group">
+                    <button class="btn btn-info text-white" onclick="exportExcel('lulusTable', 'Santri_Lulus')"><i class="bi bi-file-earmark-excel"></i> Export Excel</button>
+                </div>
+                <div class="divider"></div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="printSelectedBiodata()"><i class="bi bi-printer"></i> Cetak Biodata</button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="table table-bordered editable-table" id="lulusTable">
+                    <thead><tr id="hLulus"></tr></thead>
+                    <tbody id="tbodyLulus"></tbody>
+                </table>
+            </div>
+            <div class="pagination-container" id="paginationLulus">
+                <div class="d-flex align-items-center gap-2 me-3">
+                    <span class="small text-muted">Tampilkan:</span>
+                    <select class="form-select form-select-sm" style="width: auto;" onchange="updatePageSize(this.value, 'tbodyLulus')">
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                    </select>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodyLulus', -1)">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <div id="pageNumbersLulus" class="d-flex gap-1"></div>
+                <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodyLulus', 1)">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+                <span class="page-info ms-3" id="infoLulus">Halaman 1</span>
+            </div>
+        </div>
+
+        <!-- ===== SUB-TAB 3: DATA MUTASI ===== -->
+        <div class="tab-pane fade" id="subtab-mutasi" role="tabpanel">
+            <div class="tab-toolbar">
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveTabSpecificData('data_santri_mutasi', 'tbodyMutasi')"><i class="bi bi-cloud-arrow-up"></i> Simpan</button>
+                </div>
+                <div class="divider"></div>
+                <div class="btn-group">
+                    <button class="btn btn-info text-white" onclick="exportExcel('mutasiTable', 'Santri_Mutasi')"><i class="bi bi-file-earmark-excel"></i> Export Excel</button>
+                </div>
+                <div class="divider"></div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="printSelectedBiodata()"><i class="bi bi-printer"></i> Cetak Biodata</button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="table table-bordered editable-table" id="mutasiTable">
+                    <thead><tr id="hMutasi"></tr></thead>
+                    <tbody id="tbodyMutasi"></tbody>
+                </table>
+            </div>
+            <div class="pagination-container" id="paginationMutasi">
+                <div class="d-flex align-items-center gap-2 me-3">
+                    <span class="small text-muted">Tampilkan:</span>
+                    <select class="form-select form-select-sm" style="width: auto;" onchange="updatePageSize(this.value, 'tbodyMutasi')">
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                    </select>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodyMutasi', -1)">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <div id="pageNumbersMutasi" class="d-flex gap-1"></div>
+                <button class="btn btn-sm btn-outline-primary" onclick="changePage('tbodyMutasi', 1)">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+                <span class="page-info ms-3" id="infoMutasi">Halaman 1</span>
+            </div>
+        </div>
+
     </div>
 </div>
 
-                <!-- TAB CETAK SURAT -->
-                <div class="tab-pane fade" id="tab-surat" role="tabpanel">
-                    <div class="container bg-white p-4 rounded-4 shadow-sm" style="max-width: 900px; margin-top: 20px;">
-                        <h5 class="fw-bold mb-3 text-uppercase text-primary"><i class="bi bi-printer-fill me-2"></i> Modul Cetak Surat Resmi</h5>
-                        <hr>
-                        <ul class="nav nav-pills mb-4" id="subTabSurat" role="tablist">
-                            <li class="nav-item">
-                                <button class="nav-link active btn-sm" id="sub-skbb-tab" data-bs-toggle="pill" data-bs-target="#sub-skbb" type="button">
-                                    <i class="bi bi-shield-check"></i> SKBB
-                                </button>
-                            </li>
-                            <li class="nav-item ms-2">
-                                <button class="nav-link btn-sm" id="sub-ska-tab" data-bs-toggle="pill" data-bs-target="#sub-ska" type="button">
-                                    <i class="bi bi-book"></i> SKA
-                                </button>
-                            </li>
-                            <li class="nav-item ms-2">
-                                <button class="nav-link btn-sm" id="btn-sub-mutasi" data-bs-toggle="pill" data-bs-target="#sub-surat-mutasi" type="button">
-                                    <i class="bi bi-arrow-left-right"></i> Surat Mutasi
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="subTabSuratContent">
-                            <div class="tab-pane fade show active" id="sub-skbb" role="tabpanel">
-                                <div class="card card-body border-0 shadow-sm p-4">
-                                    <h6 class="fw-bold text-dark mb-3">Form Surat Keterangan Berkelakuan Baik</h6>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Nomor Surat</label>
-                                            <input type="text" id="noSuratSkbb" class="form-control form-control-sm" placeholder="045/PPS-IJ/V/2026">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Pilih Santri</label>
-                                            <select id="pilihSantriSkbb" class="form-select form-select-sm">
-                                                <option value="">-- Pilih Santri --</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Kategori SKBB</label>
-                                            <select id="kategoriSkbb" class="form-select form-select-sm" onchange="updateSKBBText()">
-                                                <option value="sangat_baik">Sangat Baik</option>
-                                                <option value="baik" selected>Baik</option>
-                                                <option value="cukup_baik">Cukup Baik</option>
-                                                <option value="kurang_baik">Kurang Baik</option>
-                                                <option value="tidak_baik">Tidak Baik</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Keperluan / Tujuan</label>
-                                            <input type="text" id="keperluanSkbb" class="form-control form-control-sm" placeholder="Melanjutkan Sekolah / Mengikuti Beasiswa">
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="skbb-preview-box" id="skbbPreviewText">
-                                                <div class="preview-label">
-                                                    <i class="bi bi-file-text"></i> Preview Teks SKBB
-                                                </div>
-                                                <p class="preview-text" id="skbbTextPreview">Adalah benar nama yang bersangkutan mempunyai kelakuan baik, taat pada seluruh tata tertib lembaga, dan tidak pernah terlibat dalam tindakan pidana maupun kriminalitas selama masa pendidikan di Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="text-end mt-4">
-                                        <button class="btn btn-primary btn-sm px-4" onclick="generateSurat('SKBB')"><i class="bi bi-file-pdf me-1"></i> Cetak SKBB (PDF)</button>
+<!-- ============================================================ -->
+<!-- ===== TAB STRUKTUR & CETAK (GABUNGAN) ===== -->
+<!-- ============================================================ -->
+<div class="tab-pane fade" id="tab-struktur-cetak" role="tabpanel">
+
+    <!-- ===== SUB-NAVIGASI ===== -->
+    <ul class="nav nav-pills mb-4 px-3 pt-2" id="strukturCetakSubTab" role="tablist"
+        style="gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+        <li class="nav-item">
+            <button class="nav-link active" id="subtab-struktur-btn" data-bs-toggle="pill"
+                    data-bs-target="#subtab-struktur" type="button"
+                    onclick="loadStrukturLembaga()"
+                    style="border-radius: 10px; font-weight: 600; font-size: 0.85rem; padding: 8px 20px;">
+                <i class="bi bi-person-badge me-1"></i> Struktur & TTD
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="subtab-kts-btn" data-bs-toggle="pill"
+                    data-bs-target="#subtab-kts" type="button"
+                    style="border-radius: 10px; font-weight: 600; font-size: 0.85rem; padding: 8px 20px;">
+                <i class="bi bi-credit-card-2-front me-1"></i> Cetak KTS
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="subtab-surat-btn" data-bs-toggle="pill"
+                    data-bs-target="#subtab-surat" type="button"
+                    onclick="siapkanCetakSurat()"
+                    style="border-radius: 10px; font-weight: 600; font-size: 0.85rem; padding: 8px 20px;">
+                <i class="bi bi-envelope-paper me-1"></i> Cetak Surat
+            </button>
+        </li>
+    </ul>
+
+    <!-- ===== SUB-TAB CONTENT ===== -->
+    <div class="tab-content" id="strukturCetakSubTabContent">
+
+        <!-- ===== SUB-TAB 1: STRUKTUR & TTD ===== -->
+        <div class="tab-pane fade show active" id="subtab-struktur" role="tabpanel">
+            <div class="container bg-white p-4 rounded-4 shadow-sm" style="max-width: 800px; margin-top: 20px;">
+                <h5 class="fw-bold mb-3 text-uppercase text-primary"><i class="bi bi-person-badge me-2"></i> Pengaturan Penandatangan PDF</h5>
+                <hr>
+                <form id="formStruktur" onsubmit="saveStrukturLembaga(event)">
+                    <div class="row g-4">
+                        <div class="col-12 border-bottom pb-4">
+                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-image me-2"></i> KOP SURAT LEMBAGA</h6>
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Upload Gambar Kop Surat</label>
+                                    <input type="file" id="kopSuratInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewKopSurat')">
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-center border p-2 rounded-3" style="background: #fafafa; min-height: 80px;">
+                                        <span class="small text-muted d-block mb-1">Pratinjau Kop Surat:</span>
+                                        <img id="previewKopSurat" src="" alt="Belum ada Kop Surat" style="max-height: 70px; max-width: 100%; object-fit: contain;">
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="sub-ska" role="tabpanel">
-                                <div class="card card-body border-0 shadow-sm p-4">
-                                    <h6 class="fw-bold text-dark mb-3">Form Surat Keterangan Aktif Belajar</h6>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Nomor Surat</label>
-                                            <input type="text" id="noSuratSka" class="form-control form-control-sm" placeholder="046/PPS-IJ/V/2026">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Pilih Santri</label>
-                                            <select id="pilihSantriSka" class="form-select form-select-sm">
-                                                <option value="">-- Pilih Santri --</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="text-end mt-4">
-                                        <button class="btn btn-success btn-sm px-4" onclick="generateSurat('SKA')"><i class="bi bi-file-pdf me-1"></i> Cetak SKA (PDF)</button>
+                        </div>
+                        <div class="col-md-6 border-end">
+                            <h6 class="fw-bold text-dark mb-3">KEPALA LEMBAGA</h6>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Nama Lengkap & Gelar</label>
+                                <input type="text" id="namaKepala" class="form-control form-control-sm" placeholder="Dr. H. Ahmad, M.Pd" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small fw-bold">Jabatan</label>
+                                <input type="text" id="jabatanKepala" class="form-control form-control-sm" placeholder="Kepala PPS. Ibnul Jauzy">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">NIK / NIP</label>
+                                <input type="text" id="nikKepala" class="form-control form-control-sm" placeholder="1207xxxxxxxxxxxx">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Upload Tanda Tangan (PNG)</label>
+                                <input type="file" id="ttdKepalaInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewTtdKepala')">
+                                <div class="mt-2 text-center border p-2 rounded-3" style="background: #fafafa; position: relative;">
+                                    <span class="small text-muted d-block mb-1">Pratinjau TTD Kepala:</span>
+                                    <div class="ttd-preview-wrapper">
+                                        <img id="previewTtdKepala" src="" alt="Belum ada TTD" style="max-height: 80px; object-fit: contain;">
+                                        <button type="button" class="btn-hapus-ttd" onclick="hapusTandaTangan('kepala')" title="Hapus Tanda Tangan">
+                                            <i class="bi bi-x-circle-fill"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="sub-surat-mutasi" role="tabpanel">
-                                <div class="card card-body border-0 shadow-sm p-4">
-                                    <h6 class="fw-bold text-dark mb-3">Form Surat Keterangan Pindah / Mutasi</h6>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Nomor Surat</label>
-                                            <input type="text" id="noSuratMutasi" class="form-control form-control-sm" placeholder="047/PPS-IJ/V/2026">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Pilih Santri</label>
-                                            <select id="pilihSantriMutasi" class="form-select form-select-sm">
-                                                <option value="">-- Pilih Santri --</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Sekolah / Pesantren Tujuan</label>
-                                            <input type="text" id="tujuanMutasi" class="form-control form-control-sm" placeholder="Pondok Pesantren Modern X">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label small fw-bold">Alasan Pindah</label>
-                                            <input type="text" id="alasanMutasi" class="form-control form-control-sm" placeholder="Ikut Orang Tua">
-                                        </div>
-                                    </div>
-                                    <div class="text-end mt-4">
-                                        <button class="btn btn-warning text-white btn-sm px-4" onclick="generateSurat('MUTASI')"><i class="bi bi-file-pdf me-1"></i> Cetak Surat Mutasi (PDF)</button>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-dark mb-3">STAFF / TATA USAHA</h6>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Nama Lengkap & Gelar</label>
+                                <input type="text" id="namaStaff" class="form-control form-control-sm" placeholder="Muhammad Rafli, S.Kom" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small fw-bold">Jabatan</label>
+                                <input type="text" id="jabatanStaff" class="form-control form-control-sm" placeholder="Sekretaris Lembaga">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">NIK / NIP</label>
+                                <input type="text" id="nikStaff" class="form-control form-control-sm" placeholder="1207xxxxxxxxxxxx">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Upload Tanda Tangan (PNG)</label>
+                                <input type="file" id="ttdStaffInput" class="form-control form-control-sm" accept="image/*" onchange="previewImg(this, 'previewTtdStaff')">
+                                <div class="mt-2 text-center border p-2 rounded-3" style="background: #fafafa; position: relative;">
+                                    <span class="small text-muted d-block mb-1">Pratinjau TTD Staff:</span>
+                                    <div class="ttd-preview-wrapper">
+                                        <img id="previewTtdStaff" src="" alt="Belum ada TTD" style="max-height: 80px; object-fit: contain;">
+                                        <button type="button" class="btn-hapus-ttd" onclick="hapusTandaTangan('staff')" title="Hapus Tanda Tangan">
+                                            <i class="bi bi-x-circle-fill"></i>
+                                        </button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Simpan Struktur</button>
+                    </div>
+                </form>
+
+                <!-- ===== LOGO LOGIN SECTION ===== -->
+                <div class="mt-4 pt-3 border-top">
+                    <h5 class="fw-bold mb-3 text-uppercase text-primary">
+                        <i class="bi bi-image me-2"></i> Logo Halaman Login
+                    </h5>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Upload Logo Login</label>
+                            <input type="file" id="logoLoginInput" class="form-control form-control-sm" accept="image/*"
+                                   onchange="uploadLogoLogin(event)">
+                            <small class="text-muted">Format: JPG, PNG, SVG | Maks: 500KB</small>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center border p-2 rounded-3" style="background: #fafafa; min-height: 80px;">
+                                <span class="small text-muted d-block mb-1">Pratinjau Logo Login:</span>
+                                <img id="previewLogoLogin" src="" alt="Belum ada logo"
+                                     style="max-height: 70px; max-width: 100%; object-fit: contain; display: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== TOMBOL HAPUS LOGO ===== -->
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-danger" onclick="hapusLogoLogin()">
+                            <i class="bi bi-trash me-1"></i> Hapus Logo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SUB-TAB 2: CETAK KTS ===== -->
+        <div class="tab-pane fade" id="subtab-kts" role="tabpanel">
+            <div class="card-cetak-kts">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold text-primary mb-0"><i class="bi bi-credit-card-2-front me-2"></i> Cetak Kartu Tanda Santri (KTS)</h5>
+                    <div>
+                        <button class="btn btn-primary btn-sm me-2" onclick="previewKTS()">
+                            <i class="bi bi-eye me-1"></i> Preview
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="printKTS()">
+                            <i class="bi bi-printer me-1"></i> Cetak KTS
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="resetKTSFilter()">
+                            <i class="bi bi-arrow-repeat me-1"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Status Santri</label>
+                        <select id="ktsStatus" class="form-select" onchange="updateKTSData()">
+                            <option value="all">Semua Status</option>
+                            <option value="Aktif" selected>Aktif</option>
+                            <option value="Lulus">Lulus</option>
+                            <option value="Mutasi">Mutasi</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Filter Kelas</label>
+                        <select id="ktsKelas" class="form-select" onchange="updateKTSData()">
+                            <option value="all">-- Semua Kelas --</option>
+                            <option value="7">Kelas 7</option>
+                            <option value="8">Kelas 8</option>
+                            <option value="9">Kelas 9</option>
+                            <option value="10">Kelas 10</option>
+                            <option value="11">Kelas 11</option>
+                            <option value="12">Kelas 12</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Filter Jenjang</label>
+                        <select id="ktsJenjang" class="form-select" onchange="updateKTSData()">
+                            <option value="all">-- Semua Jenjang --</option>
+                            <option value="Wustha">Wustha</option>
+                            <option value="Ulya">Ulya</option>
+                            <option value="SMP">SMP</option>
+                            <option value="SMA">SMA</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Ukuran Kertas</label>
+                        <select id="ktsUkuran" class="form-select">
+                            <option value="A4">A4 (8 KTS)</option>
+                            <option value="F4">F4 (8 KTS)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Pilih Santri (opsional, kosongkan untuk semua)</label>
+                        <select id="ktsPilihSantri" class="form-select" onchange="updateKTSData()">
+                            <option value="all">-- Semua Santri --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <div class="alert alert-info small mb-0">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>Jumlah Santri:</strong> <span id="ktsJumlahSantri">0</span> orang akan dicetak.
+                            Setiap lembar kertas berisi <strong>8 Kartu Tanda Santri</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="kts-preview-wrapper" id="ktsPreviewWrapper">
+                    <div class="ornament orn-1">✦</div>
+                    <div class="ornament orn-2">✦</div>
+                    <div class="ornament orn-3">✦</div>
+                    <div class="text-muted text-center w-100 py-5" style="color: rgba(255,255,255,0.4) !important; position: relative; z-index: 2;">
+                        <i class="bi bi-credit-card-2-front fs-1 d-block mb-3" style="color: rgba(201, 168, 76, 0.3);"></i>
+                        <p style="color: rgba(255,255,255,0.5);">Pilih filter dan klik <strong style="color: rgba(201, 168, 76, 0.7);">Preview</strong> untuk melihat tampilan KTS</p>
+                        <p class="small" style="color: rgba(255,255,255,0.3);">Setiap KTS akan ditampilkan sesuai data santri yang dipilih</p>
+                    </div>
+                </div>
+
+                <div id="printArea" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- ===== SUB-TAB 3: CETAK SURAT ===== -->
+        <div class="tab-pane fade" id="subtab-surat" role="tabpanel">
+            <div class="container bg-white p-4 rounded-4 shadow-sm" style="max-width: 900px; margin-top: 20px;">
+                <h5 class="fw-bold mb-3 text-uppercase text-primary"><i class="bi bi-printer-fill me-2"></i> Modul Cetak Surat Resmi</h5>
+                <hr>
+                <ul class="nav nav-pills mb-4" id="subTabSurat" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active btn-sm" id="sub-skbb-tab" data-bs-toggle="pill" data-bs-target="#sub-skbb" type="button">
+                            <i class="bi bi-shield-check"></i> SKBB
+                        </button>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <button class="nav-link btn-sm" id="sub-ska-tab" data-bs-toggle="pill" data-bs-target="#sub-ska" type="button">
+                            <i class="bi bi-book"></i> SKA
+                        </button>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <button class="nav-link btn-sm" id="btn-sub-mutasi" data-bs-toggle="pill" data-bs-target="#sub-surat-mutasi" type="button">
+                            <i class="bi bi-arrow-left-right"></i> Surat Mutasi
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="subTabSuratContent">
+                    <div class="tab-pane fade show active" id="sub-skbb" role="tabpanel">
+                        <div class="card card-body border-0 shadow-sm p-4">
+                            <h6 class="fw-bold text-dark mb-3">Form Surat Keterangan Berkelakuan Baik</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Nomor Surat</label>
+                                    <input type="text" id="noSuratSkbb" class="form-control form-control-sm" placeholder="045/PPS-IJ/V/2026">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Pilih Santri</label>
+                                    <select id="pilihSantriSkbb" class="form-select form-select-sm">
+                                        <option value="">-- Pilih Santri --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Kategori SKBB</label>
+                                    <select id="kategoriSkbb" class="form-select form-select-sm" onchange="updateSKBBText()">
+                                        <option value="sangat_baik">Sangat Baik</option>
+                                        <option value="baik" selected>Baik</option>
+                                        <option value="cukup_baik">Cukup Baik</option>
+                                        <option value="kurang_baik">Kurang Baik</option>
+                                        <option value="tidak_baik">Tidak Baik</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Keperluan / Tujuan</label>
+                                    <input type="text" id="keperluanSkbb" class="form-control form-control-sm" placeholder="Melanjutkan Sekolah / Mengikuti Beasiswa">
+                                </div>
+                                <div class="col-12">
+                                    <div class="skbb-preview-box" id="skbbPreviewText">
+                                        <div class="preview-label">
+                                            <i class="bi bi-file-text"></i> Preview Teks SKBB
+                                        </div>
+                                        <p class="preview-text" id="skbbTextPreview">Adalah benar nama yang bersangkutan mempunyai kelakuan baik, taat pada seluruh tata tertib lembaga, dan tidak pernah terlibat dalam tindakan pidana maupun kriminalitas selama masa pendidikan di Pondok Pesantren Salafiyah (PPS) Ibnul Jauzy.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-end mt-4">
+                                <button class="btn btn-primary btn-sm px-4" onclick="generateSurat('SKBB')"><i class="bi bi-file-pdf me-1"></i> Cetak SKBB (PDF)</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="sub-ska" role="tabpanel">
+                        <div class="card card-body border-0 shadow-sm p-4">
+                            <h6 class="fw-bold text-dark mb-3">Form Surat Keterangan Aktif Belajar</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Nomor Surat</label>
+                                    <input type="text" id="noSuratSka" class="form-control form-control-sm" placeholder="046/PPS-IJ/V/2026">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Pilih Santri</label>
+                                    <select id="pilihSantriSka" class="form-select form-select-sm">
+                                        <option value="">-- Pilih Santri --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-end mt-4">
+                                <button class="btn btn-success btn-sm px-4" onclick="generateSurat('SKA')"><i class="bi bi-file-pdf me-1"></i> Cetak SKA (PDF)</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="sub-surat-mutasi" role="tabpanel">
+                        <div class="card card-body border-0 shadow-sm p-4">
+                            <h6 class="fw-bold text-dark mb-3">Form Surat Keterangan Pindah / Mutasi</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Nomor Surat</label>
+                                    <input type="text" id="noSuratMutasi" class="form-control form-control-sm" placeholder="047/PPS-IJ/V/2026">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Pilih Santri</label>
+                                    <select id="pilihSantriMutasi" class="form-select form-select-sm">
+                                        <option value="">-- Pilih Santri --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Sekolah / Pesantren Tujuan</label>
+                                    <input type="text" id="tujuanMutasi" class="form-control form-control-sm" placeholder="Pondok Pesantren Modern X">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Alasan Pindah</label>
+                                    <input type="text" id="alasanMutasi" class="form-control form-control-sm" placeholder="Ikut Orang Tua">
+                                </div>
+                            </div>
+                            <div class="text-end mt-4">
+                                <button class="btn btn-warning text-white btn-sm px-4" onclick="generateSurat('MUTASI')"><i class="bi bi-file-pdf me-1"></i> Cetak Surat Mutasi (PDF)</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+    </div><!-- end strukturCetakSubTabContent -->
+</div><!-- end tab-struktur-cetak -->
 
                 <!-- ===== TAB ANALISIS (GABUNGAN TREN + MONITORING) ===== -->
 <div class="tab-pane fade" id="tab-analisis" role="tabpanel">
@@ -9294,13 +9426,63 @@ window.toggleDashboardView = (isDashboard) => {
     } else {
         document.body.classList.remove('on-dashboard');
     }
-    const activeTab = document.querySelector('.tab-pane.active')?.id;
-    if (activeTab === 'tab-struktur' || activeTab === 'tab-surat' || activeTab === 'tab-cetak-kts' || 
-        activeTab === 'tab-tren' || activeTab === 'tab-monitoring' || 
-        activeTab === 'tab-analisis') {
-        document.body.classList.add('hide-elements');
-    } else {
-        document.body.classList.remove('hide-elements');
+const activeTab = document.querySelector('.tab-pane.active')?.id;
+const hideTabs = [
+    'tab-struktur-cetak',
+    'tab-struktur',
+    'tab-surat',
+    'tab-cetak-kts',
+    'tab-tren',
+    'tab-monitoring',
+    'tab-analisis'
+];
+if (hideTabs.includes(activeTab)) {
+    document.body.classList.add('hide-elements');
+} else {
+    document.body.classList.remove('hide-elements');
+}
+};
+
+
+// ===== SWITCH SUB-TAB DATA SANTRI =====
+window.switchDataSubTab = function(subTab) {
+    // Update currentTab agar filter/search tahu tabel mana yang aktif
+    if (subTab === 'aktif') {
+        currentTab = 'tab-input';
+        loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri'] || 1);
+    } else if (subTab === 'lulus') {
+        currentTab = 'tab-lulus';
+        loadDataPaging('data_santri_lulus', 'tbodyLulus', 0, currentPage['tbodyLulus'] || 1);
+    } else if (subTab === 'mutasi') {
+        currentTab = 'tab-mutasi';
+        loadDataPaging('data_santri_mutasi', 'tbodyMutasi', 0, currentPage['tbodyMutasi'] || 1);
+    }
+
+    // Update visibility tombol bulk (Luluskan/Mutasi)
+    updateBulkMoveButtonsVisibility();
+
+    // Update badge jumlah data
+    updateDataSubTabBadges();
+};
+
+// ===== UPDATE BADGE JUMLAH DATA DI SUB-TAB =====
+window.updateDataSubTabBadges = async function() {
+    try {
+        const [snapAktif, snapLulus, snapMutasi] = await Promise.all([
+            getCountFromServer(collection(db, 'data_santri')),
+            getCountFromServer(collection(db, 'data_santri_lulus')),
+            getCountFromServer(collection(db, 'data_santri_mutasi'))
+        ]);
+
+        const elAktif = document.getElementById('badge-count-aktif');
+        const elLulus = document.getElementById('badge-count-lulus');
+        const elMutasi = document.getElementById('badge-count-mutasi');
+
+        if (elAktif) elAktif.textContent = snapAktif.data().count;
+        if (elLulus) elLulus.textContent = snapLulus.data().count;
+        if (elMutasi) elMutasi.textContent = snapMutasi.data().count;
+    } catch (e) {
+        console.warn('Gagal update badge sub-tab:', e);
     }
 };
 
@@ -12000,15 +12182,30 @@ window.debouncedSearch = function() {
             applyFilters();
         };
 
-        function getCurrentTbodyId() {
-            const activeTab = document.querySelector('.tab-pane.active');
-            if (!activeTab) return 'tbodySantri';
-            const id = activeTab.id;
-            if (id === 'tab-input') return 'tbodySantri';
-            if (id === 'tab-lulus') return 'tbodyLulus';
-            if (id === 'tab-mutasi') return 'tbodyMutasi';
-            return 'tbodySantri';
+
+function getCurrentTbodyId() {
+    const activeTab = document.querySelector('.tab-pane.active');
+    if (!activeTab) return 'tbodySantri';
+
+    const id = activeTab.id;
+
+    // Tab utama lama (fallback)
+    if (id === 'tab-input') {
+        // Cek sub-tab mana yang aktif
+        const activeSubTab = document.querySelector('#dataSubTabContent .tab-pane.active');
+        if (activeSubTab) {
+            if (activeSubTab.id === 'subtab-lulus') return 'tbodyLulus';
+            if (activeSubTab.id === 'subtab-mutasi') return 'tbodyMutasi';
         }
+        return 'tbodySantri';
+    }
+
+    // Fallback jika masih ada yang mengakses tab lama
+    if (id === 'tab-lulus') return 'tbodyLulus';
+    if (id === 'tab-mutasi') return 'tbodyMutasi';
+
+    return 'tbodySantri';
+}
 
 
 window.updateEmptyCells = function(tbodyId) {
@@ -12884,6 +13081,9 @@ document.getElementById('importExcel').addEventListener('change', async function
                             duration: 4000,
                             icon: 'bi-check-circle-fill'
                         });
+
+                        updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
+
                     }
                 });
 
@@ -13670,9 +13870,9 @@ window.saveAllData = async () => {
             icon: 'bi-check-circle-fill'
         });
         
-        loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri']);
-
-refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
+loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri']);
+refreshMonitoringIfActive();
+updateDataSubTabBadges();  // ← DI SINI
         
     } catch (error) {
         console.error("Error saving data: ", error);
@@ -14078,6 +14278,9 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
                 duration: 3500,
                 icon: 'bi-check-circle-fill'
             });
+
+updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
+
         } else {
             showToast({
                 title: 'Info',
@@ -14153,7 +14356,8 @@ window.deleteRow = async (btn, coll) => {
                 icon: 'bi-check-circle-fill'
             });
 
-refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
+refreshMonitoringIfActive();
+updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
 
         } catch (error) {
             showAlertModal({
@@ -14267,7 +14471,8 @@ window.bulkDelete = async () => {
             renderDashboard();
         }
 
-refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
+refreshMonitoringIfActive();
+updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
 
     } catch (error) {
         showAlertModal({
@@ -14653,6 +14858,8 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
                 renderDashboard();
             }
 
+updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
+
         } else {
             loader.style.display = 'none';
             await showAlertModal({
@@ -14758,6 +14965,8 @@ window.bulkMoveData = async (targetCollection, statusBaru) => {
                     alert(`✅ ${count} data berhasil dipromosikan!\n\n` + promotionLog.join('\n'));
                     
                     await loadDataPaging('data_santri', 'tbodySantri', 0, 1);
+                    updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
+
                 } else {
                     alert("Tidak ada data yang cocok dengan mapping kenaikan.");
                 }
@@ -15003,7 +15212,9 @@ window.bulkBatalLulus = async () => {
         if (document.querySelector('#tab-dashboard')?.classList.contains('active')) {
             renderDashboard();
         }
-        
+
+updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
+
     } catch (error) {
         loader.style.display = 'none';
         console.error("Error batal lulus:", error);
@@ -15239,6 +15450,8 @@ window.bulkBatalMutasi = async () => {
         if (document.querySelector('#tab-dashboard')?.classList.contains('active')) {
             renderDashboard();
         }
+
+updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
         
     } catch (error) {
         loader.style.display = 'none';
@@ -16899,15 +17112,23 @@ window.validateAndFixAllDates = async () => {
 
 
 window.toggleElementsForTab = (tabId) => {
-    if (tabId === 'tab-struktur' || tabId === 'tab-surat' || tabId === 'tab-cetak-kts' || 
-        tabId === 'tab-tren' || tabId === 'tab-tren-kelulusan' || 
-        tabId === 'tab-monitoring' || tabId === 'tab-analisis') {
+    const hideTabs = [
+        'tab-struktur-cetak',  // ← gabungan baru
+        'tab-struktur',        // fallback lama
+        'tab-surat',           // fallback lama
+        'tab-cetak-kts',       // fallback lama
+        'tab-tren',
+        'tab-tren-kelulusan',
+        'tab-monitoring',
+        'tab-analisis'
+    ];
+    
+    if (hideTabs.includes(tabId)) {
         document.body.classList.add('hide-elements');
     } else {
         document.body.classList.remove('hide-elements');
     }
 };
-
 
         // ===== CETAK KTS =====
 window.populateKTSSelect = async () => {
@@ -18484,7 +18705,8 @@ window.simpanDataBaru = async () => {
             renderDashboard();
         }
 
-refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
+refreshMonitoringIfActive();
+updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
 
     } catch (error) {
         console.error("Error menambah data:", error);
@@ -19133,7 +19355,8 @@ window.simpanEditData = async () => {
             renderDashboard();
         }
 
-refreshMonitoringIfActive();   // ← ✅ TAMBAHKAN DI SINI
+refreshMonitoringIfActive();
+updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
 
     } catch (error) {
         console.error("Error mengupdate data:", error);
@@ -19215,16 +19438,18 @@ document.getElementById('modalEditData')?.addEventListener('shown.bs.modal', fun
             }
         });
 
+
         // ===== INIT =====
-        window.loadAllData = async () => {
-            createHeader();
-            await Promise.all([
-                loadDataPaging("data_santri", "tbodySantri", 0, 1),
-                loadDataPaging("data_santri_lulus", "tbodyLulus", 0, 1),
-                loadDataPaging("data_santri_mutasi", "tbodyMutasi", 0, 1)
-            ]);
-            populateKTSSelect();
-        };
+window.loadAllData = async () => {
+    createHeader();
+    await Promise.all([
+        loadDataPaging("data_santri", "tbodySantri", 0, 1),
+        loadDataPaging("data_santri_lulus", "tbodyLulus", 0, 1),
+        loadDataPaging("data_santri_mutasi", "tbodyMutasi", 0, 1)
+    ]);
+    populateKTSSelect();
+    updateDataSubTabBadges();  // ← TAMBAHKAN INI
+};
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -19275,24 +19500,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 window.updateBulkMoveButtonsVisibility = function() {
-    const activeTab = document.querySelector('.tab-pane.active');
-    const tabId = activeTab ? activeTab.id : '';
-
     document.body.classList.remove('hide-bulk-luluskan', 'hide-bulk-mutasi');
 
-    if (tabId === 'tab-lulus' || tabId === 'tab-mutasi' || tabId === 'tab-analisis') {
+    // Cek sub-tab aktif di dalam Data Santri
+    const activeSubTab = document.querySelector('#dataSubTabContent .tab-pane.active');
+    const subTabId = activeSubTab ? activeSubTab.id : '';
+
+    // Sembunyikan tombol Luluskan saat di sub-tab Lulus
+    if (subTabId === 'subtab-lulus') {
         document.body.classList.add('hide-bulk-luluskan');
+    }
+
+    // Sembunyikan tombol Mutasi saat di sub-tab Mutasi
+    if (subTabId === 'subtab-mutasi') {
         document.body.classList.add('hide-bulk-mutasi');
+    }
+
+    // Sembunyikan keduanya saat di tab Analisis
+    const activeTab = document.querySelector('.tab-pane.active');
+    if (activeTab && activeTab.id === 'tab-analisis') {
+        document.body.classList.add('hide-bulk-luluskan', 'hide-bulk-mutasi');
     }
 };
 
 
-    // Pasang listener ke semua tombol tab
-    document.querySelectorAll('#myTab button[data-bs-toggle="tab"]').forEach(tabBtn => {
-        tabBtn.addEventListener('shown.bs.tab', function() {
-            updateBulkMoveButtonsVisibility();
-        });
+// Listener tab utama
+document.querySelectorAll('#myTab button[data-bs-toggle="tab"]').forEach(tabBtn => {
+    tabBtn.addEventListener('shown.bs.tab', function() {
+        updateBulkMoveButtonsVisibility();
     });
+});
+
+// Listener sub-tab Data Santri
+document.querySelectorAll('#dataSubTab button[data-bs-toggle="pill"]').forEach(subBtn => {
+    subBtn.addEventListener('shown.bs.tab', function() {
+        updateBulkMoveButtonsVisibility();
+        updateFilterCountBadge();
+    });
+});
 
     // Panggil sekali saat halaman pertama kali dimuat
     updateBulkMoveButtonsVisibility();
@@ -20397,6 +20642,9 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
                             duration: 4500,
                             icon: 'bi-check-circle-fill'
                         });
+
+                        updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
+
                     }
                 });
 
