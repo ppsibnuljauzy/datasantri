@@ -7483,10 +7483,6 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                                     <option value="Non Asrama">Non Asrama</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-2">
-                                                <label class="form-label">No. KK</label>
-                                                <input type="text" class="form-control form-control-sm" id="tdNoKk" placeholder="No. KK">
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -7499,6 +7495,10 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                             <span class="badge-count">Lengkapi</span>
                                         </div>
                                         <div class="row g-2">
+                                            <div class="col-md-2">
+                                                <label class="form-label">No. KK</label>
+                                                <input type="text" class="form-control form-control-sm" id="tdNoKk" placeholder="No. KK">
+                                            </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">Ayah</label>
                                                 <input type="text" class="form-control form-control-sm" id="tdAyah" placeholder="Nama Ayah">
@@ -7549,6 +7549,9 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                                     <option value="ASN">ASN</option>
                                                     <option value="TNI">TNI</option>
                                                     <option value="Polisi">Polisi</option>
+                                                    <option value="Dokter">Dokter</option>     
+     						    <option value="Perawat">Perawat</option>  
+   						    <option value="Bidan">Bidan</option>      
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
@@ -7623,6 +7626,9 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                                     <option value="ASN">ASN</option>
                                                     <option value="TNI">TNI</option>
                                                     <option value="Polisi">Polisi</option>
+                                                    <option value="Dokter">Dokter</option>      
+    						    <option value="Perawat">Perawat</option>   
+    						    <option value="Bidan">Bidan</option>       
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
@@ -7723,6 +7729,9 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                                     <option value="ASN">ASN</option>
                                                     <option value="TNI">TNI</option>
                                                     <option value="Polisi">Polisi</option>
+                                                    <option value="Dokter">Dokter</option>    
+    						    <option value="Perawat">Perawat</option>   
+    						    <option value="Bidan">Bidan</option>       
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
@@ -8045,10 +8054,6 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                                     <option value="Non Asrama">Non Asrama</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-2">
-                                                <label class="form-label">No. KK</label>
-                                                <input type="text" class="form-control form-control-sm" id="edNoKk" placeholder="No. KK">
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -8061,6 +8066,10 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                             <span class="badge-count">Edit</span>
                                         </div>
                                         <div class="row g-2">
+                                            <div class="col-md-2">
+                                                <label class="form-label">No. KK</label>
+                                                <input type="text" class="form-control form-control-sm" id="edNoKk" placeholder="No. KK">
+                                            </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">Ayah</label>
                                                 <input type="text" class="form-control form-control-sm" id="edAyah" placeholder="Nama Ayah">
@@ -8111,6 +8120,9 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                                     <option value="ASN">ASN</option>
                                                     <option value="TNI">TNI</option>
                                                     <option value="Polisi">Polisi</option>
+                                                    <option value="Dokter">Dokter</option>    
+    						    <option value="Perawat">Perawat</option>  
+    						    <option value="Bidan">Bidan</option>       
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
@@ -8185,6 +8197,9 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                                     <option value="ASN">ASN</option>
                                                     <option value="TNI">TNI</option>
                                                     <option value="Polisi">Polisi</option>
+                                                    <option value="Dokter">Dokter</option>     
+    						    <option value="Perawat">Perawat</option>   
+    						    <option value="Bidan">Bidan</option>       
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
@@ -8285,6 +8300,9 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                                     <option value="ASN">ASN</option>
                                                     <option value="TNI">TNI</option>
                                                     <option value="Polisi">Polisi</option>
+                                                    <option value="Dokter">Dokter</option>     
+    						    <option value="Perawat">Perawat</option>   
+    						    <option value="Bidan">Bidan</option>       
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
@@ -9738,15 +9756,15 @@ window.updateDataSubTabBadges = async function() {
             'stat_tinggal': ['Asrama', 'Non Asrama'],
             'stat_ayah': ['Masih Hidup', 'Sudah Meninggal', 'Tidak diketahui'],
             'pen_ayah': ['SD', 'MI', 'SMP', 'MTs', 'SMA', 'MA', 'D1', 'D3', 'S1', 'S2', 'S3'],
-            'pek_ayah': ['Wiraswasta', 'Buruh', 'Pedagang', 'Nelayan', 'Petani/Pekebun', 'Peternak', 'Karyawan', 'Guru', 'Dosen', 'ASN', 'TNI', 'Polisi'],
+            'pek_ayah': ['Wiraswasta', 'Buruh', 'Pedagang', 'Nelayan', 'Petani/Pekebun', 'Peternak', 'Karyawan', 'Guru', 'Dosen', 'ASN', 'TNI', 'Polisi', 'Dokter',   'Perawat', 'Bidan'],            
             'gaji_ayah': ['0-500.000', '500.001-1.000.000', '1.000.001-2.000.000', '2.000.001-3.000.000', '3.000.001-4.000.000', '4.000.001-5.000.000', '>5.000.000'],
             'stat_ibu': ['Masih Hidup', 'Sudah Meninggal', 'Tidak diketahui'],
             'pen_ibu': ['SD', 'MI', 'SMP', 'MTs', 'SMA', 'MA', 'D1', 'D3', 'S1', 'S2', 'S3'],
-            'pek_ibu': ['Ibu Rumah Tangga', 'Wiraswasta', 'Pedagang', 'Buruh', 'Nelayan', 'Petani/Pekebun', 'Peternak', 'Karyawan', 'Guru', 'Dosen', 'ASN', 'TNI', 'Polisi'],
+            'pek_ibu': ['Ibu Rumah Tangga', 'Wiraswasta', 'Pedagang', 'Buruh', 'Nelayan', 'Petani/Pekebun', 'Peternak', 'Karyawan', 'Guru', 'Dosen', 'ASN', 'TNI',   'Polisi', 'Dokter', 'Perawat', 'Bidan'],            
             'gaji_ibu': ['0-500.000', '500.001-1.000.000', '1.000.001-2.000.000', '2.000.001-3.000.000', '3.000.001-4.000.000', '4.000.001-5.000.000', '>5.000.000'],
             'hub_wali': ['Kakek', 'Nenek', 'Paman', 'Bibi', 'Abang', 'Adik', 'Sepupu', 'Ayah Tiri', 'Ibu Tiri'],
             'pen_wali': ['SD', 'MI', 'SMP', 'MTs', 'SMA', 'MA', 'D1', 'D3', 'S1', 'S2', 'S3'],
-            'pek_wali': ['Ibu Rumah Tangga', 'Wiraswasta', 'Pedagang', 'Buruh', 'Nelayan', 'Petani/Pekebun', 'Peternak', 'Karyawan', 'Guru', 'Dosen', 'ASN', 'TNI', 'Polisi'],
+            'pek_wali': ['Ibu Rumah Tangga', 'Wiraswasta', 'Pedagang', 'Buruh', 'Nelayan', 'Petani/Pekebun', 'Peternak', 'Karyawan', 'Guru', 'Dosen', 'ASN', 'TNI', 'Polisi', 'Dokter', 'Perawat', 'Bidan'],            
             'gaji_wali': ['0-500.000', '500.001-1.000.000', '1.000.001-2.000.000', '2.000.001-3.000.000', '3.000.001-4.000.000', '4.000.001-5.000.000', '>5.000.000'],
             'ket': ['Masuk Data EMIS', 'tidak Masuk Data EMIS'],
             'stat_akhir': ['Aktif', 'Lulus', 'Mutasi', 'Meninggal', 'Dikeluarkan', 'Tinggal Kelas']
