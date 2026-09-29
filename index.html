@@ -5660,25 +5660,6 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
 [data-theme="dark"] #strukturCetakSubTab.nav-pills .nav-link.active {
     background: linear-gradient(135deg, #1a2639, #2c3e50) !important;
 }
-
-
-/* ===== RESPONSIVE FILTER BAR MONITORING ===== */
-@media (max-width: 768px) {
-    .monitoring-filter-bar {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .monitoring-filter-bar > div {
-        width: 100% !important;
-        min-width: unset !important;
-    }
-    
-    .monitoring-filter-bar button {
-        width: 100%;
-        justify-content: center;
-    }
-}
 </style>
 </head>
 <body>
@@ -7048,6 +7029,9 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                         <button class="btn btn-sm btn-success" onclick="exportMonitoringIdentitas()">
                             <i class="bi bi-file-earmark-excel"></i> Export Excel
                         </button>
+                        <button class="btn btn-sm btn-warning text-white" onclick="resetMonitoringFilter()">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset Filter
+                        </button>
                         <button class="btn btn-sm btn-primary" onclick="loadMonitoringIdentitas()">
                             <i class="bi bi-arrow-clockwise"></i> Refresh
                         </button>
@@ -7166,12 +7150,6 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                         <input type="text" id="monSearchNama" class="form-control form-control-sm" 
                                placeholder="🔍 Ketik nama santri..." oninput="renderMonitoringTable()">
                     </div>
-                    <div style="display: flex; align-items: flex-end; padding-bottom: 1px;">
-                         <button class="btn btn-sm btn-outline-secondary" onclick="resetMonitoringFilter()" 
-                                title="Reset semua filter monitoring"
-                                style="border-radius: 8px; font-weight: 600; font-size: 0.8rem; padding: 6px 14px; white-space: nowrap;">
-                           <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
-                    </button>
                 </div>
 
                 <!-- TABEL MONITORING -->
@@ -21296,7 +21274,6 @@ function updateMonitoringSummary() {
     if (el('mon-nisn-bar')) el('mon-nisn-bar').style.width = `${nisnPersen}%`;
 }
 
-
 window.renderMonitoringTable = function() {
     const tbody = document.getElementById('tableMonitoringBody');
     if (!tbody) return;
@@ -21400,37 +21377,6 @@ window.renderMonitoringTable = function() {
     });
 
     tbody.innerHTML = html;
-};
-
-
-// ============================================================
-// ===== RESET FILTER MONITORING IDENTITAS =====
-// ============================================================
-window.resetMonitoringFilter = function() {
-    // Reset semua dropdown filter ke nilai default
-    const filterKelas = document.getElementById('monFilterKelas');
-    const filterJenjang = document.getElementById('monFilterJenjang');
-    const filterStatus = document.getElementById('monFilterStatus');
-    const searchNama = document.getElementById('monSearchNama');
-
-    if (filterKelas) filterKelas.value = '';
-    if (filterJenjang) filterJenjang.value = '';
-    if (filterStatus) filterStatus.value = 'all';
-    if (searchNama) searchNama.value = '';
-
-    // Render ulang tabel dengan filter yang sudah direset
-    renderMonitoringTable();
-
-    // Tampilkan toast notifikasi
-    if (typeof showToast === 'function') {
-        showToast({
-            title: '🔄 Filter Direset',
-            message: 'Semua filter monitoring identitas berhasil dikembalikan ke pengaturan awal.',
-            type: 'success',
-            duration: 2500,
-            icon: 'bi-arrow-repeat'
-        });
-    }
 };
 
 
@@ -21753,6 +21699,37 @@ function refreshMonitoringIfActive() {
         loadMonitoringIdentitas();
     }
 }
+
+
+// ============================================================
+// ===== RESET FILTER MONITORING IDENTITAS =====
+// ============================================================
+window.resetMonitoringFilter = function() {
+    // Reset semua filter ke nilai default
+    const filterKelas = document.getElementById('monFilterKelas');
+    const filterJenjang = document.getElementById('monFilterJenjang');
+    const filterStatus = document.getElementById('monFilterStatus');
+    const searchNama = document.getElementById('monSearchNama');
+
+    if (filterKelas) filterKelas.value = '';
+    if (filterJenjang) filterJenjang.value = '';
+    if (filterStatus) filterStatus.value = 'all';
+    if (searchNama) searchNama.value = '';
+
+    // Render ulang tabel dengan filter default
+    renderMonitoringTable();
+
+    // Tampilkan notifikasi
+    if (typeof showToast === 'function') {
+        showToast({
+            title: '🔄 Filter Direset',
+            message: 'Semua filter monitoring identitas berhasil dikembalikan ke pengaturan awal.',
+            type: 'success',
+            duration: 2500,
+            icon: 'bi-arrow-counterclockwise'
+        });
+    }
+};
     </script>
 </body>
 </html>
