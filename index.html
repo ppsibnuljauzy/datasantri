@@ -7294,8 +7294,10 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                         </div>
                                         <div class="row g-2">
                                             <div class="col-md-2">
-                                                <label class="form-label">Kode Absen</label>
-                                                <input type="text" class="form-control form-control-sm" id="tdKodeAbsen" placeholder="ex: 001">
+                                                <label class="form-label">Kode Absen <span class="text-muted" style="font-weight:400; font-size:0.7rem;">(opsional)</span></label>
+                                                <input type="text" class="form-control form-control-sm" id="tdKodeAbsen" 
+       placeholder="4 digit (ex: 0001)" maxlength="4" inputmode="numeric"
+       oninput="this.value = this.value.replace(/\D/g, '').slice(0, 4)">
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">Foto</label>
@@ -7437,11 +7439,11 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">NIS</label>
-                                                <input type="text" class="form-control form-control-sm" id="tdNis" readonly placeholder="Otomatis">
+                                                <input type="text" class="form-control form-control-sm" id="tdNis" readonly placeholder="Isi Kode Absen + Tgl Masuk">
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">NISM</label>
-                                                <input type="text" class="form-control form-control-sm" id="tdNism" readonly placeholder="Otomatis">
+                                                <input type="text" class="form-control form-control-sm" id="tdNism" readonly placeholder="Isi Kode Absen + Tgl Masuk">
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">Program</label>
@@ -7864,7 +7866,9 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
                                         <div class="row g-2">
                                             <div class="col-md-2">
                                                 <label class="form-label">Kode Absen</label>
-                                                <input type="text" class="form-control form-control-sm" id="edKodeAbsen" placeholder="ex: 001">
+                                                <input type="text" class="form-control form-control-sm" id="edKodeAbsen" 
+       placeholder="4 digit (ex: 0001)" maxlength="4" inputmode="numeric"
+       oninput="this.value = this.value.replace(/\D/g, '').slice(0, 4)">
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">Foto</label>
@@ -12773,7 +12777,14 @@ window.addRow = function(targetId, data = {}, rowNumber = null) {
                     <input type="hidden" data-field="foto" value="${val}">
                 </div>`;
         } else if (col === 'kode_absen') {
-            inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${val}" style="width: 90px; min-width: 70px; max-width: 110px; padding: 6px 8px; text-align: center; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input);">`;
+            inputHtml = `<input type="text" class="input-cell" data-field="${col}" value="${val}" 
+                                 maxlength="4" inputmode="numeric"
+                                 oninput="this.value = this.value.replace(/\\D/g, '').slice(0, 4)"
+                                 placeholder="0001"
+                                 style="width: 90px; min-width: 70px; max-width: 110px; padding: 6px 8px; 
+                                        text-align: center; font-size: 0.8rem; font-weight: 600; 
+                                        border: 1px solid var(--border-color); border-radius: 4px; 
+                                        background: var(--bg-input);">`;
         } else if (col === 'nama') {
             inputHtml = `<input type="text" class="input-cell input-nama-santri" data-field="${col}" value="${val}" 
                                     style="min-width: 290px; max-width: 480px; width: 100%; padding: 6px 12px; 
@@ -13527,7 +13538,56 @@ window.saveAllData = async () => {
         });
         return;
     }
-    
+
+    // ============================================================
+    // ===== VALIDASI KODE ABSEN (HARUS 4 DIGIT) =====
+    // ============================================================
+    for (const row of rows) {
+        const kodeAbsenInput = row.querySelector('[data-field="kode_absen"]');
+        const kodeAbsenVal = (kodeAbsenInput?.value || '').trim();
+        const kodeAbsenClean = kodeAbsenVal.replace(/\D/g, '');
+
+        if (kodeAbsenClean && kodeAbsenClean.length !== 4) {
+            const namaSantri = row.querySelector('[data-field="nama"]')?.value || 'Tanpa Nama';
+            
+            await showAlertModal({
+                title: 'Kode Absen Tidak Valid',
+                message: `Kode Absen untuk santri "${namaSantri}" harus terdiri dari tepat 4 digit angka.`,
+                details: `
+                    <div style="display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px;">
+                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
+                        <span style="font-weight: 600;">Nilai Input</span>
+                        <span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${kodeAbsenVal}"</span>
+                        <span style="font-weight: 600;">Jumlah Digit</span>
+                        <span style="color: #e74c3c;">: ${kodeAbsenClean.length} digit</span>
+                        <span style="font-weight: 600;">Format Benar</span>
+                        <span style="color: #2ecc71;">: 4 digit angka</span>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                        <i class="bi bi-lightbulb-fill me-1"></i>
+                        <strong>Contoh:</strong> 0001, 0123, 9999
+                    </div>
+                `,
+                type: 'warning',
+                okText: 'OK, Saya Perbaiki',
+                icon: 'bi-123'
+            });
+
+            if (kodeAbsenInput) {
+                setTimeout(() => {
+                    kodeAbsenInput.focus();
+                    kodeAbsenInput.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                }, 300);
+            }
+            return;
+        }
+
+        // Normalisasi: pad ke 4 digit
+        if (kodeAbsenInput && kodeAbsenClean && kodeAbsenClean.length === 4) {
+            kodeAbsenInput.value = kodeAbsenClean.padStart(4, '0');
+        }
+    }
+
     // ===== VALIDASI NIK/NISN SEBELUM SIMPAN =====
     const rowsTanpaIdentitas = [];
     rows.forEach(row => {
@@ -13889,9 +13949,9 @@ window.saveAllData = async () => {
             icon: 'bi-check-circle-fill'
         });
         
-loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri']);
-refreshMonitoringIfActive();
-updateDataSubTabBadges();  // ← DI SINI
+        loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri']);
+        refreshMonitoringIfActive();
+        updateDataSubTabBadges();
         
     } catch (error) {
         console.error("Error saving data: ", error);
@@ -13917,7 +13977,56 @@ updateDataSubTabBadges();  // ← DI SINI
 window.saveTabSpecificData = async (collectionName, tbodyId) => {
     const rows = document.querySelectorAll(`#${tbodyId} tr`);
     if (rows.length === 0) return;
-    
+
+    // ============================================================
+    // ===== VALIDASI KODE ABSEN (HARUS 4 DIGIT) =====
+    // ============================================================
+    for (const row of rows) {
+        const kodeAbsenInput = row.querySelector('[data-field="kode_absen"]');
+        const kodeAbsenVal = (kodeAbsenInput?.value || '').trim();
+        const kodeAbsenClean = kodeAbsenVal.replace(/\D/g, '');
+
+        if (kodeAbsenClean && kodeAbsenClean.length !== 4) {
+            const namaSantri = row.querySelector('[data-field="nama"]')?.value || 'Tanpa Nama';
+            
+            await showAlertModal({
+                title: 'Kode Absen Tidak Valid',
+                message: `Kode Absen untuk santri "${namaSantri}" harus terdiri dari tepat 4 digit angka.`,
+                details: `
+                    <div style="display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px;">
+                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
+                        <span style="font-weight: 600;">Nilai Input</span>
+                        <span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${kodeAbsenVal}"</span>
+                        <span style="font-weight: 600;">Jumlah Digit</span>
+                        <span style="color: #e74c3c;">: ${kodeAbsenClean.length} digit</span>
+                        <span style="font-weight: 600;">Format Benar</span>
+                        <span style="color: #2ecc71;">: 4 digit angka</span>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                        <i class="bi bi-lightbulb-fill me-1"></i>
+                        <strong>Contoh:</strong> 0001, 0123, 9999
+                    </div>
+                `,
+                type: 'warning',
+                okText: 'OK, Saya Perbaiki',
+                icon: 'bi-123'
+            });
+
+            if (kodeAbsenInput) {
+                setTimeout(() => {
+                    kodeAbsenInput.focus();
+                    kodeAbsenInput.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                }, 300);
+            }
+            return;
+        }
+
+        // Normalisasi: pad ke 4 digit
+        if (kodeAbsenInput && kodeAbsenClean && kodeAbsenClean.length === 4) {
+            kodeAbsenInput.value = kodeAbsenClean.padStart(4, '0');
+        }
+    }
+
     // ===== VALIDASI NIK/NISN SEBELUM SIMPAN =====
     const rowsTanpaIdentitas = [];
     rows.forEach(row => {
@@ -14298,7 +14407,7 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
                 icon: 'bi-check-circle-fill'
             });
 
-updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
+            updateDataSubTabBadges();
 
         } else {
             showToast({
@@ -18324,8 +18433,40 @@ window.validateAllIdentityFields = async function(dataObj, prefixId = '') {
 
 // ===== SIMPAN DATA BARU =====
 window.simpanDataBaru = async () => {
+    // ============================================================
+    // ===== VALIDASI KODE ABSEN (HARUS 4 DIGIT) =====
+    // ============================================================
+    const kodeAbsenInput = document.getElementById('tdKodeAbsen')?.value || '';
+    const kodeAbsenClean = kodeAbsenInput.replace(/\D/g, '');
+
+    if (kodeAbsenClean && kodeAbsenClean.length !== 4) {
+        await showAlertModal({
+            title: 'Kode Absen Tidak Valid',
+            message: 'Kode Absen harus terdiri dari tepat 4 digit angka.',
+            details: `
+                <div style="display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px;">
+                    <span style="font-weight: 600;">Nilai Input</span>
+                    <span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${kodeAbsenInput}"</span>
+                    <span style="font-weight: 600;">Jumlah Digit</span>
+                    <span style="color: #e74c3c;">: ${kodeAbsenClean.length} digit</span>
+                    <span style="font-weight: 600;">Format Benar</span>
+                    <span style="color: #2ecc71;">: 4 digit angka</span>
+                </div>
+                <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                    <i class="bi bi-lightbulb-fill me-1"></i>
+                    <strong>Contoh:</strong> 0001, 0123, 9999
+                </div>
+            `,
+            type: 'warning',
+            okText: 'OK, Saya Perbaiki',
+            icon: 'bi-123'
+        });
+        document.getElementById('tdKodeAbsen')?.focus();
+        return;
+    }
+
     const data = {
-        kode_absen: document.getElementById('tdKodeAbsen')?.value || '',
+        kode_absen: kodeAbsenClean ? kodeAbsenClean.padStart(4, '0') : '',
         nama: document.getElementById('tdNama').value.trim(),
         tmp_lahir: document.getElementById('tdTmpLahir').value.trim(),
         tgl_lahir: document.getElementById('tdTglLahir').value.trim(),
@@ -18503,44 +18644,6 @@ window.simpanDataBaru = async () => {
 
     if (!allDatesValid) return;
 
-    // ===== PERINGATAN NIS/NISM TIDAK LENGKAP =====
-    if (!data.tgl_masuk || data.tgl_masuk.length < 10 || !data.kode_absen) {
-        const lanjutkan = await showConfirmModal({
-            title: 'Data NIS/NISM Tidak Lengkap',
-            message: 'Tanggal Masuk dan/atau Kode Absen kosong. NIS dan NISM tidak dapat di-generate otomatis.',
-            details: `
-                <div style="display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px;">
-                    <span style="font-weight: 600;">Nama Santri</span><span>: ${data.nama || '-'}</span>
-                    <span style="font-weight: 600;">Tanggal Masuk</span>
-                    <span style="color: ${data.tgl_masuk && data.tgl_masuk.length >= 10 ? '#2ecc71' : '#e74c3c'};">
-                        : ${data.tgl_masuk || '❌ Kosong'}
-                    </span>
-                    <span style="font-weight: 600;">Kode Absen</span>
-                    <span style="color: ${data.kode_absen ? '#2ecc71' : '#e74c3c'};">
-                        : ${data.kode_absen || '❌ Kosong'}
-                    </span>
-                </div>
-                <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
-                    <i class="bi bi-lightbulb-fill me-1"></i>
-                    <strong>Solusi:</strong> Isi <strong>Tanggal Masuk</strong> (format dd/mm/yyyy) dan <strong>Kode Absen</strong> agar NIS/NISM terisi otomatis.
-                </div>
-            `,
-            type: 'warning',
-            okText: 'Tetap Simpan (Tanpa NIS/NISM)',
-            cancelText: 'Kembali Isi',
-            icon: 'bi-exclamation-triangle-fill'
-        });
-
-        if (!lanjutkan) {
-            if (!data.tgl_masuk || data.tgl_masuk.length < 10) {
-                document.getElementById('tdTglMasuk')?.focus();
-            } else if (!data.kode_absen) {
-                document.getElementById('tdKodeAbsen')?.focus();
-            }
-            return;
-        }
-    }
-
     // ===== VALIDASI NISN =====
     const isNisnValid = await validateNISN(data.nisn, 'NISN', 'tdNisn');
     if (!isNisnValid) return;
@@ -18567,7 +18670,7 @@ window.simpanDataBaru = async () => {
     const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'tdNsppAsal');
     if (!isNsppValid) return;
 
-    // ===== ✅ VALIDASI WAJIB ISI NO. IJAZAH/MUTASI =====
+    // ===== VALIDASI WAJIB ISI NO. IJAZAH/MUTASI =====
     const cekNoIjazah = await cekWajibNoIjazah({
         statAkhir: data.stat_akhir,
         noIjazah: data.no_ijazah,
@@ -18576,7 +18679,6 @@ window.simpanDataBaru = async () => {
         context: 'modal'
     });
     if (!cekNoIjazah.valid) return;
-    // ===== SELESAI VALIDASI NO. IJAZAH =====
 
     // ===== VALIDASI: WAJIB ISI MINIMAL SALAH SATU NIK ATAU NISN =====
     if (!data.nik && !data.nisn) {
@@ -18666,12 +18768,13 @@ window.simpanDataBaru = async () => {
         details: `
             <div style="display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px;">
                 <span style="font-weight: 600;">Nama</span><span>: ${data.nama}</span>
+                <span style="font-weight: 600;">Kode Absen</span><span style="color: #2ecc71; font-weight: 700;">: ${data.kode_absen || '-(kosong)'}</span>
                 <span style="font-weight: 600;">Kelas</span><span>: ${data.kls_now || '-'}</span>
                 <span style="font-weight: 600;">Jenjang</span><span>: ${data.jenjang || '-'}</span>
                 <span style="font-weight: 600;">NIK</span><span>: ${data.nik || '-'}</span>
                 <span style="font-weight: 600;">NISN</span><span>: ${data.nisn || '-'}</span>
-                <span style="font-weight: 600;">NIS</span><span style="color: ${data.nis ? '#2ecc71' : '#e74c3c'};">: ${data.nis || '❌ Kosong'}</span>
-                <span style="font-weight: 600;">NISM</span><span style="color: ${data.nism ? '#2ecc71' : '#e74c3c'};">: ${data.nism || '❌ Kosong'}</span>
+                <span style="font-weight: 600;">NIS</span><span style="color: ${data.nis ? '#2ecc71' : '#6c757d'};">: ${data.nis || '-(kosong)'}</span>
+                <span style="font-weight: 600;">NISM</span><span style="color: ${data.nism ? '#2ecc71' : '#6c757d'};">: ${data.nism || '-(kosong)'}</span>
                 <span style="font-weight: 600;">Status Akhir</span><span>: ${data.stat_akhir || 'Aktif'}</span>
                 <span style="font-weight: 600;">No. Ijazah/Mutasi</span><span style="color: ${(data.stat_akhir === 'Lulus' || data.stat_akhir === 'Mutasi') ? (data.no_ijazah ? '#2ecc71' : '#e74c3c') : '#6c757d'};">: ${data.no_ijazah || '-'}</span>
             </div>
@@ -18724,8 +18827,8 @@ window.simpanDataBaru = async () => {
             renderDashboard();
         }
 
-refreshMonitoringIfActive();
-updateDataSubTabBadges();  // ← TAMBAHKAN DI SINI
+        refreshMonitoringIfActive();
+        updateDataSubTabBadges();
 
     } catch (error) {
         console.error("Error menambah data:", error);
@@ -19039,8 +19142,40 @@ window.simpanEditData = async () => {
         return;
     }
 
+    // ============================================================
+    // ===== VALIDASI KODE ABSEN (HARUS 4 DIGIT) =====
+    // ============================================================
+    const kodeAbsenEditInput = document.getElementById('edKodeAbsen')?.value || '';
+    const kodeAbsenEditClean = kodeAbsenEditInput.replace(/\D/g, '');
+
+    if (kodeAbsenEditClean && kodeAbsenEditClean.length !== 4) {
+        await showAlertModal({
+            title: 'Kode Absen Tidak Valid',
+            message: 'Kode Absen harus terdiri dari tepat 4 digit angka.',
+            details: `
+                <div style="display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px;">
+                    <span style="font-weight: 600;">Nilai Input</span>
+                    <span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${kodeAbsenEditInput}"</span>
+                    <span style="font-weight: 600;">Jumlah Digit</span>
+                    <span style="color: #e74c3c;">: ${kodeAbsenEditClean.length} digit</span>
+                    <span style="font-weight: 600;">Format Benar</span>
+                    <span style="color: #2ecc71;">: 4 digit angka</span>
+                </div>
+                <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                    <i class="bi bi-lightbulb-fill me-1"></i>
+                    <strong>Contoh:</strong> 0001, 0123, 9999
+                </div>
+            `,
+            type: 'warning',
+            okText: 'OK, Saya Perbaiki',
+            icon: 'bi-123'
+        });
+        document.getElementById('edKodeAbsen')?.focus();
+        return;
+    }
+
     const data = {
-        kode_absen: document.getElementById('edKodeAbsen')?.value || '',
+        kode_absen: kodeAbsenEditClean ? kodeAbsenEditClean.padStart(4, '0') : '',
         nama: document.getElementById('edNama').value.trim(),
         tmp_lahir: document.getElementById('edTmpLahir').value.trim(),
         tgl_lahir: document.getElementById('edTglLahir').value.trim(),
@@ -19219,7 +19354,7 @@ window.simpanEditData = async () => {
     const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'edNsppAsal');
     if (!isNsppValid) return;
 
-    // ===== ✅ VALIDASI WAJIB ISI NO. IJAZAH/MUTASI =====
+    // ===== VALIDASI WAJIB ISI NO. IJAZAH/MUTASI =====
     const cekNoIjazah = await cekWajibNoIjazah({
         statAkhir: data.stat_akhir,
         noIjazah: data.no_ijazah,
@@ -19228,7 +19363,6 @@ window.simpanEditData = async () => {
         context: 'modal'
     });
     if (!cekNoIjazah.valid) return;
-    // ===== SELESAI VALIDASI NO. IJAZAH =====
 
     // ===== VALIDASI: WAJIB ISI MINIMAL SALAH SATU NIK ATAU NISN =====
     if (!data.nik && !data.nisn) {
@@ -19324,6 +19458,7 @@ window.simpanEditData = async () => {
         details: `
             <div style="display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px;">
                 <span style="font-weight: 600;">Nama</span><span>: ${data.nama}</span>
+                <span style="font-weight: 600;">Kode Absen</span><span style="color: #2ecc71; font-weight: 700;">: ${data.kode_absen || '-(kosong)'}</span>
                 <span style="font-weight: 600;">Kelas</span><span>: ${data.kls_now || '-'}</span>
                 <span style="font-weight: 600;">Jenjang</span><span>: ${data.jenjang || '-'}</span>
                 <span style="font-weight: 600;">NIK</span><span>: ${data.nik || '-'}</span>
@@ -19342,9 +19477,6 @@ window.simpanEditData = async () => {
     loader.style.display = 'flex';
 
     try {
-        // ============================================================
-        // ===== 1. SIMPAN FOTO (JIKA ADA) =====
-        // ============================================================
         if (fotoBaru && fotoBaru.startsWith('data:image')) {
             try {
                 await simpanFotoKeKoleksi(docId, fotoBaru);
@@ -19355,79 +19487,49 @@ window.simpanEditData = async () => {
 
         delete data.foto;
 
-        // ============================================================
-        // ===== 2. SIMPAN PERUBAHAN KE FIRESTORE =====
-        // ============================================================
         const docRef = doc(db, collName, docId);
         await updateDoc(docRef, data);
 
-        // ============================================================
-        // ===== 3. TUTUP MODAL EDIT =====
-        // ============================================================
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditData'));
         if (modal) modal.hide();
 
-        // ============================================================
-        // ===== 4. TENTUKAN TBODY ID =====
-        // ============================================================
         const tbodyId = collName === 'data_santri' ? 'tbodySantri' : 
                         (collName === 'data_santri_lulus' ? 'tbodyLulus' : 'tbodyMutasi');
 
-        // ============================================================
-        // ===== 5. 🔥 FIX UTAMA: RESET SEMUA FILTER & SEARCH =====
-        // ============================================================
-        // Simpan nama santri yang baru diedit untuk auto-search nanti
         const namaYangDiedit = data.nama;
 
-        // Reset semua dropdown filter ke default (kosong = semua)
         const filterIds = ['fKls', 'fJj', 'fJk', 'fStat', 'fEmis', 'fProgram'];
         filterIds.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.value = '';
         });
 
-        // Reset search box
         const searchEl = document.getElementById('globalSearch');
         if (searchEl) searchEl.value = '';
 
-        // Reset sort state agar tidak menyembunyikan data
         if (sortState[tbodyId]) {
             sortState[tbodyId].field = null;
             sortState[tbodyId].order = 'asc';
         }
 
-        // Reset halaman ke 1
         currentPage[tbodyId] = 1;
 
-        // Update badge filter count
         if (typeof updateFilterCountBadge === 'function') {
             updateFilterCountBadge();
         }
 
-        // Update UI header sort (hapus tanda panah aktif)
         if (typeof updateSortHeaderUI === 'function') {
             updateSortHeaderUI(tbodyId);
         }
 
-        // ============================================================
-        // ===== 6. 🔥 RELOAD TABEL DENGAN FORCE RELOAD =====
-        // ============================================================
-        // Paksa reload meskipun guard isLoadingPaging aktif
         if (typeof isLoadingPaging !== 'undefined') {
             isLoadingPaging[tbodyId] = false;
         }
 
         await loadDataPaging(collName, tbodyId, 0, 1);
 
-        // ============================================================
-        // ===== 7. 🔥 AUTO-SEARCH NAMA YANG BARU DIEDIT =====
-        // ============================================================
-        // Setelah reload, isi search box dengan nama yang diedit
-        // dan trigger pencarian agar user langsung melihat datanya
         if (searchEl && namaYangDiedit) {
             searchEl.value = namaYangDiedit;
-
-            // Tunggu reload selesai, baru trigger search
             setTimeout(() => {
                 if (typeof debouncedSearch === 'function') {
                     debouncedSearch();
@@ -19435,9 +19537,6 @@ window.simpanEditData = async () => {
             }, 350);
         }
 
-        // ============================================================
-        // ===== 8. SHOW TOAST SUKSES =====
-        // ============================================================
         showToast({
             title: '✅ Data Berhasil Diperbarui',
             message: `Data santri "${data.nama}" berhasil diperbarui. Tabel otomatis menampilkan data yang diedit.`,
@@ -19446,19 +19545,14 @@ window.simpanEditData = async () => {
             icon: 'bi-check-circle-fill'
         });
 
-        // ============================================================
-        // ===== 9. REFRESH DASHBOARD & KOMPONEN LAIN =====
-        // ============================================================
         if (document.querySelector('#tab-dashboard').classList.contains('active')) {
             renderDashboard();
         }
 
-        // Refresh monitoring jika tab monitoring sedang aktif
         if (typeof refreshMonitoringIfActive === 'function') {
             refreshMonitoringIfActive();
         }
 
-        // Update badge jumlah data di sub-tab
         if (typeof updateDataSubTabBadges === 'function') {
             updateDataSubTabBadges();
         }
@@ -19773,13 +19867,32 @@ document.querySelectorAll('#dataSubTab button[data-bs-toggle="pill"]').forEach(s
         });
     }
 
-    // ===== AUTO-FILTER INPUT HANYA ANGKA UNTUK NISN, NIK, KK, NPSN, NSPP DI TABEL =====
+    // ===== AUTO-FILTER INPUT HANYA ANGKA DI TABEL =====
     const numericFields = [
+        'kode_absen',
         'nisn', 
         'nik', 'nik_ayah', 'nik_ibu', 'nik_wali', 
         'no_kk', 'kk_wali', 
         'npsn_asal', 'nspp_asal'
     ];
+    
+    ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(tbodyId => {
+        const tbody = document.getElementById(tbodyId);
+        if (!tbody) return;
+        
+        tbody.addEventListener('input', function(e) {
+            const field = e.target.dataset?.field;
+            if (numericFields.includes(field)) {
+                const cleaned = e.target.value.replace(/\D/g, '');
+                let maxLen = 16;
+                if (field === 'kode_absen') maxLen = 4;
+                else if (field === 'nisn') maxLen = 10;
+                else if (field === 'npsn_asal') maxLen = 8;
+                else if (field === 'nspp_asal') maxLen = 12;
+                e.target.value = cleaned.slice(0, maxLen);
+            }
+        });
+    });
     
     ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(tbodyId => {
         const tbody = document.getElementById(tbodyId);
