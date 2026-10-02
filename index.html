@@ -5700,7 +5700,7 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
     overflow: visible !important;
 }
 
-/* 2. Wrapper filter — default state adalah TERBUKA (tidak collapsed) */
+/* 2. Wrapper filter VervalPD */
 #vervalpdFilterWrapper {
     display: block !important;
     visibility: visible !important;
@@ -5710,9 +5710,17 @@ body.hide-bulk-mutasi #filterSectionWrapper button[onclick*="bulkMoveData"][oncl
     padding: 20px 25px !important;
     margin: 0 10px 20px 10px !important;
     border-radius: 12px !important;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08) !important;
-    border: 1px solid #e9ecef !important;
+    box-shadow: var(--card-shadow) !important;
+    border: 1px solid var(--border-color) !important;
+    background: var(--bg-card) !important;
     transition: all 0.3s ease !important;
+}
+
+/* Dark mode */
+[data-theme="dark"] #vervalpdFilterWrapper {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4) !important;
 }
 
 /* 3. State COLLAPSED — benar-benar tertutup */
@@ -5824,90 +5832,364 @@ body.on-dashboard #vervalpdFilterWrapper:not(.collapsed) {
 
 
 /* ============================================================
-   ===== FIELD VERVALPD TERISI = MERAH + FONT PUTIH =====
+   ===== TABEL VERVALPD - INPUT VIA SEL (DROPDOWN) =====
    ============================================================ */
 
-/* Select field yang terisi (bernilai masalah) */
-#modalVervalPD .form-select.vpd-field-terisi {
-    background-color: #e74c3c !important;
-    color: #ffffff !important;
-    border-color: #c0392b !important;
-    font-weight: 600 !important;
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+/* ===== TABEL UTAMA VERVALPD ===== */
+#tableVervalPD {
+    margin-bottom: 0;
+    font-size: 0.8rem;
+    table-layout: auto;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-#modalVervalPD .form-select.vpd-field-terisi:focus {
-    background-color: #c0392b !important;
-    color: #ffffff !important;
-    border-color: #a93226 !important;
-    box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.35) !important;
+/* Header tabel VervalPD - sticky */
+#tableVervalPD thead {
+    position: sticky;
+    top: 0;
+    z-index: 20;
 }
 
-/* Option di dalam select tetap terbaca */
-#modalVervalPD .form-select.vpd-field-terisi option {
+#tableVervalPD thead th {
+    background: var(--bg-table-header) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    padding: 10px 8px !important;
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+/* Kolom No & Nama - sticky horizontal */
+#tableVervalPD thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 22;
+    min-width: 50px;
+    background: var(--bg-table-header) !important;
+}
+
+#tableVervalPD thead th:nth-child(2) {
+    position: sticky;
+    left: 50px;
+    z-index: 22;
+    min-width: 220px;
+    background: var(--bg-table-header) !important;
+    border-right: 2px solid rgba(255, 255, 255, 0.15) !important;
+    text-align: left;
+}
+
+/* Body baris */
+#tableVervalPD tbody tr {
+    transition: background 0.2s ease;
+}
+
+#tableVervalPD tbody tr:hover {
+    background: var(--bg-card-hover);
+}
+
+#tableVervalPD tbody td {
+    padding: 4px 6px !important;
+    vertical-align: middle;
+    border-color: var(--border-color);
+    white-space: nowrap;
+    transition: background 0.15s ease;
+}
+
+/* Kolom No & Nama sticky di body */
+#tableVervalPD tbody td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background: var(--bg-card);
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-right: 1px solid var(--border-color);
+}
+
+#tableVervalPD tbody td:nth-child(2) {
+    position: sticky;
+    left: 50px;
+    z-index: 5;
+    background: var(--bg-card);
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-right: 2px solid var(--border-color);
+}
+
+#tableVervalPD tbody tr:hover td:first-child,
+#tableVervalPD tbody tr:hover td:nth-child(2) {
+    background: var(--bg-card-hover);
+}
+
+/* ===== DROPDOWN DI SEL TABEL VERVALPD ===== */
+.vpd-cell-select {
+    width: 100%;
+    min-width: 100px;
+    font-size: 0.72rem !important;
+    padding: 4px 6px !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--border-color) !important;
+    background-color: var(--bg-input);
+    color: var(--text-muted);
+    font-weight: normal;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.vpd-cell-select:hover {
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    border-color: var(--accent-color) !important;
+}
+
+.vpd-cell-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+    border-color: var(--accent-color) !important;
     background-color: #ffffff !important;
-    color: #2c3e50 !important;
 }
 
-/* Input field yang terisi */
-#modalVervalPD .form-control.vpd-field-terisi {
-    background-color: #e74c3c !important;
-    color: #ffffff !important;
-    border-color: #c0392b !important;
-    font-weight: 600 !important;
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+/* ===== INPUT TEXT CUSTOM DI SEL TABEL VERVALPD ===== */
+.vpd-custom-input {
+    width: 100%;
+    min-width: 100px;
+    font-size: 0.72rem !important;
+    padding: 4px 6px !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--border-color) !important;
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
 }
 
-#modalVervalPD .form-control.vpd-field-terisi:focus {
-    background-color: #c0392b !important;
-    color: #ffffff !important;
-    border-color: #a93226 !important;
-    box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.35) !important;
+.vpd-custom-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.25);
+    border-color: #9b59b6 !important;
+    background-color: #ffffff !important;
 }
 
-#modalVervalPD .form-control.vpd-field-terisi::placeholder {
-    color: rgba(255, 255, 255, 0.7) !important;
+/* ===== HEADER KOLOM CUSTOM DI VERVALPD ===== */
+#vpdTableHeaderRow th[data-custom-key] {
+    background: linear-gradient(135deg, #7d3c98, #9b59b6) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    min-width: 130px;
 }
 
-/* Field readonly (Kelas & Jenjang) yang terisi */
-#modalVervalPD .form-control.vpd-field-terisi[readonly] {
-    background-color: #e74c3c !important;
-    color: #ffffff !important;
-    border-color: #c0392b !important;
-    cursor: not-allowed;
-}
-
-/* Label field yang terisi juga diberi warna merah */
-#modalVervalPD .form-label.vpd-label-terisi {
-    color: #e74c3c !important;
-    font-weight: 700 !important;
-}
-
-#modalVervalPD .form-label.vpd-label-terisi::after {
-    content: ' ⚠';
-    font-size: 0.75rem;
-    color: #e74c3c;
-}
-
-/* Custom field yang terisi */
-#modalVervalPD .custom-value.vpd-field-terisi {
-    background-color: #e74c3c !important;
-    color: #ffffff !important;
-    border-color: #c0392b !important;
-    font-weight: 600 !important;
-}
-
-/* Dark mode */
-[data-theme="dark"] #modalVervalPD .form-select.vpd-field-terisi,
-[data-theme="dark"] #modalVervalPD .form-control.vpd-field-terisi,
-[data-theme="dark"] #modalVervalPD .custom-value.vpd-field-terisi {
-    background-color: #c0392b !important;
-    color: #ffffff !important;
-    border-color: #e74c3c !important;
-}
-
-[data-theme="dark"] #modalVervalPD .form-label.vpd-label-terisi {
+#vpdTableHeaderRow th[data-custom-key] .btn {
     color: #ff6b6b !important;
+    opacity: 0.8;
+    transition: all 0.2s;
+}
+
+#vpdTableHeaderRow th[data-custom-key] .btn:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+/* ===== BARIS VERVALPD DENGAN PERUBAHAN BELUM TERSIMPAN ===== */
+#tableVervalPD tbody tr.row-belum-tersimpan {
+    background: rgba(243, 156, 18, 0.08) !important;
+}
+
+#tableVervalPD tbody tr.row-belum-tersimpan:hover {
+    background: rgba(243, 156, 18, 0.15) !important;
+}
+
+#tableVervalPD tbody tr.row-belum-tersimpan td {
+    border-color: rgba(243, 156, 18, 0.3) !important;
+}
+
+/* ===== SCROLLBAR TABEL VERVALPD ===== */
+#tableVervalPD::-webkit-scrollbar,
+div:has(> #tableVervalPD)::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+#tableVervalPD::-webkit-scrollbar-track,
+div:has(> #tableVervalPD)::-webkit-scrollbar-track {
+    background: var(--bg-body);
+    border-radius: 8px;
+}
+
+#tableVervalPD::-webkit-scrollbar-thumb,
+div:has(> #tableVervalPD)::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 8px;
+}
+
+#tableVervalPD::-webkit-scrollbar-thumb:hover,
+div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* ===== BADGE STATUS DI TABEL VERVALPD ===== */
+#tableVervalPD .badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    letter-spacing: 0.3px;
+}
+
+/* ===== DARK MODE UNTUK TABEL VERVALPD ===== */
+[data-theme="dark"] #tableVervalPD thead th {
+    background: var(--bg-table-header) !important;
+    color: #e6edf3 !important;
+    border-color: #30363d !important;
+}
+
+[data-theme="dark"] #tableVervalPD tbody td:first-child,
+[data-theme="dark"] #tableVervalPD tbody td:nth-child(2) {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] #tableVervalPD tbody tr:hover td:first-child,
+[data-theme="dark"] #tableVervalPD tbody tr:hover td:nth-child(2) {
+    background: var(--bg-card-hover) !important;
+}
+
+[data-theme="dark"] .vpd-cell-select {
+    background-color: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .vpd-cell-select:hover {
+    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2);
+    border-color: var(--accent-color) !important;
+}
+
+[data-theme="dark"] .vpd-cell-select:focus {
+    background-color: #0d1117 !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.25) !important;
+}
+
+[data-theme="dark"] .vpd-custom-input {
+    background-color: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .vpd-custom-input:focus {
+    background-color: #0d1117 !important;
+    border-color: #9b59b6 !important;
+    box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.3) !important;
+}
+
+[data-theme="dark"] #vpdTableHeaderRow th[data-custom-key] {
+    background: linear-gradient(135deg, #5b2c6f, #7d3c98) !important;
+}
+
+[data-theme="dark"] #tableVervalPD tbody tr.row-belum-tersimpan {
+    background: rgba(243, 156, 18, 0.12) !important;
+}
+
+[data-theme="dark"] #tableVervalPD tbody tr.row-belum-tersimpan:hover {
+    background: rgba(243, 156, 18, 0.2) !important;
+}
+
+[data-theme="dark"] #tableVervalPD::-webkit-scrollbar-track {
+    background: #0d1117;
+}
+
+[data-theme="dark"] #tableVervalPD::-webkit-scrollbar-thumb {
+    background: #30363d;
+}
+
+[data-theme="dark"] #tableVervalPD::-webkit-scrollbar-thumb:hover {
+    background: #484f58;
+}
+
+/* ===== RESPONSIVE VERVALPD ===== */
+@media (max-width: 992px) {
+    #tableVervalPD thead th:nth-child(2),
+    #tableVervalPD tbody td:nth-child(2) {
+        min-width: 180px;
+        max-width: 250px;
+    }
+    
+    .vpd-cell-select,
+    .vpd-custom-input {
+        min-width: 90px;
+        font-size: 0.68rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #tableVervalPD thead th:first-child,
+    #tableVervalPD tbody td:first-child {
+        min-width: 40px;
+        font-size: 0.7rem;
+    }
+    
+    #tableVervalPD thead th:nth-child(2),
+    #tableVervalPD tbody td:nth-child(2) {
+        min-width: 150px;
+        max-width: 200px;
+        font-size: 0.72rem;
+    }
+    
+    .vpd-cell-select,
+    .vpd-custom-input {
+        min-width: 80px;
+        font-size: 0.65rem !important;
+        padding: 3px 4px !important;
+    }
+}
+
+
+/* ===== TOOLBAR VERVALPD ===== */
+#sub-analisis-vervalpd-pane .btn-success {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    border: none;
+    box-shadow: 0 2px 8px rgba(46, 204, 113, 0.25);
+}
+
+#sub-analisis-vervalpd-pane .btn-success:hover {
+    background: linear-gradient(135deg, #27ae60, #1e8449);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
+}
+
+#sub-analisis-vervalpd-pane .btn-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border: none;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.25);
+}
+
+#sub-analisis-vervalpd-pane .btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #1f618d);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+/* Badge unsaved indicator */
+#vpdUnsavedBadge {
+    animation: pulseUnsaved 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseUnsaved {
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.4); 
+    }
+    50% { 
+        box-shadow: 0 0 0 6px rgba(243, 156, 18, 0); 
+    }
 }
 </style>
 </head>
@@ -7455,12 +7737,15 @@ body.on-dashboard #vervalpdFilterWrapper:not(.collapsed) {
             <i class="bi bi-shield-exclamation me-2" style="color: #e74c3c;"></i>
             Daftar Masalah VervalPD (Verifikasi Validasi Peserta Didik)
         </h5>
-        <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-sm btn-success" onclick="exportVervalPD()">
-                <i class="bi bi-file-earmark-excel"></i> Export Excel
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <button class="btn btn-sm btn-success" onclick="simpanSemuaVervalPD()">
+                <i class="bi bi-cloud-arrow-up"></i> Simpan Semua
             </button>
-            <button class="btn btn-sm btn-primary" onclick="openModalVervalPD()">
-                <i class="bi bi-plus-lg"></i> Tambah Masalah
+            <button class="btn btn-sm btn-primary" onclick="tambahKolomVervalPD()">
+                <i class="bi bi-plus-lg"></i> Tambah Kolom
+            </button>
+            <button class="btn btn-sm btn-info text-white" onclick="exportVervalPD()">
+                <i class="bi bi-file-earmark-excel"></i> Export Excel
             </button>
             <button class="btn btn-sm btn-warning text-white" onclick="resetFilterVervalPD()">
                 <i class="bi bi-arrow-counterclockwise"></i> Reset Filter
@@ -7476,7 +7761,7 @@ body.on-dashboard #vervalpdFilterWrapper:not(.collapsed) {
         <div class="col-md-3">
             <div class="stat-mini-box" style="border-left: 4px solid #3498db;">
                 <div class="stat-mini-number" id="vpd-total" style="color: #3498db;">0</div>
-                <div class="stat-mini-label">Total Santri Bermasalah</div>
+                <div class="stat-mini-label">Total Santri Aktif</div>
             </div>
         </div>
         <div class="col-md-3">
@@ -7489,7 +7774,7 @@ body.on-dashboard #vervalpdFilterWrapper:not(.collapsed) {
             <div class="stat-mini-box" style="border-left: 4px solid #f39c12;">
                 <div class="stat-mini-number" id="vpd-nik-belum" style="color: #f39c12;">0</div>
                 <div class="stat-mini-label">NIK Belum Padan Dukcapil</div>
-        </div>
+            </div>
         </div>
         <div class="col-md-3">
             <div class="stat-mini-box" style="border-left: 4px solid #9b59b6;">
@@ -7507,251 +7792,228 @@ body.on-dashboard #vervalpdFilterWrapper:not(.collapsed) {
         <span class="filter-count-badge" id="vervalpdFilterCountBadge">0</span>
     </button>
 
-    <!-- ===== PANEL FILTER VERVALPD (SESUAI KOLOM TABEL) ===== -->
-<div class="filter-section-wrapper" id="vervalpdFilterWrapper">
-    <div class="filter-section">
-        
-        <!-- ===== BARIS 1: IDENTITAS SANTRI ===== -->
-        <div class="row g-2 align-items-end mb-3">
-            <div class="col-12">
-                <h6 class="fw-bold mb-0" style="font-size: 0.8rem; color: var(--gold-color); border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
-                    <i class="bi bi-person-badge me-1"></i> Identitas Santri
-                </h6>
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-search me-1"></i>Nama Santri
-                </label>
-                <input type="text" id="vpdSearchNama" class="form-control form-control-sm"
-                       placeholder="🔍 Ketik nama santri..." 
-                       oninput="debouncedRenderVervalPD()">
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-mortarboard me-1"></i>Kelas
-                </label>
-                <select id="vpdFilterKelas" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-                    <option value="">-- Semua Kelas --</option>
-                    <option value="7">Kelas 7</option>
-                    <option value="8">Kelas 8</option>
-                    <option value="9">Kelas 9</option>
-                    <option value="10">Kelas 10</option>
-                    <option value="11">Kelas 11</option>
-                    <option value="12">Kelas 12</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-building me-1"></i>Sekolah
-                </label>
-                <select id="vpdFilterSekolah" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-                    <option value="">-- Semua --</option>
-                    <option value="ada">✅ Ada</option>
-                    <option value="tidak ada">❌ Tidak Ada</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-people me-1"></i>Terdaftar &gt;1 Rombel
-                </label>
-                <select id="vpdFilterRombel" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-                    <option value="">-- Semua --</option>
-                    <option value="1 sekolah atau 1 rombel">1 Sekolah / 1 Rombel</option>
-                    <option value="lebih dari 1 sekolah atau 1 rombel">Lebih dari 1</option>
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-123 me-1"></i>Keunikan NISN
-                </label>
-                <select id="vpdFilterNisn" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-                    <option value="">-- Semua --</option>
-                    <option value="unik">✅ Unik</option>
-                    <option value="ganda">⚠️ Ganda</option>
-                    <option value="tidak sesuai format">❌ Tidak Sesuai Format</option>
-                    <option value="kosong">⬜ Kosong</option>
-                </select>
+    <!-- Panel Filter (sama seperti sebelumnya) -->
+    <div class="filter-section-wrapper" id="vervalpdFilterWrapper">
+        <div class="filter-section">
+            <div class="row g-2 align-items-end mb-3">
+                <div class="col-12">
+                    <h6 class="fw-bold mb-0" style="font-size: 0.8rem; color: var(--gold-color); border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
+                        <i class="bi bi-person-badge me-1"></i> Filter Data
+                    </h6>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Nama Santri</label>
+                    <input type="text" id="vpdSearchNama" class="form-control form-control-sm"
+                           placeholder="🔍 Ketik nama..." oninput="debouncedRenderVervalPD()">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold text-muted">Kelas</label>
+                    <select id="vpdFilterKelas" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold text-muted">Status Masalah</label>
+                    <select id="vpdFilterStatusMasalah" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="ada_masalah">⚠️ Ada Masalah</option>
+                        <option value="tidak_ada">✅ Tidak Ada Masalah</option>
+                        <option value="belum_diisi">⬜ Belum Diisi</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold text-muted">Sekolah</label>
+                    <select id="vpdFilterSekolah" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="ada">✅ Ada</option>
+                        <option value="tidak ada">❌ Tidak Ada</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Terdaftar &gt;1 Rombel</label>
+                    <select id="vpdFilterRombel" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="1 sekolah atau 1 rombel">1 Sekolah / 1 Rombel</option>
+                        <option value="lebih dari 1 sekolah atau 1 rombel">Lebih dari 1</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Keunikan NISN</label>
+                    <select id="vpdFilterNisn" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="unik">✅ Unik</option>
+                        <option value="ganda">⚠️ Ganda</option>
+                        <option value="tidak sesuai format">❌ Tidak Sesuai Format</option>
+                        <option value="kosong">⬜ Kosong</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">NIK Dukcapil</label>
+                    <select id="vpdFilterNikDukcapil" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="ditemukan">✅ Ditemukan</option>
+                        <option value="belum dipadankan/tidak ditemukan">❌ Belum Dipadankan</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">NIK Ganda</label>
+                    <select id="vpdFilterNikGanda" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="unik">✅ Unik</option>
+                        <option value="ganda">⚠️ Ganda</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Nama</label>
+                    <select id="vpdFilterNama" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="padan dukcapil">✅ Padan</option>
+                        <option value="tidak padan dukcapil">❌ Tidak Padan</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Tempat Lahir</label>
+                    <select id="vpdFilterTmpLahir" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="padan dukcapil">✅ Padan</option>
+                        <option value="tidak padan dukcapil">❌ Tidak Padan</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Tanggal Lahir</label>
+                    <select id="vpdFilterTglLahir" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="padan dukcapil">✅ Padan</option>
+                        <option value="tidak padan dukcapil">❌ Tidak Padan</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Nama Ibu Kandung</label>
+                    <select id="vpdFilterNamaIbu" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="padan dukcapil">✅ Padan</option>
+                        <option value="tidak padan dukcapil">❌ Tidak Padan</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Jenis Kelamin</label>
+                    <select id="vpdFilterJk" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="padan dukcapil">✅ Padan</option>
+                        <option value="tidak padan dukcapil">❌ Tidak Padan</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Desa/Kelurahan</label>
+                    <select id="vpdFilterDesa" class="form-select form-select-sm" onchange="renderVervalPDTable()">
+                        <option value="">-- Semua --</option>
+                        <option value="terisi">✅ Terisi</option>
+                        <option value="tidak terisi">❌ Tidak Terisi</option>
+                    </select>
+                </div>
+                <div class="col-12 mt-3" id="vpdCustomFilterSection" style="display: none;">
+                    <h6 class="fw-bold mb-0" style="font-size: 0.8rem; color: #9b59b6; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
+                        <i class="bi bi-funnel-fill me-1"></i> Filter Kolom Tambahan
+                    </h6>
+                </div>
+                <div class="row g-2 align-items-end w-100" id="vpdCustomFilterContainer"></div>
+                <div class="col-md-3 ms-auto">
+                    <label class="form-label small fw-semibold text-muted d-block">&nbsp;</label>
+                    <div class="d-flex gap-2 justify-content-end">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="resetFilterVervalPD()">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="renderVervalPDTable()">
+                            <i class="bi bi-funnel me-1"></i> Terapkan
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- ===== BARIS 2: MASALAH DUKCAPIL ===== -->
-        <div class="row g-2 align-items-end mb-3">
-            <div class="col-12">
-                <h6 class="fw-bold mb-0" style="font-size: 0.8rem; color: var(--gold-color); border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
-                    <i class="bi bi-shield-exclamation me-1"></i> Masalah Dukcapil
-                </h6>
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-person-vcard me-1"></i>NIK Dukcapil
-                </label>
-                <select id="vpdFilterNikDukcapil" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-                    <option value="">-- Semua --</option>
-                    <option value="ditemukan">✅ Ditemukan</option>
-                    <option value="belum dipadankan/tidak ditemukan">❌ Belum Dipadankan</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-copy me-1"></i>NIK Ganda
-                </label>
-                <select id="vpdFilterNikGanda" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-                    <option value="">-- Semua --</option>
-                    <option value="unik">✅ Unik</option>
-                    <option value="ganda">⚠️ Ganda</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-person me-1"></i>Nama
-                </label>
-                <select id="vpdFilterNama" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-                    <option value="">-- Semua --</option>
-                    <option value="padan dukcapil">✅ Padan</option>
-                    <option value="tidak padan dukcapil">❌ Tidak Padan</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-geo-alt me-1"></i>Tempat Lahir
-                </label>
-                <select id="vpdFilterTmpLahir" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-                    <option value="">-- Semua --</option>
-                    <option value="padan dukcapil">✅ Padan</option>
-                    <option value="tidak padan dukcapil">❌ Tidak Padan</option>
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label small fw-semibold text-muted">
-                    <i class="bi bi-calendar-event me-1"></i>Tanggal Lahir
-                </label>
-                <select id="vpdFilterTglLahir" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-                    <option value="">-- Semua --</option>
-                    <option value="padan dukcapil">✅ Padan</option>
-                    <option value="tidak padan dukcapil">❌ Tidak Padan</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- ===== BARIS 3: MASALAH LAINNYA ===== -->
-<div class="row g-2 align-items-end">
-    <div class="col-12">
-        <h6 class="fw-bold mb-0" style="font-size: 0.8rem; color: var(--gold-color); border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
-            <i class="bi bi-list-check me-1"></i> Masalah Lainnya
-        </h6>
     </div>
 
-    <!-- ✅ TAMBAHKAN INI: Nama Ibu Kandung -->
-    <div class="col-md-3">
-        <label class="form-label small fw-semibold text-muted">
-            <i class="bi bi-person-heart me-1"></i>Nama Ibu Kandung
-        </label>
-        <select id="vpdFilterNamaIbu" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-            <option value="">-- Semua --</option>
-            <option value="padan dukcapil">✅ Padan Dukcapil</option>
-            <option value="tidak padan dukcapil">❌ Tidak Padan Dukcapil</option>
-        </select>
-    </div>
-
-    <!-- ✅ TAMBAHKAN INI: Jenis Kelamin -->
-    <div class="col-md-3">
-        <label class="form-label small fw-semibold text-muted">
-            <i class="bi bi-gender-ambiguous me-1"></i>Jenis Kelamin
-        </label>
-        <select id="vpdFilterJk" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-            <option value="">-- Semua --</option>
-            <option value="padan dukcapil">✅ Padan Dukcapil</option>
-            <option value="tidak padan dukcapil">❌ Tidak Padan Dukcapil</option>
-        </select>
-    </div>
-
-    <!-- ✅ TAMBAHKAN INI: Desa/Kelurahan -->
-    <div class="col-md-3">
-        <label class="form-label small fw-semibold text-muted">
-            <i class="bi bi-geo-alt me-1"></i>Desa/Kelurahan
-        </label>
-        <select id="vpdFilterDesa" class="form-select form-select-sm" onchange="renderVervalPDTable()">
-            <option value="">-- Semua --</option>
-            <option value="terisi">✅ Terisi</option>
-            <option value="tidak terisi">❌ Tidak Terisi</option>
-        </select>
-    </div>
-
-    <!-- Container untuk filter custom -->
-    <div class="col-12 mt-3" id="vpdCustomFilterSection" style="display: none;">
-        <h6 class="fw-bold mb-0" style="font-size: 0.8rem; color: #9b59b6; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
-            <i class="bi bi-funnel-fill me-1"></i> Filter Kolom Tambahan
-        </h6>
-    </div>
-    <div class="row g-2 align-items-end w-100" id="vpdCustomFilterContainer"></div>
-
-    <!-- TOMBOL AKSI -->
-    <div class="col-md-3">
-        <label class="form-label small fw-semibold text-muted d-block">&nbsp;</label>
-        <div class="d-flex gap-2 justify-content-end">
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="resetFilterVervalPD()">
-                <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Filter
-            </button>
-            <button type="button" class="btn btn-sm btn-primary" onclick="renderVervalPDTable()">
-                <i class="bi bi-funnel me-1"></i> Terapkan Filter
-            </button>
-        </div>
-    </div>
-</div>
-
-    </div><!-- end .filter-section -->
-</div><!-- end .filter-section-wrapper -->
-
-    <!-- Tabel VervalPD -->
+    <!-- ===== TABEL VERVALPD DENGAN INPUT LANGSUNG ===== -->
     <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card);">
         <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                 <div class="stat-label" style="color: var(--text-muted); margin-bottom: 0;">
-                    <i class="bi bi-table me-1"></i> Detail Masalah VervalPD
+                    <i class="bi bi-table me-1"></i> Tabel Masalah VervalPD
+                    <span class="badge bg-info ms-2" style="font-size: 0.65rem;">
+                        <i class="bi bi-pencil-square me-1"></i>Klik sel untuk mengisi
+                    </span>
                 </div>
-                <div>
+                <div class="d-flex gap-2 align-items-center">
                     <span class="badge bg-secondary" id="vpdShowingInfo">Menampilkan: 0 data</span>
+                    <span class="badge bg-warning text-dark" id="vpdUnsavedBadge" style="display: none;">
+                        <i class="bi bi-exclamation-circle me-1"></i>
+                        <span id="vpdUnsavedCount">0</span> belum disimpan
+                    </span>
                 </div>
             </div>
-            <div style="max-height: 600px; overflow: auto;">
-                <table class="table table-sm table-bordered" id="tableVervalPD">
-                    <thead style="position: sticky; top: 0; z-index: 10;">
+
+            <div style="max-height: 65vh; overflow: auto; border: 1px solid var(--border-color); border-radius: 8px;">
+                <table class="table table-sm table-bordered editable-table" id="tableVervalPD" style="margin-bottom: 0;">
+                    <thead style="position: sticky; top: 0; z-index: 20;">
                         <tr id="vpdTableHeaderRow">
-                            <th style="min-width: 40px;">No</th>
-                            <th style="min-width: 200px;">Nama Santri</th>
-                            <th style="min-width: 70px;">Kelas</th>
-                            <th style="min-width: 90px;">Sekolah</th>
-                            <th style="min-width: 130px;">Terdaftar >1 Rombel</th>
-                            <th style="min-width: 130px;">Keunikan NISN</th>
-                            <th style="min-width: 140px;">NIK Dukcapil</th>
-                            <th style="min-width: 100px;">NIK Ganda</th>
-                            <th style="min-width: 130px;">Nama</th>
-                            <th style="min-width: 130px;">Tempat Lahir</th>
-                            <th style="min-width: 130px;">Tanggal Lahir</th>
-                            <th style="min-width: 130px;">Nama Ibu</th>
-                            <th style="min-width: 130px;">Jenis Kelamin</th>
-                            <th style="min-width: 110px;">Desa/Kelurahan</th>
-                            <!-- Kolom custom akan di-inject di sini oleh JavaScript -->
-                            <th style="min-width: 90px;">Aksi</th>
+                            <th style="min-width: 50px; background: var(--bg-table-header); color: white; text-align: center; position: sticky; left: 0; z-index: 21;">No</th>
+                            <th style="min-width: 220px; background: var(--bg-table-header); color: white; text-align: left; position: sticky; left: 50px; z-index: 21; border-right: 2px solid rgba(255,255,255,0.15);">
+                                Nama Santri
+                            </th>
+                            <th style="min-width: 70px; background: var(--bg-table-header); color: white; text-align: center;">Kelas</th>
+                            <th style="min-width: 130px; background: var(--bg-table-header); color: white;">Sekolah</th>
+                            <th style="min-width: 130px; background: var(--bg-table-header); color: white;">Terdaftar &gt;1 Rombel</th>
+                            <th style="min-width: 130px; background: var(--bg-table-header); color: white;">Keunikan NISN</th>
+                            <th style="min-width: 140px; background: var(--bg-table-header); color: white;">NIK Dukcapil</th>
+                            <th style="min-width: 110px; background: var(--bg-table-header); color: white;">NIK Ganda</th>
+                            <th style="min-width: 130px; background: var(--bg-table-header); color: white;">Nama</th>
+                            <th style="min-width: 130px; background: var(--bg-table-header); color: white;">Tempat Lahir</th>
+                            <th style="min-width: 130px; background: var(--bg-table-header); color: white;">Tanggal Lahir</th>
+                            <th style="min-width: 130px; background: var(--bg-table-header); color: white;">Nama Ibu</th>
+                            <th style="min-width: 130px; background: var(--bg-table-header); color: white;">Jenis Kelamin</th>
+                            <th style="min-width: 120px; background: var(--bg-table-header); color: white;">Desa/Kelurahan</th>
+                            <th style="min-width: 100px; background: var(--bg-table-header); color: white; text-align: center;">
+                                Status
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="tableVervalPDBody">
-                        <tr><td colspan="15" class="text-center text-muted py-4">
-                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
-                            Belum ada data. Klik "Tambah Masalah" untuk menambahkan.
-                       </td></tr>
+                        <tr>
+                            <td colspan="15" class="text-center text-muted py-4">
+                                <div class="spinner-border spinner-border-sm text-primary me-2"></i>
+                                Memuat data santri aktif...
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Pagination VervalPD -->
+            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="small text-muted">Tampilkan:</span>
+                    <select class="form-select form-select-sm" style="width: auto;" onchange="updateVervalPDPageSize(this.value)">
+                        <option value="25">25</option>
+                        <option value="50" selected>50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="all">Semua</option>
+                    </select>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-primary" onclick="changeVervalPDPage(-1)" id="vpdPrevBtn">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <span class="small" id="vpdPageInfo">Halaman 1 dari 1</span>
+                    <button class="btn btn-sm btn-outline-primary" onclick="changeVervalPDPage(1)" id="vpdNextBtn">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -22591,54 +22853,222 @@ window.resetMonitoringFilter = function() {
 
 
 // ============================================================
-// ===== DAFTAR MASALAH VERVALPD =====
+// ===== DAFTAR MASALAH VERVALPD - INPUT VIA SEL TABEL =====
 // ============================================================
 
-let vervalpdDataCache = [];
-let vervalpdSantriList = [];
-let customColumns = []; // { key, label }
+let vervalpdDataCache = [];        // Data vervalpd dari Firestore (key: santri_id)
+let vervalpdSantriList = [];        // Daftar santri aktif
+let vervalpdMergedList = [];       // Gabungan santri + data vervalpd (untuk render tabel)
+let vpdCurrentPage = 1;
+let vpdPageSize = 50;
+let vpdUnsavedChanges = {};         // { santri_id: { field: value } } - perubahan yang belum disimpan
+
+// ===== OPSI DROPDOWN UNTUK SETIAP KOLOM MASALAH =====
+const VPD_DROPDOWN_OPTIONS = {
+    sekolah: {
+        default: 'ada',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'ada', label: '✅ Ada' },
+            { value: 'tidak ada', label: '❌ Tidak Ada' }
+        ]
+    },
+    rombel: {
+        default: '1 sekolah atau 1 rombel',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: '1 sekolah atau 1 rombel', label: '✅ 1 Sekolah / 1 Rombel' },
+            { value: 'lebih dari 1 sekolah atau 1 rombel', label: '⚠️ Lebih dari 1' }
+        ]
+    },
+    nisn: {
+        default: 'unik',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'unik', label: '✅ Unik' },
+            { value: 'ganda', label: '⚠️ Ganda' },
+            { value: 'tidak sesuai format', label: '❌ Tidak Sesuai Format' },
+            { value: 'kosong', label: '⬜ Kosong' }
+        ]
+    },
+    nik_dukcapil: {
+        default: 'ditemukan',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'ditemukan', label: '✅ Ditemukan' },
+            { value: 'belum dipadankan/tidak ditemukan', label: '❌ Belum Dipadankan' }
+        ]
+    },
+    nik_ganda: {
+        default: 'unik',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'unik', label: '✅ Unik' },
+            { value: 'ganda', label: '⚠️ Ganda' }
+        ]
+    },
+    nama_padan: {
+        default: 'padan dukcapil',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'padan dukcapil', label: '✅ Padan Dukcapil' },
+            { value: 'tidak padan dukcapil', label: '❌ Tidak Padan Dukcapil' }
+        ]
+    },
+    tmp_lahir_padan: {
+        default: 'padan dukcapil',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'padan dukcapil', label: '✅ Padan Dukcapil' },
+            { value: 'tidak padan dukcapil', label: '❌ Tidak Padan Dukcapil' }
+        ]
+    },
+    tgl_lahir_padan: {
+        default: 'padan dukcapil',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'padan dukcapil', label: '✅ Padan Dukcapil' },
+            { value: 'tidak padan dukcapil', label: '❌ Tidak Padan Dukcapil' }
+        ]
+    },
+    nama_ibu_padan: {
+        default: 'padan dukcapil',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'padan dukcapil', label: '✅ Padan Dukcapil' },
+            { value: 'tidak padan dukcapil', label: '❌ Tidak Padan Dukcapil' }
+        ]
+    },
+    jk_padan: {
+        default: 'padan dukcapil',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'padan dukcapil', label: '✅ Padan Dukcapil' },
+            { value: 'tidak padan dukcapil', label: '❌ Tidak Padan Dukcapil' }
+        ]
+    },
+    desa: {
+        default: 'terisi',
+        options: [
+            { value: '', label: '-- Pilih --' },
+            { value: 'terisi', label: '✅ Terisi' },
+            { value: 'tidak terisi', label: '❌ Tidak Terisi' }
+        ]
+    }
+};
 
 
+// ===== VARIABEL KOLOM CUSTOM =====
+window.vpdCustomColumns = []; // { key, label, options: [] }
+
+
+// ============================================================
+// ===== LOAD DATA VERVALPD (GABUNGKAN SANTRI + VERVALPD) =====
+// ============================================================
 window.loadVervalPD = async function() {
     const loader = document.getElementById('loader');
     if (loader) loader.style.display = 'flex';
 
     try {
-        // Load data dari koleksi vervalpd
+        // 1. Load daftar santri aktif
+        const snapSantri = await getDocs(collection(db, "data_santri"));
+        vervalpdSantriList = [];
+        snapSantri.forEach(docSnap => {
+            const d = docSnap.data();
+            vervalpdSantriList.push({
+                santri_id: docSnap.id,
+                nama: d.nama || 'Tanpa Nama',
+                kelas: d.kls_now || '-',
+                jenjang: d.jenjang || '-',
+                nik: d.nik || '',
+                nisn: d.nisn || ''
+            });
+        });
+        vervalpdSantriList.sort((a, b) => a.nama.localeCompare(b.nama));
+
+        // 2. Load data vervalpd dari Firestore
         const snapVpd = await getDocs(collection(db, "vervalpd"));
-        vervalpdDataCache = [];
+        const vpdMap = {};
         snapVpd.forEach(docSnap => {
             const data = docSnap.data();
             data.id = docSnap.id;
-            vervalpdDataCache.push(data);
+            const key = data.santri_id || data.nama;
+            vpdMap[key] = data;
         });
 
-        // Load daftar santri untuk dropdown modal
-        if (vervalpdSantriList.length === 0) {
-            const snapSantri = await getDocs(collection(db, "data_santri"));
-            vervalpdSantriList = [];
-            snapSantri.forEach(docSnap => {
-                const d = docSnap.data();
-                vervalpdSantriList.push({
-                    id: docSnap.id,
-                    nama: d.nama || 'Tanpa Nama',
-                    kelas: d.kls_now || '-',
-                    jenjang: d.jenjang || '-'
-                });
-            });
-            vervalpdSantriList.sort((a, b) => a.nama.localeCompare(b.nama));
-        }
+        // 3. Gabungkan: setiap santri + data vervalpd-nya (jika ada)
+        vervalpdMergedList = vervalpdSantriList.map(santri => {
+            const vpd = vpdMap[santri.santri_id] || null;
+            
+            // ✅ PERBAIKAN: Ambil custom fields dari nested object `_custom_fields`
+            const customFields = vpd?._custom_fields || {};
+            const customLabels = vpd?._custom_fields_labels || {};
+            
+            return {
+                santri_id: santri.santri_id,
+                nama: santri.nama,
+                kelas: santri.kelas,
+                jenjang: santri.jenjang,
+                nik: santri.nik,
+                nisn: santri.nisn,
+                // Data vervalpd
+                vpd_id: vpd?.id || null,
+                sekolah: vpd?.sekolah || '',
+                rombel: vpd?.rombel || '',
+                nisn_masalah: vpd?.nisn || '',
+                nik_dukcapil: vpd?.nik_dukcapil || '',
+                nik_ganda: vpd?.nik_ganda || '',
+                nama_padan: vpd?.nama_padan || '',
+                tmp_lahir_padan: vpd?.tmp_lahir_padan || '',
+                tgl_lahir_padan: vpd?.tgl_lahir_padan || '',
+                nama_ibu_padan: vpd?.nama_ibu_padan || '',
+                jk_padan: vpd?.jk_padan || '',
+                desa: vpd?.desa || '',
+                // ✅ Custom fields di-spread ke level atas
+                ...customFields,
+                // ✅ Simpan labels untuk reference
+                _custom_labels: customLabels
+            };
+        });
 
-        // ===== DETEKSI KOLOM CUSTOM DARI DATA =====
+        // ============================================================
+        // ===== ✅ TERAPKAN NILAI DEFAULT CENTANG HIJAU =====
+        // ===== Semua sel yang kosong otomatis terisi nilai positif =====
+        // ============================================================
+        const VPD_DEFAULT_VALUES = {
+            sekolah: 'ada',
+            rombel: '1 sekolah atau 1 rombel',
+            nisn_masalah: 'unik',
+            nik_dukcapil: 'ditemukan',
+            nik_ganda: 'unik',
+            nama_padan: 'padan dukcapil',
+            tmp_lahir_padan: 'padan dukcapil',
+            tgl_lahir_padan: 'padan dukcapil',
+            nama_ibu_padan: 'padan dukcapil',
+            jk_padan: 'padan dukcapil',
+            desa: 'terisi'
+        };
+
+        vervalpdMergedList.forEach(d => {
+            Object.keys(VPD_DEFAULT_VALUES).forEach(field => {
+                const val = (d[field] || '').toString().trim();
+                if (val === '') {
+                    d[field] = VPD_DEFAULT_VALUES[field];
+                }
+            });
+        });
+        // ===== SELESAI TERAPKAN NILAI DEFAULT =====
+
+        // 4. Deteksi kolom custom (dari data + labels yang tersimpan)
         detectCustomColumnsFromData();
         renderCustomTableHeaders();
         renderCustomFilters();
 
-        // Update ringkasan & tabel
+        // 5. Reset halaman & render
+        vpdCurrentPage = 1;
         updateVervalPDSummary();
         renderVervalPDTable();
         updateVervalPDBadge();
-        populateSantriDropdownVervalPD();
 
     } catch (error) {
         console.error("Error load vervalpd:", error);
@@ -22657,150 +23087,110 @@ window.loadVervalPD = async function() {
 };
 
 
-// ===== POPULATE DROPDOWN SANTRI =====
-function populateSantriDropdownVervalPD() {
-    const select = document.getElementById('vpdNamaSantri');
-    if (!select) return;
-    const currentVal = select.value;
-    select.innerHTML = '<option value="">-- Pilih Santri --</option>';
-    vervalpdSantriList.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.id;
-        opt.textContent = `${s.nama} (Kelas ${s.kelas} - ${s.jenjang})`;
-        opt.dataset.nama = s.nama;
-        opt.dataset.kelas = s.kelas;
-        opt.dataset.jenjang = s.jenjang;
-        select.appendChild(opt);
-    });
-    if (currentVal) select.value = currentVal;
-}
-
-// ===== AUTO-ISI KELAS & JENJANG SAAT PILIH SANTRI =====
-window.onPilihSantriVervalPD = function() {
-    const select = document.getElementById('vpdNamaSantri');
-    const opt = select.options[select.selectedIndex];
-    document.getElementById('vpdKelas').value = opt?.dataset.kelas || '';
-    document.getElementById('vpdJenjang').value = opt?.dataset.jenjang || '';
-};
-
-
-// ===== VARIABEL GLOBAL UNTUK KOLOM CUSTOM =====
-window.vpdCustomColumns = []; // { key, label }
-
-
-// ===== FUNGSI: DETEKSI SEMUA KOLOM CUSTOM DARI DATA (VERSI PERBAIKAN) =====
 function detectCustomColumnsFromData() {
-    const customMap = new Map(); // key -> label
+    const customMap = new Map();
     
-    // ============================================================
-    // ===== LANGKAH 1: Kumpulkan semua key & label yang ada =====
-    // ============================================================
-    const keyToLabel = new Map();
-    const keyHasValue = new Map(); // key -> boolean (apakah ada minimal 1 data terisi)
+    // ✅ HANYA baca dari Firestore, jangan merge dengan existingColumns
+    const rawVpd = vervalpdMergedList.filter(d => d.vpd_id);
     
-    vervalpdDataCache.forEach(d => {
-        // Baca dari metadata label dulu (prioritas)
-        if (d._custom_labels && typeof d._custom_labels === 'object') {
-            Object.keys(d._custom_labels).forEach(key => {
-                if (!keyToLabel.has(key)) {
-                    keyToLabel.set(key, d._custom_labels[key]);
-                }
-            });
-        }
+    rawVpd.forEach(d => {
+        const savedLabels = d._custom_labels || {};
         
-        // Deteksi dari key
         Object.keys(d).forEach(k => {
-            if (k.startsWith('custom_') && k !== 'custom_' && k !== '_custom_labels') {
-                // Generate label dari key jika belum ada
-                if (!keyToLabel.has(k)) {
-                    let label = k.replace('custom_', '').replace(/_/g, ' ');
-                    label = label.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-                    keyToLabel.set(k, label);
-                }
-                
-                // Cek apakah ada nilai terisi
+            if (k.startsWith('custom_')) {
+                // ✅ Cek apakah ada nilai yang benar-benar tersimpan
                 const val = (d[k] || '').toString().trim();
-                if (val !== '') {
-                    keyHasValue.set(k, true);
-                } else if (!keyHasValue.has(k)) {
-                    keyHasValue.set(k, false);
+                if (val !== '' && val !== '__DELETE__') {
+                    if (!customMap.has(k)) {
+                        let label = savedLabels[k] || 
+                            k.replace('custom_', '').replace(/_/g, ' ')
+                             .split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                             .join(' ');
+                        customMap.set(k, label);
+                    }
                 }
             }
         });
     });
-    
-    // ============================================================
-    // ===== LANGKAH 2: Filter HANYA kolom yang punya minimal 1 nilai =====
-    // ============================================================
-    keyToLabel.forEach((label, key) => {
-        const hasAnyValue = keyHasValue.get(key) === true;
-        
-        if (hasAnyValue) {
-            customMap.set(key, label);
-        }
-        // Kolom yang semua nilainya kosong TIDAK dimasukkan
+
+    // ❌ HAPUS BLOK INI — ini yang membuat kolom "hidup kembali"
+    // const existingColumns = window.vpdCustomColumns || [];
+    // const existingMap = new Map(existingColumns.map(c => [c.key, c.label]));
+    // existingMap.forEach((label, key) => {
+    //     if (!customMap.has(key)) {
+    //         customMap.set(key, label);
+    //         keyHasValue.set(key, true);
+    //     }
+    // });
+
+    window.vpdCustomColumns = [];
+    customMap.forEach((label, key) => {
+        window.vpdCustomColumns.push({ key, label });
     });
-    
-    // Konversi ke array
-    window.vpdCustomColumns = Array.from(customMap.entries()).map(([key, label]) => ({
-        key,
-        label
-    }));
-    
-    return window.vpdCustomColumns;
 }
 
 
-// ===== FUNGSI: RENDER HEADER KOLOM CUSTOM DI TABEL =====
+// ============================================================
+// ===== RENDER HEADER KOLOM CUSTOM =====
+// ============================================================
 function renderCustomTableHeaders() {
     const headerRow = document.getElementById('vpdTableHeaderRow');
     if (!headerRow) return;
-    
-    // Hapus th custom lama (jika ada)
+
+    // Hapus th custom lama
     headerRow.querySelectorAll('th[data-custom-key]').forEach(th => th.remove());
-    
-    // Cari posisi th "Aksi" (kolom terakhir)
-    const aksiTh = headerRow.querySelector('th:last-child');
-    if (!aksiTh) return;
-    
-    // Inject th custom sebelum "Aksi"
+
+    // Cari posisi th "Status" (sebelum kolom terakhir)
+    const statusTh = headerRow.querySelector('th:last-child');
+    if (!statusTh) return;
+
     window.vpdCustomColumns.forEach(col => {
         const th = document.createElement('th');
         th.setAttribute('data-custom-key', col.key);
         th.style.minWidth = '130px';
-        th.style.backgroundColor = 'rgba(155, 89, 182, 0.15)';
-        th.innerHTML = `<i class="bi bi-tag-fill me-1" style="font-size: 0.7rem; color: #9b59b6;"></i>${col.label}`;
-        headerRow.insertBefore(th, aksiTh);
+        th.style.background = 'var(--bg-table-header)';
+        th.style.color = 'white';
+        th.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+                <span><i class="bi bi-tag-fill me-1" style="font-size: 0.7rem; color: #bb8fce;"></i>${col.label}</span>
+                <button class="btn btn-sm p-0" onclick="hapusKolomVervalPD('${col.key}')" 
+                        title="Hapus kolom" style="color: #ff6b6b; font-size: 0.7rem;">
+                    <i class="bi bi-x-circle-fill"></i>
+                </button>
+            </div>
+        `;
+        headerRow.insertBefore(th, statusTh);
     });
 }
 
-// ===== FUNGSI: RENDER FILTER CUSTOM DI PANEL FILTER =====
+
+// ============================================================
+// ===== RENDER FILTER KOLOM CUSTOM =====
+// ============================================================
 function renderCustomFilters() {
     const container = document.getElementById('vpdCustomFilterContainer');
     const section = document.getElementById('vpdCustomFilterSection');
     if (!container || !section) return;
-    
-    // Kosongkan container
+
     container.innerHTML = '';
-    
+
     if (window.vpdCustomColumns.length === 0) {
         section.style.display = 'none';
         return;
     }
-    
+
     section.style.display = 'block';
-    
-    // Buat filter untuk setiap kolom custom
+
+
     window.vpdCustomColumns.forEach(col => {
-        // Ambil unique values dari data
         const uniqueValues = new Set();
-        vervalpdDataCache.forEach(d => {
+        vervalpdMergedList.forEach(d => {
             const val = (d[col.key] || '').trim();
-            if (val) uniqueValues.add(val);
+            if (val && val !== '__DELETE__') uniqueValues.add(val);
         });
-        
+
         const valuesArray = Array.from(uniqueValues).sort();
-        
+
         const div = document.createElement('div');
         div.className = 'col-md-3';
         div.innerHTML = `
@@ -22818,38 +23208,310 @@ function renderCustomFilters() {
     });
 }
 
-// ===== FUNGSI: RENDER TABEL VERVALPD (VERSI DENGAN KOLOM CUSTOM) =====
+
+// ============================================================
+// ===== TAMBAH KOLOM CUSTOM BARU (VERSI FIX - TANPA SWEETALERT) =====
+// ============================================================
+window.tambahKolomVervalPD = async function() {
+    // ===== BUAT MODAL INPUT DINAMIS =====
+    let modalEl = document.getElementById('modalTambahKolomVPD');
+    
+    if (!modalEl) {
+        modalEl = document.createElement('div');
+        modalEl.id = 'modalTambahKolomVPD';
+        modalEl.className = 'modal fade';
+        modalEl.tabIndex = -1;
+        modalEl.setAttribute('aria-hidden', 'true');
+        modalEl.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
+                <div class="modal-content" style="border-radius: 20px; border: none; overflow: hidden; box-shadow: 0 25px 80px rgba(0,0,0,0.25);">
+                    <div class="modal-header" style="background: linear-gradient(135deg, #7d3c98, #9b59b6); color: white; border-bottom: 3px solid var(--gold-color); padding: 18px 28px;">
+                        <h5 class="modal-title">
+                            <i class="bi bi-plus-circle-fill me-2" style="color: var(--gold-color);"></i>
+                            Tambah Kolom Baru
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" style="padding: 28px 30px; background: var(--bg-card);">
+                        <div style="display: grid; grid-template-columns: 52px 1fr; gap: 16px; align-items: start;">
+                            <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #9b59b6, #7d3c98); display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(155,89,182,0.3);">
+                                <i class="bi bi-tag-fill" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <p style="font-size: 0.9rem; color: var(--text-primary); margin-bottom: 14px;">
+                                    Masukkan nama kolom baru untuk mencatat informasi tambahan terkait masalah VervalPD.
+                                </p>
+                                <label class="form-label fw-bold small" style="color: var(--text-muted);">
+                                    Nama Kolom <span style="color: #e74c3c;">*</span>
+                                </label>
+                                <input type="text" 
+                                       id="inputNamaKolomVPD" 
+                                       class="form-control" 
+                                       placeholder="Contoh: Catatan Tambahan"
+                                       maxlength="50"
+                                       style="border-radius: 10px; border: 2px solid var(--border-color); padding: 10px 14px; font-size: 0.9rem;">
+                                <small class="text-muted" style="font-size: 0.7rem; display: block; margin-top: 6px;">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Nama kolom akan otomatis dikonversi menjadi key unik.
+                                </small>
+                                <div id="errorNamaKolom" style="display: none; margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                                    <span id="errorNamaKolomText"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="padding: 16px 28px; background: var(--bg-card); border-top: 1px solid var(--border-color);">
+                        <button type="button" class="btn" data-bs-dismiss="modal"
+                                style="background: #f1f3f5; color: var(--secondary-color); border: none; padding: 10px 24px; border-radius: 10px; font-weight: 600;">
+                            <i class="bi bi-x-circle me-1"></i> Batal
+                        </button>
+                        <button type="button" id="btnSimpanKolomVPD" class="btn"
+                                style="background: linear-gradient(135deg, #9b59b6, #7d3c98); color: white; border: none; padding: 10px 32px; border-radius: 10px; font-weight: 700;">
+                            <i class="bi bi-plus-circle me-1"></i> Tambah Kolom
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modalEl);
+    }
+
+    // Reset input & error
+    const inputEl = document.getElementById('inputNamaKolomVPD');
+    const errorBox = document.getElementById('errorNamaKolom');
+    inputEl.value = '';
+    errorBox.style.display = 'none';
+
+    const modal = new bootstrap.Modal(modalEl);
+
+    // Fungsi proses tambah kolom
+    const prosesTambah = () => {
+        const label = inputEl.value.trim();
+
+        // Validasi kosong
+        if (!label) {
+            document.getElementById('errorNamaKolomText').textContent = 'Nama kolom tidak boleh kosong.';
+            errorBox.style.display = 'block';
+            inputEl.focus();
+            return;
+        }
+
+        // Validasi minimal 3 karakter
+        if (label.length < 3) {
+            document.getElementById('errorNamaKolomText').textContent = 'Nama kolom minimal 3 karakter.';
+            errorBox.style.display = 'block';
+            inputEl.focus();
+            return;
+        }
+
+        // Generate key
+        const key = 'custom_' + label.toLowerCase()
+            .replace(/[^a-z0-9]/g, '_')
+            .replace(/_+/g, '_')
+            .replace(/^_|_$/g, '');
+
+        // Cek duplikat
+        if (window.vpdCustomColumns.some(c => c.key === key)) {
+            document.getElementById('errorNamaKolomText').textContent = `Kolom "${label}" sudah ada di tabel.`;
+            errorBox.style.display = 'block';
+            inputEl.focus();
+            return;
+        }
+
+        // Tambah kolom
+        window.vpdCustomColumns.push({ key, label });
+        renderCustomTableHeaders();
+        renderCustomFilters();
+        renderVervalPDTable();
+
+        modal.hide();
+
+        if (typeof showToast === 'function') {
+            showToast({
+                title: '✅ Kolom Ditambahkan',
+                message: `Kolom "${label}" berhasil ditambahkan. Isi nilai pada sel tabel.`,
+                type: 'success',
+                duration: 3000,
+                icon: 'bi-check-circle-fill'
+            });
+        }
+    };
+
+    // Handler tombol simpan
+    const btnSimpan = document.getElementById('btnSimpanKolomVPD');
+    const newBtnSimpan = btnSimpan.cloneNode(true);
+    btnSimpan.parentNode.replaceChild(newBtnSimpan, btnSimpan);
+    newBtnSimpan.addEventListener('click', prosesTambah);
+
+    // Enter key di input
+    inputEl.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            prosesTambah();
+        }
+    };
+
+    // Reset error saat mengetik
+    inputEl.oninput = () => {
+        errorBox.style.display = 'none';
+    };
+
+    // Fokus otomatis setelah modal tampil
+    modalEl.addEventListener('shown.bs.modal', function() {
+        inputEl.focus();
+    }, { once: true });
+
+    modal.show();
+};
+
+
+window.hapusKolomVervalPD = async function(key) {
+    const col = window.vpdCustomColumns.find(c => c.key === key);
+    if (!col) return;
+
+    const konfirmasi = await showConfirmModal({
+        title: 'Hapus Kolom VervalPD',
+        message: `Apakah Anda yakin ingin menghapus kolom "${col.label}"?`,
+        details: `
+            <div style="padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                <strong>Peringatan:</strong> Kolom ini akan dihapus dari tampilan 
+                <strong>DAN dari database</strong>. Data yang sudah tersimpan akan hilang permanen.
+            </div>
+        `,
+        type: 'danger',
+        okText: 'Ya, Hapus Permanen',
+        cancelText: 'Batal',
+        icon: 'bi-trash-fill'
+    });
+
+    if (!konfirmasi) return;
+
+    const loader = document.getElementById('loader');
+    if (loader) loader.style.display = 'flex';
+
+    try {
+        // ============================================================
+        // ✅ HAPUS FIELD DARI FIRESTORE (SEMUA DOKUMEN VERVALPD)
+        // ============================================================
+        const snap = await getDocs(collection(db, "vervalpd"));
+        const CHUNK_SIZE = 400;
+        const docs = snap.docs;
+        let deletedCount = 0;
+
+        for (let i = 0; i < docs.length; i += CHUNK_SIZE) {
+            const chunk = docs.slice(i, i + CHUNK_SIZE);
+            const batch = writeBatch(db);
+
+            chunk.forEach(docSnap => {
+                const data = docSnap.data();
+                const updateData = {};
+
+                // Hapus dari nested _custom_fields
+                if (data._custom_fields && data._custom_fields[key] !== undefined) {
+                    updateData[`_custom_fields.${key}`] = deleteField();
+                    deletedCount++;
+                }
+
+                // Hapus dari _custom_fields_labels
+                if (data._custom_fields_labels && data._custom_fields_labels[key] !== undefined) {
+                    updateData[`_custom_fields_labels.${key}`] = deleteField();
+                }
+
+                // Hapus dari field level atas (backward compatibility)
+                if (data[key] !== undefined) {
+                    updateData[key] = deleteField();
+                }
+
+                if (Object.keys(updateData).length > 0) {
+                    batch.update(docSnap.ref, updateData);
+                }
+            });
+
+            await batch.commit();
+        }
+
+        // ============================================================
+        // ✅ HAPUS DARI MEMORY
+        // ============================================================
+        window.vpdCustomColumns = window.vpdCustomColumns.filter(c => c.key !== key);
+
+        // Hapus dari data merged
+        vervalpdMergedList.forEach(d => {
+            delete d[key];
+        });
+
+        // Hapus dari unsaved changes
+        Object.keys(vpdUnsavedChanges).forEach(santriId => {
+            delete vpdUnsavedChanges[santriId][key];
+        });
+
+        // Re-render
+        renderCustomTableHeaders();
+        renderCustomFilters();
+        renderVervalPDTable();
+        updateUnsavedIndicator();
+
+        if (typeof showToast === 'function') {
+            showToast({
+                title: '✅ Kolom Dihapus Permanen',
+                message: `Kolom "${col.label}" berhasil dihapus dari tampilan dan database (${deletedCount} data terpengaruh).`,
+                type: 'success',
+                duration: 4000,
+                icon: 'bi-check-circle-fill'
+            });
+        }
+
+    } catch (error) {
+        console.error("Gagal hapus kolom:", error);
+        if (typeof showAlertModal === 'function') {
+            await showAlertModal({
+                title: 'Gagal Menghapus Kolom',
+                message: 'Terjadi kesalahan saat menghapus kolom dari database.',
+                details: `Error: ${error.message}`,
+                type: 'danger',
+                okText: 'OK',
+                icon: 'bi-x-circle-fill'
+            });
+        }
+    } finally {
+        if (loader) loader.style.display = 'none';
+    }
+};
+
+
+// ============================================================
+// ===== RENDER TABEL VERVALPD (INPUT VIA SEL) =====
+// ============================================================
 window.renderVervalPDTable = function() {
     const tbody = document.getElementById('tableVervalPDBody');
     if (!tbody) return;
 
-    // ============================================================
-    // ===== AMBIL SEMUA NILAI FILTER =====
-    // ============================================================
-    const fNama        = (document.getElementById('vpdSearchNama')?.value || '').toLowerCase().trim();
-    const fKelas       = document.getElementById('vpdFilterKelas')?.value || '';
-    const fSekolah     = document.getElementById('vpdFilterSekolah')?.value || '';
-    const fRombel      = document.getElementById('vpdFilterRombel')?.value || '';
-    const fNisn        = document.getElementById('vpdFilterNisn')?.value || '';
+    // ===== AMBIL FILTER =====
+    const fNama = (document.getElementById('vpdSearchNama')?.value || '').toLowerCase().trim();
+    const fKelas = document.getElementById('vpdFilterKelas')?.value || '';
+    const fStatusMasalah = document.getElementById('vpdFilterStatusMasalah')?.value || '';
+    const fSekolah = document.getElementById('vpdFilterSekolah')?.value || '';
+    const fRombel = document.getElementById('vpdFilterRombel')?.value || '';
+    const fNisn = document.getElementById('vpdFilterNisn')?.value || '';
     const fNikDukcapil = document.getElementById('vpdFilterNikDukcapil')?.value || '';
-    const fNikGanda    = document.getElementById('vpdFilterNikGanda')?.value || '';
-    const fNamaPadan   = document.getElementById('vpdFilterNama')?.value || '';
-    const fTmpLahir    = document.getElementById('vpdFilterTmpLahir')?.value || '';
-    const fTglLahir    = document.getElementById('vpdFilterTglLahir')?.value || '';
-    const fNamaIbu     = document.getElementById('vpdFilterNamaIbu')?.value || '';
-    const fJk          = document.getElementById('vpdFilterJk')?.value || '';
-    const fDesa        = document.getElementById('vpdFilterDesa')?.value || '';
+    const fNikGanda = document.getElementById('vpdFilterNikGanda')?.value || '';
+    const fNamaPadan = document.getElementById('vpdFilterNama')?.value || '';
+    const fTmpLahir = document.getElementById('vpdFilterTmpLahir')?.value || '';
+    const fTglLahir = document.getElementById('vpdFilterTglLahir')?.value || '';
+    const fNamaIbu = document.getElementById('vpdFilterNamaIbu')?.value || '';
+    const fJk = document.getElementById('vpdFilterJk')?.value || '';
+    const fDesa = document.getElementById('vpdFilterDesa')?.value || '';
 
-    // ============================================================
     // ===== TERAPKAN FILTER =====
-    // ============================================================
-    let filtered = [...vervalpdDataCache];
+    let filtered = [...vervalpdMergedList];
 
-    if (fNama) filtered = filtered.filter(d => (d.nama || '').toLowerCase().includes(fNama));
-    if (fKelas) filtered = filtered.filter(d => String(d.kelas || '') === fKelas);
+    if (fNama) filtered = filtered.filter(d => d.nama.toLowerCase().includes(fNama));
+    if (fKelas) filtered = filtered.filter(d => String(d.kelas) === fKelas);
     if (fSekolah) filtered = filtered.filter(d => (d.sekolah || '').toLowerCase() === fSekolah.toLowerCase());
     if (fRombel) filtered = filtered.filter(d => (d.rombel || '').toLowerCase() === fRombel.toLowerCase());
-    if (fNisn) filtered = filtered.filter(d => (d.nisn || '').toLowerCase() === fNisn.toLowerCase());
+    if (fNisn) filtered = filtered.filter(d => (d.nisn_masalah || '').toLowerCase() === fNisn.toLowerCase());
     if (fNikDukcapil) filtered = filtered.filter(d => (d.nik_dukcapil || '').toLowerCase() === fNikDukcapil.toLowerCase());
     if (fNikGanda) filtered = filtered.filter(d => (d.nik_ganda || '').toLowerCase() === fNikGanda.toLowerCase());
     if (fNamaPadan) filtered = filtered.filter(d => (d.nama_padan || '').toLowerCase() === fNamaPadan.toLowerCase());
@@ -22859,32 +23521,89 @@ window.renderVervalPDTable = function() {
     if (fJk) filtered = filtered.filter(d => (d.jk_padan || '').toLowerCase() === fJk.toLowerCase());
     if (fDesa) filtered = filtered.filter(d => (d.desa || '').toLowerCase() === fDesa.toLowerCase());
 
+// ===== FILTER STATUS MASALAH =====
+if (fStatusMasalah) {
+    filtered = filtered.filter(d => {
+        // ✅ Kumpulkan semua field (standar + custom)
+        const fieldsToCheck = [
+            { key: 'sekolah',         value: d.sekolah },
+            { key: 'rombel',          value: d.rombel },
+            { key: 'nisn_masalah',    value: d.nisn_masalah },
+            { key: 'nik_dukcapil',    value: d.nik_dukcapil },
+            { key: 'nik_ganda',       value: d.nik_ganda },
+            { key: 'nama_padan',      value: d.nama_padan },
+            { key: 'tmp_lahir_padan', value: d.tmp_lahir_padan },
+            { key: 'tgl_lahir_padan', value: d.tgl_lahir_padan },
+            { key: 'nama_ibu_padan',  value: d.nama_ibu_padan },
+            { key: 'jk_padan',        value: d.jk_padan },
+            { key: 'desa',            value: d.desa }
+        ];
+
+        // ✅ TAMBAHKAN custom fields
+        window.vpdCustomColumns.forEach(col => {
+            fieldsToCheck.push({ key: col.key, value: d[col.key] || '' });
+        });
+
+        // ✅ Gunakan isVervalPDProblem untuk konsistensi
+        const problemCount = fieldsToCheck.filter(f =>
+            isVervalPDProblem(f.key, f.value)
+        ).length;
+
+        const hasAnyValue = fieldsToCheck.some(f =>
+            f.value && f.value.toString().trim() !== ''
+        );
+
+        if (fStatusMasalah === 'ada_masalah') return problemCount > 0;
+        if (fStatusMasalah === 'tidak_ada')  return problemCount === 0 && hasAnyValue;
+        if (fStatusMasalah === 'belum_diisi') return !d.vpd_id && !hasAnyValue;
+        return true;
+    });
+}
+
+
     // ===== FILTER CUSTOM =====
     window.vpdCustomColumns.forEach(col => {
         const filterEl = document.getElementById(`vpdFilterCustom_${col.key}`);
         if (filterEl && filterEl.value) {
-            filtered = filtered.filter(d => 
+            filtered = filtered.filter(d =>
                 (d[col.key] || '').toLowerCase() === filterEl.value.toLowerCase()
             );
         }
     });
 
-    // ============================================================
-    // ===== UPDATE INFO JUMLAH DATA =====
-    // ============================================================
+    // ===== UPDATE INFO =====
     const infoEl = document.getElementById('vpdShowingInfo');
     if (infoEl) {
-        infoEl.textContent = `Menampilkan: ${filtered.length} dari ${vervalpdDataCache.length} data`;
+        infoEl.textContent = `Menampilkan: ${filtered.length} dari ${vervalpdMergedList.length} data`;
     }
 
     updateVervalPDFilterBadge();
 
-    // ============================================================
-    // ===== RENDER TABEL =====
-    // ============================================================
-    const totalColspan = 15 + window.vpdCustomColumns.length;
+    // ===== PAGINATION =====
+    const totalData = filtered.length;
+    const pageSize = vpdPageSize === 'all' ? totalData : vpdPageSize;
+    const totalPages = Math.max(1, Math.ceil(totalData / pageSize));
+
+    if (vpdCurrentPage > totalPages) vpdCurrentPage = totalPages;
+    if (vpdCurrentPage < 1) vpdCurrentPage = 1;
+
+    const start = (vpdCurrentPage - 1) * pageSize;
+    const end = vpdPageSize === 'all' ? totalData : Math.min(start + pageSize, totalData);
+    const pageData = filtered.slice(start, end);
+
+    // Update pagination UI
+    const pageInfo = document.getElementById('vpdPageInfo');
+    if (pageInfo) pageInfo.textContent = `Halaman ${vpdCurrentPage} dari ${totalPages} (${totalData} data)`;
     
-    if (filtered.length === 0) {
+    const prevBtn = document.getElementById('vpdPrevBtn');
+    const nextBtn = document.getElementById('vpdNextBtn');
+    if (prevBtn) prevBtn.disabled = vpdCurrentPage <= 1;
+    if (nextBtn) nextBtn.disabled = vpdCurrentPage >= totalPages;
+
+    // ===== RENDER BARIS =====
+    const totalColspan = 15 + window.vpdCustomColumns.length;
+
+    if (pageData.length === 0) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="${totalColspan}" class="text-center text-muted py-4">
@@ -22896,65 +23615,138 @@ window.renderVervalPDTable = function() {
         return;
     }
 
-    // ===== FUNGSI WARNA BADGE =====
-    const badgeColor = (val, type) => {
-        if (!val) return 'bg-secondary';
-        val = val.toLowerCase();
-        if (type === 'sekolah') return val === 'ada' ? 'bg-success' : 'bg-danger';
-        if (type === 'rombel') return val.includes('lebih') ? 'bg-danger' : 'bg-success';
-        if (type === 'nisn') return val === 'unik' ? 'bg-success'
-            : (val === 'ganda' ? 'bg-danger' : 'bg-warning text-dark');
-        if (type === 'nikduk') return val === 'ditemukan' ? 'bg-success' : 'bg-danger';
-        if (type === 'nikganda') return val === 'unik' ? 'bg-success' : 'bg-danger';
-        if (type === 'padan') return val.includes('tidak') ? 'bg-danger' : 'bg-success';
-        if (type === 'desa') return val === 'terisi' ? 'bg-success' : 'bg-danger';
-        return 'bg-secondary';
-    };
-
-    // ===== BANGUN HTML BARIS =====
     let html = '';
-    filtered.forEach((d, idx) => {
-        // Kolom custom
+    pageData.forEach((d, idx) => {
+        const globalIdx = start + idx + 1;
+        const hasUnsaved = vpdUnsavedChanges[d.santri_id] && Object.keys(vpdUnsavedChanges[d.santri_id]).length > 0;
+        const rowClass = hasUnsaved ? 'row-belum-tersimpan' : '';
+
+        // ===== BUILD DROPDOWN UNTUK SETIAP KOLOM =====
+        const buildDropdown = (fieldKey, dataField, config) => {
+            // config bisa berupa object { default, options } atau array (backward compat)
+            const options = Array.isArray(config) ? config : config.options;
+            const defaultValue = Array.isArray(config) ? '' : (config.default || '');
+            
+            // Ambil nilai dari data, jika kosong gunakan default (centang hijau)
+            const rawValue = (d[dataField] || '').toString();
+            const currentValue = rawValue !== '' ? rawValue : defaultValue;
+            
+            // Nilai positif (centang hijau) → tidak dianggap sebagai masalah
+            const POSITIVE_VALUES = [
+                'ada', '1 sekolah atau 1 rombel', 'unik', 'ditemukan',
+                'padan dukcapil', 'terisi'
+            ];
+            
+            const isProblem = currentValue !== '' && !POSITIVE_VALUES.includes(currentValue);
+            const hasValue = currentValue !== '';
+            
+            return `
+                <select class="form-select form-select-sm vpd-cell-select" 
+                        data-santri-id="${d.santri_id}"
+                        data-field="${dataField}"
+                        onchange="onVervalPDCellChange(this)"
+                        style="font-size: 0.72rem; padding: 4px 6px; border-radius: 6px; 
+                               min-width: 100px;
+                               ${isProblem 
+                                    ? 'background-color: #ffe8e8; border-color: #e74c3c; color: #721c24; font-weight: 600;' 
+                                    : hasValue
+                                        ? 'background-color: #eafaf1; border-color: #2ecc71; color: #1a5a3a; font-weight: 600;'
+                                        : 'background-color: var(--bg-input); border-color: var(--border-color); color: var(--text-muted);'}">
+                    ${options.map(opt => 
+                        `<option value="${opt.value}" ${currentValue === opt.value ? 'selected' : ''}>${opt.label}</option>`
+                    ).join('')}
+                </select>
+            `;
+        };
+
+
+        // ===== CUSTOM FIELDS CELLS =====
         let customCells = '';
         window.vpdCustomColumns.forEach(col => {
-            const val = d[col.key] || '-';
-            customCells += `<td style="background: rgba(155, 89, 182, 0.05);">
-                <span style="font-size: 0.75rem; color: ${val !== '-' ? 'var(--text-primary)' : 'var(--text-muted)'};">
-                    ${val}
-                </span>
-            </td>`;
+            const val = (d[col.key] !== undefined && d[col.key] !== null) ? d[col.key] : '';
+            const displayVal = val === '__DELETE__' ? '' : val;
+            const hasValue = displayVal !== '';
+            
+            customCells += `
+                <td style="background: rgba(155, 89, 182, 0.05); padding: 4px 6px;">
+                    <input type="text" 
+                           class="form-control form-control-sm vpd-custom-input" 
+                           data-santri-id="${d.santri_id}"
+                           data-field="${col.key}"
+                           value="${displayVal}"
+                           placeholder="Isi..."
+                           oninput="onVervalPDCustomChange(this)"
+                           style="font-size: 0.72rem; padding: 4px 6px; border-radius: 6px; min-width: 100px;
+                                  ${hasValue ? 'background-color: rgba(155, 89, 182, 0.12); border-color: #9b59b6; font-weight: 600;' : 'background-color: var(--bg-input); border-color: var(--border-color);'}">
+                </td>
+            `;
         });
 
+// ===== STATUS MASALAH (LOGIKA BARU) =====
+const fieldsToCheck = [
+    { key: 'sekolah',         value: d.sekolah },
+    { key: 'rombel',          value: d.rombel },
+    { key: 'nisn_masalah',    value: d.nisn_masalah },
+    { key: 'nik_dukcapil',    value: d.nik_dukcapil },
+    { key: 'nik_ganda',       value: d.nik_ganda },
+    { key: 'nama_padan',      value: d.nama_padan },
+    { key: 'tmp_lahir_padan', value: d.tmp_lahir_padan },
+    { key: 'tgl_lahir_padan', value: d.tgl_lahir_padan },
+    { key: 'nama_ibu_padan',  value: d.nama_ibu_padan },
+    { key: 'jk_padan',        value: d.jk_padan },
+    { key: 'desa',            value: d.desa }
+];
+
+window.vpdCustomColumns.forEach(col => {
+    fieldsToCheck.push({ key: col.key, value: d[col.key] || '' });
+});
+
+// Hitung hanya yang benar-benar masalah
+const problemCount = fieldsToCheck.filter(f =>
+    isVervalPDProblem(f.key, f.value)
+).length;
+
+const hasAnyValue = fieldsToCheck.some(f =>
+    f.value && f.value.toString().trim() !== ''
+);
+
+let statusBadge = '';
+if (!d.vpd_id && !hasAnyValue && !hasUnsaved) {
+    statusBadge = '<span class="badge bg-secondary" style="font-size: 0.65rem;">⬜ Belum Diisi</span>';
+} else if (problemCount > 0) {
+    statusBadge = `<span class="badge bg-danger" style="font-size: 0.65rem;">⚠️ ${problemCount} Masalah</span>`;
+} else {
+    statusBadge = '<span class="badge bg-success" style="font-size: 0.65rem;">✅ Tidak Ada Masalah</span>';
+}
+
+if (hasUnsaved) {
+    statusBadge += ' <span class="badge bg-warning text-dark" style="font-size: 0.6rem;">●</span>';
+}
+
         html += `
-            <tr>
-                <td style="font-weight: 600; color: var(--text-muted); text-align: center;">${idx + 1}</td>
-                <td style="text-align: left; font-weight: 600; color: var(--text-primary);">
+            <tr class="${rowClass}" data-santri-id="${d.santri_id}">
+                <td style="text-align: center; font-weight: 600; color: var(--text-muted); position: sticky; left: 0; background: var(--bg-card); z-index: 5;">${globalIdx}</td>
+                <td style="text-align: left; font-weight: 600; color: var(--text-primary); position: sticky; left: 50px; background: var(--bg-card); z-index: 5; border-right: 2px solid var(--border-color);">
                     <i class="bi bi-person-fill me-1" style="color: var(--gold-color); font-size: 0.7rem;"></i>
-                    ${d.nama || '-'}
+                    ${d.nama}
+                    ${d.nik ? `<br><small style="font-size: 0.6rem; color: var(--text-muted); font-weight: 400;">NIK: ${d.nik}</small>` : ''}
                 </td>
-                <td><span class="badge bg-secondary" style="font-size: 0.7rem;">${d.kelas || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.sekolah, 'sekolah')}" style="font-size: 0.65rem;">${d.sekolah || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.rombel, 'rombel')}" style="font-size: 0.65rem;">${d.rombel || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.nisn, 'nisn')}" style="font-size: 0.65rem;">${d.nisn || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.nik_dukcapil, 'nikduk')}" style="font-size: 0.65rem;">${d.nik_dukcapil || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.nik_ganda, 'nikganda')}" style="font-size: 0.65rem;">${d.nik_ganda || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.nama_padan, 'padan')}" style="font-size: 0.65rem;">${d.nama_padan || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.tmp_lahir_padan, 'padan')}" style="font-size: 0.65rem;">${d.tmp_lahir_padan || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.tgl_lahir_padan, 'padan')}" style="font-size: 0.65rem;">${d.tgl_lahir_padan || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.nama_ibu_padan, 'padan')}" style="font-size: 0.65rem;">${d.nama_ibu_padan || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.jk_padan, 'padan')}" style="font-size: 0.65rem;">${d.jk_padan || '-'}</span></td>
-                <td><span class="badge ${badgeColor(d.desa, 'desa')}" style="font-size: 0.65rem;">${d.desa || '-'}</span></td>
-                ${customCells}
                 <td style="text-align: center;">
-                    <button class="btn btn-sm btn-outline-primary" onclick="openModalVervalPD('${d.id}')"
-                            title="Edit" style="padding: 2px 8px; font-size: 0.7rem;">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="hapusVervalPD('${d.id}')"
-                            title="Hapus" style="padding: 2px 8px; font-size: 0.7rem;">
-                        <i class="bi bi-trash"></i>
-                    </button>
+                    <span class="badge bg-secondary" style="font-size: 0.7rem;">${d.kelas}</span>
                 </td>
+                <td>${buildDropdown('sekolah', 'sekolah', VPD_DROPDOWN_OPTIONS.sekolah)}</td>
+                <td>${buildDropdown('rombel', 'rombel', VPD_DROPDOWN_OPTIONS.rombel)}</td>
+                <td>${buildDropdown('nisn', 'nisn_masalah', VPD_DROPDOWN_OPTIONS.nisn)}</td>
+                <td>${buildDropdown('nik_dukcapil', 'nik_dukcapil', VPD_DROPDOWN_OPTIONS.nik_dukcapil)}</td>
+                <td>${buildDropdown('nik_ganda', 'nik_ganda', VPD_DROPDOWN_OPTIONS.nik_ganda)}</td>
+                <td>${buildDropdown('nama_padan', 'nama_padan', VPD_DROPDOWN_OPTIONS.nama_padan)}</td>
+                <td>${buildDropdown('tmp_lahir_padan', 'tmp_lahir_padan', VPD_DROPDOWN_OPTIONS.tmp_lahir_padan)}</td>
+                <td>${buildDropdown('tgl_lahir_padan', 'tgl_lahir_padan', VPD_DROPDOWN_OPTIONS.tgl_lahir_padan)}</td>
+                <td>${buildDropdown('nama_ibu_padan', 'nama_ibu_padan', VPD_DROPDOWN_OPTIONS.nama_ibu_padan)}</td>
+                <td>${buildDropdown('jk_padan', 'jk_padan', VPD_DROPDOWN_OPTIONS.jk_padan)}</td>
+                <td>${buildDropdown('desa', 'desa', VPD_DROPDOWN_OPTIONS.desa)}</td>
+                ${customCells}
+                <td style="text-align: center;">${statusBadge}</td>
             </tr>
         `;
     });
@@ -22963,12 +23755,455 @@ window.renderVervalPDTable = function() {
 };
 
 
-// ===== UPDATE RINGKASAN =====
+// ============================================================
+// ===== HANDLER: PERUBAHAN DROPDOWN DI SEL TABEL =====
+// ============================================================
+window.onVervalPDCellChange = function(selectEl) {
+    const santriId = selectEl.dataset.santriId;
+    const field = selectEl.dataset.field;
+    const value = selectEl.value;
+
+    // Update data lokal
+    const dataRow = vervalpdMergedList.find(d => d.santri_id === santriId);
+    if (dataRow) {
+        dataRow[field] = value;
+    }
+
+    // Tandai perubahan belum disimpan
+    if (!vpdUnsavedChanges[santriId]) vpdUnsavedChanges[santriId] = {};
+    vpdUnsavedChanges[santriId][field] = value;
+
+    // Update warna sel
+    if (value) {
+        selectEl.style.backgroundColor = '#ffe8e8';
+        selectEl.style.borderColor = '#e74c3c';
+        selectEl.style.color = '#721c24';
+        selectEl.style.fontWeight = '600';
+    } else {
+        selectEl.style.backgroundColor = 'var(--bg-input)';
+        selectEl.style.borderColor = 'var(--border-color)';
+        selectEl.style.color = 'var(--text-muted)';
+        selectEl.style.fontWeight = 'normal';
+    }
+
+    // Update indikator belum tersimpan
+    updateUnsavedIndicator();
+
+    // Update status badge di baris
+    updateRowStatusBadge(santriId);
+};
+
+
+// ============================================================
+// ===== HANDLER: PERUBAHAN INPUT CUSTOM DI SEL TABEL =====
+// ============================================================
+window.onVervalPDCustomChange = function(inputEl) {
+    const santriId = inputEl.dataset.santriId;
+    const field = inputEl.dataset.field;
+    const value = inputEl.value;
+    const trimmedValue = value.trim();
+
+    const dataRow = vervalpdMergedList.find(d => d.santri_id === santriId);
+    if (dataRow) {
+        dataRow[field] = value;
+    }
+
+    if (!vpdUnsavedChanges[santriId]) vpdUnsavedChanges[santriId] = {};
+    
+    // ✅ Tandai DELETE jika kosong, atau simpan nilai jika ada isi
+    if (trimmedValue === '') {
+        vpdUnsavedChanges[santriId][field] = '__DELETE__';
+    } else {
+        vpdUnsavedChanges[santriId][field] = value;
+    }
+
+    // Update styling sel
+    if (trimmedValue !== '') {
+        inputEl.style.backgroundColor = 'rgba(155, 89, 182, 0.12)';
+        inputEl.style.borderColor = '#9b59b6';
+        inputEl.style.fontWeight = '600';
+    } else {
+        inputEl.style.backgroundColor = 'var(--bg-input)';
+        inputEl.style.borderColor = 'var(--border-color)';
+        inputEl.style.fontWeight = 'normal';
+    }
+
+    updateUnsavedIndicator();
+    updateRowStatusBadge(santriId);
+};
+
+
+window.isVervalPDProblem = function(field, value) {
+    const v = (value || '').toString().trim().toLowerCase();
+    if (v === '') return false;
+
+    // ✅ PERBAIKAN: hapus `v` yang duplikat
+    if (field.startsWith('custom_')) {
+        return v !== '';
+    }
+
+    const POSITIVE_VALUES = {
+        sekolah:         ['ada'],
+        rombel:          ['1 sekolah atau 1 rombel'],
+        nisn_masalah:    ['unik'],
+        nik_dukcapil:    ['ditemukan'],
+        nik_ganda:       ['unik'],
+        nama_padan:      ['padan dukcapil'],
+        tmp_lahir_padan: ['padan dukcapil'],
+        tgl_lahir_padan: ['padan dukcapil'],
+        nama_ibu_padan:  ['padan dukcapil'],
+        jk_padan:        ['padan dukcapil'],
+        desa:            ['terisi']
+    };
+
+    const positives = POSITIVE_VALUES[field];
+    if (!positives) return false;
+
+    if (positives.includes(v)) return false;
+    return true;
+};
+
+
+/**
+ * Kumpulkan semua field vervalpd (standar + custom) dari satu baris data
+ * @param {Object} dataRow - Baris data dari vervalpdMergedList
+ * @returns {Array<{key, value}>}
+ */
+window.getVervalPDFields = function(dataRow) {
+    const fields = [
+        { key: 'sekolah',         value: dataRow.sekolah },
+        { key: 'rombel',          value: dataRow.rombel },
+        { key: 'nisn_masalah',    value: dataRow.nisn_masalah },
+        { key: 'nik_dukcapil',    value: dataRow.nik_dukcapil },
+        { key: 'nik_ganda',       value: dataRow.nik_ganda },
+        { key: 'nama_padan',      value: dataRow.nama_padan },
+        { key: 'tmp_lahir_padan', value: dataRow.tmp_lahir_padan },
+        { key: 'tgl_lahir_padan', value: dataRow.tgl_lahir_padan },
+        { key: 'nama_ibu_padan',  value: dataRow.nama_ibu_padan },
+        { key: 'jk_padan',        value: dataRow.jk_padan },
+        { key: 'desa',            value: dataRow.desa }
+    ];
+
+    window.vpdCustomColumns.forEach(col => {
+        fields.push({ key: col.key, value: dataRow[col.key] || '' });
+    });
+
+    return fields;
+};
+
+/**
+ * Hitung jumlah masalah pada satu baris data vervalpd
+ */
+window.countVervalPDProblems = function(dataRow) {
+    return getVervalPDFields(dataRow)
+        .filter(f => isVervalPDProblem(f.key, f.value))
+        .length;
+};
+
+
+function updateRowStatusBadge(santriId) {
+    const row = document.querySelector(`#tableVervalPDBody tr[data-santri-id="${santriId}"]`);
+    if (!row) return;
+
+    const dataRow = vervalpdMergedList.find(d => d.santri_id === santriId);
+    if (!dataRow) return;
+
+    // ===== HITUNG MASALAH: HANYA FIELD DENGAN NILAI NEGATIF =====
+    const fieldsToCheck = [
+        { key: 'sekolah',         value: dataRow.sekolah },
+        { key: 'rombel',          value: dataRow.rombel },
+        { key: 'nisn_masalah',    value: dataRow.nisn_masalah },
+        { key: 'nik_dukcapil',    value: dataRow.nik_dukcapil },
+        { key: 'nik_ganda',       value: dataRow.nik_ganda },
+        { key: 'nama_padan',      value: dataRow.nama_padan },
+        { key: 'tmp_lahir_padan', value: dataRow.tmp_lahir_padan },
+        { key: 'tgl_lahir_padan', value: dataRow.tgl_lahir_padan },
+        { key: 'nama_ibu_padan',  value: dataRow.nama_ibu_padan },
+        { key: 'jk_padan',        value: dataRow.jk_padan },
+        { key: 'desa',            value: dataRow.desa }
+    ];
+
+    // Tambahkan custom fields
+    window.vpdCustomColumns.forEach(col => {
+        fieldsToCheck.push({
+            key: col.key,
+            value: dataRow[col.key] || ''
+        });
+    });
+
+    // Hitung hanya yang BENAR-BENAR masalah
+    const problemCount = fieldsToCheck.filter(f =>
+        isVervalPDProblem(f.key, f.value)
+    ).length;
+
+    const hasUnsaved = vpdUnsavedChanges[santriId] &&
+                       Object.keys(vpdUnsavedChanges[santriId]).length > 0;
+
+    // ===== TENTUKAN BADGE =====
+    let statusBadge = '';
+    if (problemCount > 0) {
+        statusBadge = `<span class="badge bg-danger" style="font-size: 0.65rem;">
+                        ⚠️ ${problemCount} Masalah
+                       </span>`;
+    } else {
+        statusBadge = `<span class="badge bg-success" style="font-size: 0.65rem;">
+                        ✅ Tidak Ada Masalah
+                       </span>`;
+    }
+
+    if (hasUnsaved) {
+        statusBadge += ' <span class="badge bg-warning text-dark" style="font-size: 0.6rem;">●</span>';
+    }
+
+    const lastCell = row.querySelector('td:last-child');
+    if (lastCell) lastCell.innerHTML = statusBadge;
+
+    // Update row class
+    if (hasUnsaved) {
+        row.classList.add('row-belum-tersimpan');
+    } else {
+        row.classList.remove('row-belum-tersimpan');
+    }
+}
+
+
+// ============================================================
+// ===== INDIKATOR BELUM TERSIMPAN =====
+// ============================================================
+function updateUnsavedIndicator() {
+    const badge = document.getElementById('vpdUnsavedBadge');
+    const countEl = document.getElementById('vpdUnsavedCount');
+    if (!badge || !countEl) return;
+
+    const count = Object.keys(vpdUnsavedChanges).filter(
+        santriId => vpdUnsavedChanges[santriId] && Object.keys(vpdUnsavedChanges[santriId]).length > 0
+    ).length;
+
+    countEl.textContent = count;
+    badge.style.display = count > 0 ? 'inline-block' : 'none';
+}
+
+
+// ============================================================
+// ===== SIMPAN SEMUA PERUBAHAN VERVALPD =====
+// ============================================================
+window.simpanSemuaVervalPD = async function() {
+    const unsavedIds = Object.keys(vpdUnsavedChanges).filter(
+        santriId => vpdUnsavedChanges[santriId] && Object.keys(vpdUnsavedChanges[santriId]).length > 0
+    );
+
+    if (unsavedIds.length === 0) {
+        if (typeof showToast === 'function') {
+            showToast({
+                title: 'ℹ️ Tidak Ada Perubahan',
+                message: 'Tidak ada perubahan data VervalPD yang perlu disimpan.',
+                type: 'info',
+                duration: 3000,
+                icon: 'bi-info-circle-fill'
+            });
+        }
+        return;
+    }
+
+    // ===== KONFIRMASI =====
+    const konfirmasi = await showConfirmModal({
+        title: 'Simpan Perubahan VervalPD',
+        message: `Apakah Anda yakin ingin menyimpan perubahan pada ${unsavedIds.length} data santri?`,
+        details: `
+            <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                <span style="font-weight: 600;">Jumlah Santri</span>
+                <span style="color: #2ecc71; font-weight: 700;">: ${unsavedIds.length} santri</span>
+                <span style="font-weight: 600;">Status</span>
+                <span>: Perubahan belum disimpan</span>
+            </div>
+            <div style="margin-top: 10px; padding: 8px 12px; background: #eafaf1; border-radius: 8px; border-left: 3px solid #2ecc71; font-size: 0.8rem; color: #1a5a3a;">
+                <i class="bi bi-info-circle-fill me-1"></i>
+                Data akan disimpan ke koleksi <code>vervalpd</code> di Firestore.
+            </div>
+        `,
+        type: 'success',
+        okText: 'Ya, Simpan Semua',
+        cancelText: 'Batal',
+        icon: 'bi-cloud-arrow-up-fill'
+    });
+
+    if (!konfirmasi) return;
+
+    const loader = document.getElementById('loader');
+    if (loader) loader.style.display = 'flex';
+
+    try {
+        let successCount = 0;
+        let errorCount = 0;
+        const CHUNK_SIZE = 400;
+        const entries = Object.entries(vpdUnsavedChanges).filter(
+            ([, fields]) => fields && Object.keys(fields).length > 0
+        );
+
+        for (let i = 0; i < entries.length; i += CHUNK_SIZE) {
+            const chunk = entries.slice(i, i + CHUNK_SIZE);
+            const batch = writeBatch(db);
+
+            for (const [santriId, fields] of chunk) {
+                try {
+                    const dataRow = vervalpdMergedList.find(d => d.santri_id === santriId);
+                    if (!dataRow) {
+                        errorCount++;
+                        continue;
+                    }
+
+                    // ============================================================
+                    // ===== BANGUN DATA UTAMA =====
+                    // ============================================================
+                    const dataToSave = {
+                        santri_id: santriId,
+                        nama: dataRow.nama,
+                        kelas: dataRow.kelas,
+                        jenjang: dataRow.jenjang,
+                        updated_at: serverTimestamp()
+                    };
+
+                    // Field vervalpd standar
+                    const vpdFields = [
+                        'sekolah', 'rombel', 'nik_dukcapil', 'nik_ganda',
+                        'nama_padan', 'tmp_lahir_padan', 'tgl_lahir_padan',
+                        'nama_ibu_padan', 'jk_padan', 'desa'
+                    ];
+
+                    vpdFields.forEach(f => {
+                        dataToSave[f] = dataRow[f] || '';
+                    });
+                    // NISN → field `nisn` di Firestore
+                    dataToSave.nisn = dataRow.nisn_masalah || '';
+
+                    // ============================================================
+                    // ===== ✅ BANGUN CUSTOM FIELDS (PERBAIKAN UTAMA) =====
+                    // ============================================================
+                    const customFields = {};
+                    const customLabels = {};
+
+                    window.vpdCustomColumns.forEach(col => {
+                        const unsavedVal = fields[col.key];
+                        const dataVal = dataRow[col.key];
+
+                        // Kasus 1: user menandai DELETE (mengosongkan nilai)
+                        if (unsavedVal === '__DELETE__') {
+                            customFields[col.key] = deleteField();
+                            return;
+                        }
+
+                        // Kasus 2: ada nilai (dari data atau unsaved)
+                        const finalVal = (dataVal !== undefined && dataVal !== null && dataVal !== '')
+                            ? dataVal
+                            : (unsavedVal !== undefined && unsavedVal !== '__DELETE__' ? unsavedVal : '');
+
+                        if (finalVal !== '' && finalVal !== undefined) {
+                            customFields[col.key] = finalVal;
+                            customLabels[col.key] = col.label;
+                        }
+                    });
+
+                    // ✅ Simpan custom fields di dalam nested object
+                    if (Object.keys(customFields).length > 0) {
+                        dataToSave._custom_fields = customFields;
+                    }
+                    if (Object.keys(customLabels).length > 0) {
+                        dataToSave._custom_fields_labels = customLabels;
+                    }
+
+                    // ============================================================
+                    // ===== SIMPAN KE FIRESTORE =====
+                    // ============================================================
+                    if (dataRow.vpd_id) {
+                        // Update dokumen yang sudah ada
+                        const docRef = doc(db, "vervalpd", dataRow.vpd_id);
+                        batch.update(docRef, dataToSave);
+                    } else {
+                        // Buat dokumen baru
+                        dataToSave.created_at = serverTimestamp();
+                        const newRef = doc(collection(db, "vervalpd"));
+                        batch.set(newRef, dataToSave);
+                        dataRow.vpd_id = newRef.id;
+                    }
+
+                    successCount++;
+                } catch (err) {
+                    console.error(`Gagal proses santri ${santriId}:`, err);
+                    errorCount++;
+                }
+            }
+
+            await batch.commit();
+        }
+
+        // ===== RESET UNSAVED CHANGES =====
+        vpdUnsavedChanges = {};
+        updateUnsavedIndicator();
+
+        // ===== TAMPILKAN SUKSES =====
+        if (typeof showToast === 'function') {
+            showToast({
+                title: '✅ Data Berhasil Disimpan',
+                message: `${successCount} data VervalPD berhasil disimpan${errorCount > 0 ? `, ${errorCount} gagal` : ''}.`,
+                type: 'success',
+                duration: 4000,
+                icon: 'bi-check-circle-fill'
+            });
+        }
+
+        // ===== RELOAD DATA (CUKUP SEKALI) =====
+        await loadVervalPD();
+
+    } catch (error) {
+        console.error("Error simpan semua vervalpd:", error);
+        if (typeof showAlertModal === 'function') {
+            await showAlertModal({
+                title: 'Gagal Menyimpan',
+                message: 'Terjadi kesalahan saat menyimpan data: ' + error.message,
+                type: 'danger',
+                okText: 'OK',
+                icon: 'bi-x-circle-fill'
+            });
+        }
+    } finally {
+        if (loader) loader.style.display = 'none';
+    }
+};
+
+
+// ============================================================
+// ===== PAGINATION VERVALPD =====
+// ============================================================
+window.changeVervalPDPage = function(direction) {
+    vpdCurrentPage += direction;
+    if (vpdCurrentPage < 1) vpdCurrentPage = 1;
+    renderVervalPDTable();
+    
+    // Scroll ke atas tabel
+    const tableContainer = document.querySelector('#tableVervalPD')?.closest('div[style*="overflow"]');
+    if (tableContainer) tableContainer.scrollTop = 0;
+};
+
+window.updateVervalPDPageSize = function(value) {
+    vpdPageSize = value === 'all' ? 'all' : parseInt(value);
+    vpdCurrentPage = 1;
+    renderVervalPDTable();
+};
+
+
 function updateVervalPDSummary() {
-    const total = vervalpdDataCache.length;
-    const nisnGanda = vervalpdDataCache.filter(d => d.nisn === 'ganda' || d.nisn === 'tidak sesuai format').length;
-    const nikBelum = vervalpdDataCache.filter(d => d.nik_dukcapil === 'belum dipadankan/tidak ditemukan').length;
-    const namaTidakPadan = vervalpdDataCache.filter(d => d.nama_padan === 'tidak padan dukcapil').length;
+    const total = vervalpdMergedList.length;
+
+    // ✅ Hitung berdasarkan LOGIKA MASALAH yang benar
+    let nisnGanda = 0;
+    let nikBelum = 0;
+    let namaTidakPadan = 0;
+
+    vervalpdMergedList.forEach(d => {
+        if (isVervalPDProblem('nisn_masalah', d.nisn_masalah)) nisnGanda++;
+        if (isVervalPDProblem('nik_dukcapil', d.nik_dukcapil)) nikBelum++;
+        if (isVervalPDProblem('nama_padan', d.nama_padan)) namaTidakPadan++;
+    });
 
     const el = (id) => document.getElementById(id);
     if (el('vpd-total')) el('vpd-total').textContent = total;
@@ -22978,14 +24213,14 @@ function updateVervalPDSummary() {
 }
 
 
-// ===== BADGE COUNT DI SUB-TAB =====
 function updateVervalPDBadge() {
     const badge = document.getElementById('badge-count-vervalpd');
-    if (badge) badge.textContent = vervalpdDataCache.length;
+    if (badge) badge.textContent = vervalpdMergedList.length;
 }
 
-
-// ===== TOGGLE FILTER PANEL =====
+// ============================================================
+// ===== FILTER TOGGLE & BADGE =====
+// ============================================================
 window.toggleFilterVervalPD = function() {
     const wrapper = document.getElementById('vervalpdFilterWrapper');
     const btn = document.getElementById('vervalpdFilterToggleBtn');
@@ -22993,20 +24228,15 @@ window.toggleFilterVervalPD = function() {
     
     wrapper.classList.toggle('collapsed');
     btn.classList.toggle('collapsed');
-    
-    // Update badge count
-    if (typeof updateVervalPDFilterBadge === 'function') {
-        updateVervalPDFilterBadge();
-    }
+    updateVervalPDFilterBadge();
 };
-
 
 function updateVervalPDFilterBadge() {
     const badge = document.getElementById('vervalpdFilterCountBadge');
     if (!badge) return;
 
     const filterIds = [
-        'vpdFilterKelas', 'vpdFilterSekolah', 'vpdFilterRombel',
+        'vpdFilterKelas', 'vpdFilterStatusMasalah', 'vpdFilterSekolah', 'vpdFilterRombel',
         'vpdFilterNisn', 'vpdFilterNikDukcapil', 'vpdFilterNikGanda',
         'vpdFilterNama', 'vpdFilterTmpLahir', 'vpdFilterTglLahir',
         'vpdFilterNamaIbu', 'vpdFilterJk', 'vpdFilterDesa'
@@ -23018,7 +24248,6 @@ function updateVervalPDFilterBadge() {
         if (el && el.value) count++;
     });
 
-    // Hitung filter custom
     window.vpdCustomColumns.forEach(col => {
         const el = document.getElementById(`vpdFilterCustom_${col.key}`);
         if (el && el.value) count++;
@@ -23031,10 +24260,12 @@ function updateVervalPDFilterBadge() {
     badge.style.display = count > 0 ? 'inline-block' : 'none';
 }
 
-
+// ============================================================
+// ===== RESET FILTER =====
+// ============================================================
 window.resetFilterVervalPD = function() {
     const filterIds = [
-        'vpdFilterKelas', 'vpdFilterSekolah', 'vpdFilterRombel',
+        'vpdFilterKelas', 'vpdFilterStatusMasalah', 'vpdFilterSekolah', 'vpdFilterRombel',
         'vpdFilterNisn', 'vpdFilterNikDukcapil', 'vpdFilterNikGanda',
         'vpdFilterNama', 'vpdFilterTmpLahir', 'vpdFilterTglLahir',
         'vpdFilterNamaIbu', 'vpdFilterJk', 'vpdFilterDesa'
@@ -23045,7 +24276,6 @@ window.resetFilterVervalPD = function() {
         if (el) el.value = '';
     });
 
-    // Reset filter custom
     window.vpdCustomColumns.forEach(col => {
         const el = document.getElementById(`vpdFilterCustom_${col.key}`);
         if (el) el.value = '';
@@ -23054,6 +24284,7 @@ window.resetFilterVervalPD = function() {
     const search = document.getElementById('vpdSearchNama');
     if (search) search.value = '';
 
+    vpdCurrentPage = 1;
     renderVervalPDTable();
     updateVervalPDFilterBadge();
 
@@ -23068,445 +24299,23 @@ window.resetFilterVervalPD = function() {
     }
 };
 
-
-// ===== MODAL: TAMBAH KOLOM CUSTOM =====
-window.tambahKolomCustom = function() {
-    const container = document.getElementById('vpdCustomFieldsContainer');
-    if (!container) return;
-    const index = container.querySelectorAll('.custom-field-row').length;
-    const div = document.createElement('div');
-    div.className = 'row g-2 custom-field-row mb-2 align-items-end';
-    div.innerHTML = `
-        <div class="col-md-5">
-            <label class="form-label fw-bold small">Label Kolom</label>
-            <input type="text" class="form-control form-control-sm custom-label" placeholder="Contoh: Catatan Tambahan" oninput="syncCustomKey(this)">
-        </div>
-        <div class="col-md-5">
-            <label class="form-label fw-bold small">Nilai</label>
-            <input type="text" class="form-control form-control-sm custom-value" placeholder="Nilai...">
-        </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.closest('.custom-field-row').remove()">
-                <i class="bi bi-trash"></i> Hapus
-            </button>
-        </div>
-        <input type="hidden" class="custom-key">
-    `;
-    container.appendChild(div);
+// ============================================================
+// ===== DEBOUNCE SEARCH =====
+// ============================================================
+let vervalpdSearchTimer = null;
+window.debouncedRenderVervalPD = function() {
+    if (vervalpdSearchTimer) clearTimeout(vervalpdSearchTimer);
+    vervalpdSearchTimer = setTimeout(() => {
+        vpdCurrentPage = 1;
+        renderVervalPDTable();
+    }, 400);
 };
-
-window.syncCustomKey = function(input) {
-    const row = input.closest('.custom-field-row');
-    const keyInput = row.querySelector('.custom-key');
-    const label = input.value.trim();
-    const key = 'custom_' + label.toLowerCase().replace(/[^a-z0-9]/g, '_');
-    keyInput.value = key;
-};
-
-
-// ===== MODAL: OPEN (TAMBAH / EDIT) - GANTI BAGIAN LOAD CUSTOM FIELDS =====
-window.openModalVervalPD = async function(docId = null) {
-    const title = document.getElementById('modalVervalPDTitle');
-    const docIdInput = document.getElementById('vpdDocId');
-    const customContainer = document.getElementById('vpdCustomFieldsContainer');
-    customContainer.innerHTML = '';
-
-    const fields = ['vpdNamaSantri', 'vpdKelas', 'vpdJenjang', 'vpdSekolah', 'vpdRombel',
-        'vpdNisn', 'vpdNikDukcapil', 'vpdNikGanda', 'vpdNama', 'vpdTmpLahir',
-        'vpdTglLahir', 'vpdNamaIbu', 'vpdJk', 'vpdDesa'];
-    fields.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-    });
-
-    if (docId) {
-        title.innerHTML = `<i class="bi bi-pencil-square me-2" style="color: var(--gold-color);"></i>Edit Masalah VervalPD`;
-        docIdInput.value = docId;
-
-        const data = vervalpdDataCache.find(d => d.id === docId);
-        if (data) {
-            const santriMatch = vervalpdSantriList.find(s => s.nama === data.nama);
-            if (santriMatch) {
-                document.getElementById('vpdNamaSantri').value = santriMatch.id;
-            }
-            document.getElementById('vpdKelas').value = data.kelas || '';
-            document.getElementById('vpdJenjang').value = data.jenjang || '';
-            document.getElementById('vpdSekolah').value = data.sekolah || '';
-            document.getElementById('vpdRombel').value = data.rombel || '';
-            document.getElementById('vpdNisn').value = data.nisn || '';
-            document.getElementById('vpdNikDukcapil').value = data.nik_dukcapil || '';
-            document.getElementById('vpdNikGanda').value = data.nik_ganda || '';
-            document.getElementById('vpdNama').value = data.nama_padan || '';
-            document.getElementById('vpdTmpLahir').value = data.tmp_lahir_padan || '';
-            document.getElementById('vpdTglLahir').value = data.tgl_lahir_padan || '';
-            document.getElementById('vpdNamaIbu').value = data.nama_ibu_padan || '';
-            document.getElementById('vpdJk').value = data.jk_padan || '';
-            document.getElementById('vpdDesa').value = data.desa || '';
-
-            // ===== LOAD CUSTOM FIELDS (DENGAN LABEL) =====
-            const customLabels = data._custom_labels || {};
-            
-            Object.keys(data).forEach(key => {
-                if (key.startsWith('custom_') && key !== 'custom_') {
-                    // Ambil label dari metadata, atau generate dari key
-                    let label = customLabels[key];
-                    if (!label) {
-                        label = key.replace('custom_', '').replace(/_/g, ' ');
-                        label = label.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-                    }
-                    
-                    const div = document.createElement('div');
-                    div.className = 'row g-2 custom-field-row mb-2 align-items-end';
-                    div.innerHTML = `
-                        <div class="col-md-5">
-                            <label class="form-label fw-bold small">Label Kolom</label>
-                            <input type="text" class="form-control form-control-sm custom-label" value="${label}" oninput="syncCustomKey(this)">
-                        </div>
-                        <div class="col-md-5">
-                            <label class="form-label fw-bold small">Nilai</label>
-                            <input type="text" class="form-control form-control-sm custom-value" value="${data[key] || ''}">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.closest('.custom-field-row').remove()">
-                                <i class="bi bi-trash"></i> Hapus
-                            </button>
-                        </div>
-                        <input type="hidden" class="custom-key" value="${key}">
-                    `;
-                    customContainer.appendChild(div);
-                }
-            });
-        }
-    } else {
-        title.innerHTML = `<i class="bi bi-shield-exclamation me-2" style="color: var(--gold-color);"></i>Tambah Masalah VervalPD`;
-        docIdInput.value = '';
-    }
-
-    const modal = new bootstrap.Modal(document.getElementById('modalVervalPD'));
-    modal.show();
-
-    // ✅ TAMBAHKAN INI: Tandai field yang terisi setelah modal tampil
-    setTimeout(() => {
-        if (typeof tandaiFieldVervalPDTerisi === 'function') {
-            tandaiFieldVervalPDTerisi();
-        }
-    }, 150);
-};
-
 
 // ============================================================
-// ===== FUNGSI: TANDAI FIELD VERVALPD YANG TERISI =====
+// ===== EXPORT VERVALPD =====
 // ============================================================
-window.tandaiFieldVervalPDTerisi = function() {
-    const modal = document.getElementById('modalVervalPD');
-    if (!modal) return;
-
-    // Daftar field yang perlu ditandai (yang punya nilai = masalah)
-    const fieldsToMark = [
-        'vpdSekolah',
-        'vpdRombel',
-        'vpdNisn',
-        'vpdNikDukcapil',
-        'vpdNikGanda',
-        'vpdNama',
-        'vpdTmpLahir',
-        'vpdTglLahir',
-        'vpdNamaIbu',
-        'vpdJk',
-        'vpdDesa'
-    ];
-
-    fieldsToMark.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-
-        const value = (el.value || '').trim();
-
-        // Ambil label wrapper (parent .col-md-*)
-        const wrapper = el.closest('.col-md-4, .col-md-3, .col-md-6');
-        const label = wrapper ? wrapper.querySelector('.form-label') : null;
-
-        if (value !== '') {
-            // Field terisi = masalah → warna merah
-            el.classList.add('vpd-field-terisi');
-            if (label) label.classList.add('vpd-label-terisi');
-        } else {
-            // Field kosong = tidak ada masalah → hapus warna
-            el.classList.remove('vpd-field-terisi');
-            if (label) label.classList.remove('vpd-label-terisi');
-        }
-    });
-
-    // Tandai juga custom field yang terisi
-    modal.querySelectorAll('.custom-value').forEach(input => {
-        const value = (input.value || '').trim();
-        const row = input.closest('.custom-field-row');
-        const label = row ? row.querySelector('.custom-label') : null;
-
-        if (value !== '') {
-            input.classList.add('vpd-field-terisi');
-            if (label) label.classList.add('vpd-label-terisi');
-        } else {
-            input.classList.remove('vpd-field-terisi');
-            if (label) label.classList.remove('vpd-label-terisi');
-        }
-    });
-};
-
-
-// ===== SIMPAN VERVALPD (VERSI PERBAIKAN - HAPUS FIELD KOSONG) =====
-window.simpanVervalPD = async function() {
-    const docId = document.getElementById('vpdDocId').value;
-    const santriSelect = document.getElementById('vpdNamaSantri');
-    const santriOpt = santriSelect.options[santriSelect.selectedIndex];
-
-    if (!santriSelect.value) {
-        if (typeof showAlertModal === 'function') {
-            await showAlertModal({
-                title: 'Data Belum Lengkap',
-                message: 'Silakan pilih santri terlebih dahulu.',
-                type: 'warning',
-                okText: 'OK',
-                icon: 'bi-exclamation-triangle-fill'
-            });
-        } else {
-            alert('Silakan pilih santri terlebih dahulu.');
-        }
-        return;
-    }
-
-    // ============================================================
-    // ===== BANGUN DATA DASAR =====
-    // ============================================================
-    const data = {
-        santri_id: santriSelect.value,
-        nama: santriOpt?.dataset.nama || '',
-        kelas: document.getElementById('vpdKelas').value || '',
-        jenjang: document.getElementById('vpdJenjang').value || '',
-        sekolah: document.getElementById('vpdSekolah').value || '',
-        rombel: document.getElementById('vpdRombel').value || '',
-        nisn: document.getElementById('vpdNisn').value || '',
-        nik_dukcapil: document.getElementById('vpdNikDukcapil').value || '',
-        nik_ganda: document.getElementById('vpdNikGanda').value || '',
-        nama_padan: document.getElementById('vpdNama').value || '',
-        tmp_lahir_padan: document.getElementById('vpdTmpLahir').value || '',
-        tgl_lahir_padan: document.getElementById('vpdTglLahir').value || '',
-        nama_ibu_padan: document.getElementById('vpdNamaIbu').value || '',
-        jk_padan: document.getElementById('vpdJk').value || '',
-        desa: document.getElementById('vpdDesa').value || '',
-        updated_at: serverTimestamp()
-    };
-
-    // ============================================================
-    // ===== AMBIL DATA LAMA (UNTUK DETEKSI FIELD YANG DIHAPUS) =====
-    // ============================================================
-    let oldData = null;
-    if (docId) {
-        oldData = vervalpdDataCache.find(d => d.id === docId) || null;
-    }
-
-    // ============================================================
-    // ===== KUMPULKAN CUSTOM FIELDS DARI FORM =====
-    // ============================================================
-    const customLabels = {};       // { key: label } — untuk metadata
-    const currentCustomKeys = [];  // key yang masih ada di form
-    const customRows = document.querySelectorAll('#vpdCustomFieldsContainer .custom-field-row');
-
-    customRows.forEach(row => {
-        const key = row.querySelector('.custom-key')?.value.trim();
-        const label = row.querySelector('.custom-label')?.value.trim() || '';
-        const val = row.querySelector('.custom-value')?.value.trim() || '';
-
-        if (!key) return;
-
-        currentCustomKeys.push(key);
-
-        // Simpan label (untuk metadata)
-        if (label) {
-            customLabels[key] = label;
-        }
-
-        // ============================================================
-        // ===== KEPUTUSAN: SIMPAN atau HAPUS =====
-        // ============================================================
-        if (val === '') {
-            // Nilai kosong → HAPUS field dari Firestore
-            // (hanya jika field tersebut ada di data lama)
-            if (oldData && oldData[key] !== undefined) {
-                data[key] = deleteField();
-                console.log(`🗑️ Menghapus field kosong: ${key}`);
-            }
-            // Jika tidak ada di data lama, tidak perlu diapa-apakan
-        } else {
-            // Nilai terisi → SIMPAN
-            data[key] = val;
-        }
-    });
-
-    // ============================================================
-    // ===== HAPUS FIELD LAMA YANG SUDAH TIDAK ADA DI FORM =====
-    // (misalnya user menekan tombol "Hapus" pada baris custom field)
-    // ============================================================
-    if (oldData) {
-        Object.keys(oldData).forEach(oldKey => {
-            if (oldKey.startsWith('custom_') && oldKey !== 'custom_') {
-                // Field lama yang tidak ada lagi di form saat ini
-                if (!currentCustomKeys.includes(oldKey)) {
-                    data[oldKey] = deleteField();
-                    console.log(`🗑️ Menghapus field yang dihilangkan dari form: ${oldKey}`);
-                }
-            }
-        });
-
-        // Bersihkan metadata label lama yang field-nya sudah dihapus
-        if (oldData._custom_labels) {
-            const newLabels = { ...customLabels };
-            // Hanya pertahankan label untuk key yang masih ada
-            Object.keys(newLabels).forEach(k => {
-                if (!currentCustomKeys.includes(k)) {
-                    delete newLabels[k];
-                }
-            });
-
-            // Set metadata baru (atau hapus jika kosong)
-            if (Object.keys(newLabels).length > 0) {
-                data._custom_labels = newLabels;
-            } else if (oldData._custom_labels) {
-                data._custom_labels = deleteField();
-            }
-        } else if (Object.keys(customLabels).length > 0) {
-            data._custom_labels = customLabels;
-        }
-    } else {
-        // Data baru → langsung set metadata jika ada
-        if (Object.keys(customLabels).length > 0) {
-            data._custom_labels = customLabels;
-        }
-    }
-
-    // ============================================================
-    // ===== SIMPAN KE FIRESTORE =====
-    // ============================================================
-    const loader = document.getElementById('loader');
-    if (loader) loader.style.display = 'flex';
-
-    try {
-        if (docId) {
-            await updateDoc(doc(db, "vervalpd", docId), data);
-            if (typeof showToast === 'function') {
-                showToast({
-                    title: '✅ Data Berhasil Diperbarui',
-                    message: `Data VervalPD untuk "${data.nama}" berhasil diperbarui.`,
-                    type: 'success',
-                    duration: 3000,
-                    icon: 'bi-check-circle-fill'
-                });
-            }
-        } else {
-            // Hapus deleteField() untuk data baru (tidak relevan)
-            Object.keys(data).forEach(k => {
-                if (data[k] && typeof data[k] === 'object' && data[k]._methodName === 'deleteField') {
-                    delete data[k];
-                }
-            });
-            data.created_at = serverTimestamp();
-            await addDoc(collection(db, "vervalpd"), data);
-            if (typeof showToast === 'function') {
-                showToast({
-                    title: '✅ Data Berhasil Ditambahkan',
-                    message: `Data VervalPD untuk "${data.nama}" berhasil disimpan.`,
-                    type: 'success',
-                    duration: 3000,
-                    icon: 'bi-check-circle-fill'
-                });
-            }
-        }
-
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalVervalPD'));
-        if (modal) modal.hide();
-
-        // Reload data dari Firestore
-        await loadVervalPD();
-
-    } catch (error) {
-        console.error("Error simpan vervalpd:", error);
-        if (typeof showAlertModal === 'function') {
-            await showAlertModal({
-                title: 'Gagal Menyimpan',
-                message: 'Terjadi kesalahan saat menyimpan data: ' + error.message,
-                type: 'danger',
-                okText: 'OK',
-                icon: 'bi-x-circle-fill'
-            });
-        } else {
-            alert('Gagal menyimpan: ' + error.message);
-        }
-    } finally {
-        if (loader) loader.style.display = 'none';
-    }
-};
-
-
-// ===== HAPUS VERVALPD =====
-window.hapusVervalPD = async function(docId) {
-    const data = vervalpdDataCache.find(d => d.id === docId);
-    if (!data) return;
-
-    const konfirmasi = await showConfirmModal({
-        title: 'Konfirmasi Hapus Data',
-        message: `Apakah Anda yakin ingin menghapus data VervalPD untuk santri "${data.nama}"?`,
-        details: `
-            <div style="display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px;">
-                <span style="font-weight: 600;">Nama</span><span>: ${data.nama}</span>
-                <span style="font-weight: 600;">Kelas</span><span>: ${data.kelas || '-'}</span>
-            </div>
-            <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
-                <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                <strong>Peringatan:</strong> Data yang dihapus tidak dapat dikembalikan!
-            </div>
-        `,
-        type: 'danger',
-        okText: 'Ya, Hapus Data',
-        cancelText: 'Batal',
-        icon: 'bi-trash-fill'
-    });
-
-    if (!konfirmasi) return;
-
-    const loader = document.getElementById('loader');
-    if (loader) loader.style.display = 'flex';
-
-    try {
-        await deleteDoc(doc(db, "vervalpd", docId));
-        if (typeof showToast === 'function') {
-            showToast({
-                title: '✅ Data Berhasil Dihapus',
-                message: `Data VervalPD untuk "${data.nama}" telah dihapus.`,
-                type: 'success',
-                duration: 3000,
-                icon: 'bi-check-circle-fill'
-            });
-        }
-        await loadVervalPD();
-    } catch (error) {
-        console.error("Error hapus vervalpd:", error);
-        if (typeof showAlertModal === 'function') {
-            await showAlertModal({
-                title: 'Gagal Menghapus',
-                message: 'Terjadi kesalahan: ' + error.message,
-                type: 'danger',
-                okText: 'OK',
-                icon: 'bi-x-circle-fill'
-            });
-        }
-    } finally {
-        if (loader) loader.style.display = 'none';
-    }
-};
-
-
 window.exportVervalPD = function() {
-    if (vervalpdDataCache.length === 0) {
+    if (vervalpdMergedList.length === 0) {
         if (typeof showToast === 'function') {
             showToast({
                 title: 'Tidak Ada Data',
@@ -23519,32 +24328,48 @@ window.exportVervalPD = function() {
         return;
     }
 
-    // Header dasar
-    const baseHeaders = ['No', 'Nama Santri', 'Kelas', 'Jenjang', 'Sekolah', 'Terdaftar >1 Rombel',
-        'Keunikan NISN', 'NIK Dukcapil', 'NIK Ganda', 'Nama', 'Tempat Lahir', 'Tanggal Lahir',
-        'Nama Ibu Kandung', 'Jenis Kelamin', 'Desa/Kelurahan'];
+    const baseHeaders = ['No', 'Nama Santri', 'NIK Santri', 'NISN Santri', 'Kelas', 'Jenjang',
+        'Sekolah', 'Terdaftar >1 Rombel', 'Keunikan NISN', 'NIK Dukcapil',
+        'NIK Ganda', 'Nama', 'Tempat Lahir', 'Tanggal Lahir',
+        'Nama Ibu Kandung', 'Jenis Kelamin', 'Desa/Kelurahan', 'Status Masalah'];
 
-    // Header custom
     const customHeaders = window.vpdCustomColumns.map(c => c.label);
-    
     const headers = [...baseHeaders, ...customHeaders];
     const excelData = [headers];
 
-    vervalpdDataCache.forEach((d, idx) => {
+    vervalpdMergedList.forEach((d, idx) => {
+        const allFields = [
+            d.sekolah, d.rombel, d.nisn_masalah, d.nik_dukcapil, d.nik_ganda,
+            d.nama_padan, d.tmp_lahir_padan, d.tgl_lahir_padan, d.nama_ibu_padan,
+            d.jk_padan, d.desa
+        ];
+        const filledCount = allFields.filter(v => v && v !== '').length;
+
         const row = [
             idx + 1,
-            d.nama || '', d.kelas || '', d.jenjang || '',
-            d.sekolah || '', d.rombel || '', d.nisn || '',
-            d.nik_dukcapil || '', d.nik_ganda || '',
-            d.nama_padan || '', d.tmp_lahir_padan || '', d.tgl_lahir_padan || '',
-            d.nama_ibu_padan || '', d.jk_padan || '', d.desa || ''
+            d.nama || '',
+            d.nik || '',
+            d.nisn || '',
+            d.kelas || '',
+            d.jenjang || '',
+            d.sekolah || '',
+            d.rombel || '',
+            d.nisn_masalah || '',
+            d.nik_dukcapil || '',
+            d.nik_ganda || '',
+            d.nama_padan || '',
+            d.tmp_lahir_padan || '',
+            d.tgl_lahir_padan || '',
+            d.nama_ibu_padan || '',
+            d.jk_padan || '',
+            d.desa || '',
+            filledCount > 0 ? `⚠️ ${filledCount} Masalah` : (d.vpd_id ? '✅ Tidak Ada' : '⬜ Belum Diisi')
         ];
-        
-        // Tambahkan nilai custom
+
         window.vpdCustomColumns.forEach(col => {
             row.push(d[col.key] || '');
         });
-        
+
         excelData.push(row);
     });
 
@@ -23557,25 +24382,12 @@ window.exportVervalPD = function() {
     if (typeof showToast === 'function') {
         showToast({
             title: '✅ Export Berhasil',
-            message: `${vervalpdDataCache.length} data VervalPD berhasil diexport.`,
+            message: `${vervalpdMergedList.length} data VervalPD berhasil diexport.`,
             type: 'success',
             duration: 3000,
             icon: 'bi-file-earmark-excel'
         });
     }
-};
-
-
-// ===== DEBOUNCE KHUSUS VERVALPD =====
-let vervalpdSearchTimer = null;
-
-window.debouncedRenderVervalPD = function() {
-    if (vervalpdSearchTimer) {
-        clearTimeout(vervalpdSearchTimer);
-    }
-    vervalpdSearchTimer = setTimeout(() => {
-        renderVervalPDTable();
-    }, 400); // tunggu 400ms setelah user berhenti mengetik
 };
 
 
