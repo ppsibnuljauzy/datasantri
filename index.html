@@ -6279,6 +6279,85 @@ div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
     font-size: 0.65rem;
     font-weight: 700;
 }
+
+
+/* ===== SUB-TAB KELENGKAPAN KOLOM ===== */
+#klgSubTab.nav-pills {
+    gap: 6px;
+    padding: 0;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+#klgSubTab .nav-link {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+#klgSubTab .nav-link i {
+    font-size: 0.95rem;
+    color: #adb5bd;
+    transition: color 0.25s ease;
+}
+
+#klgSubTab .nav-link:hover {
+    color: var(--primary-color);
+    background: var(--bg-card-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+#klgSubTab .nav-link:hover i {
+    color: var(--accent-color);
+}
+
+#klgSubTab .nav-link.active {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    color: white !important;
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(26, 38, 57, 0.25);
+}
+
+#klgSubTab .nav-link.active i {
+    color: var(--gold-color) !important;
+}
+
+#klgSubTab .nav-link .klg-tab-badge {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    font-size: 0.6rem;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+#klgSubTab .nav-link.active .klg-tab-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+/* Dark mode */
+[data-theme="dark"] #klgSubTab .nav-link {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] #klgSubTab .nav-link.active {
+    background: linear-gradient(135deg, #1a2639, #2c3e50) !important;
+}
 </style>
 </head>
 <body>
@@ -8163,28 +8242,64 @@ div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
 
     <!-- Layout 2 Kolom: Kiri = Daftar Kolom, Kanan = Detail -->
     <div class="row g-3">
-        <!-- KIRI: Daftar Kolom -->
-        <div class="col-lg-5">
-            <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card); height: 100%;">
-                <div class="card-body" style="padding: 16px 18px;">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="stat-label" style="color: var(--text-muted); margin-bottom: 0;">
-                            <i class="bi bi-list-columns me-1"></i> Daftar Kolom
-                        </div>
-                        <span class="badge bg-secondary" id="klgShowingInfo" style="font-size: 0.65rem;">
-                            0 kolom
-                        </span>
-                    </div>
-                    <div style="max-height: 520px; overflow-y: auto; padding-right: 4px;"
-                         id="klgColumnList">
-                        <div class="text-center text-muted py-4">
-                            <div class="spinner-border spinner-border-sm text-primary"></div>
-                            <div style="font-size: 0.8rem; margin-top: 8px;">Memuat kolom...</div>
-                        </div>
-                    </div>
+        <!-- KIRI: Daftar Kolom (dengan Sub-Tab) -->
+<div class="col-lg-5">
+    <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card); height: 100%;">
+        <div class="card-body" style="padding: 16px 18px;">
+
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="stat-label" style="color: var(--text-muted); margin-bottom: 0;">
+                    <i class="bi bi-list-columns me-1"></i> Daftar Kolom
+                </div>
+                <span class="badge bg-secondary" id="klgShowingInfo" style="font-size: 0.65rem;">
+                    0 kolom
+                </span>
+            </div>
+
+            <!-- SUB-TAB KELENGKAPAN -->
+            <ul class="nav nav-pills" id="klgSubTab" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-klg-tab="pribadi" type="button"
+                            onclick="switchKelengkapanTab('pribadi')">
+                        <i class="bi bi-person-circle"></i> Pribadi
+                        <span class="klg-tab-badge" id="klg-badge-pribadi">0</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-klg-tab="akademik" type="button"
+                            onclick="switchKelengkapanTab('akademik')">
+                        <i class="bi bi-book"></i> Akademik
+                        <span class="klg-tab-badge" id="klg-badge-akademik">0</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-klg-tab="orangtua" type="button"
+                            onclick="switchKelengkapanTab('orangtua')">
+                        <i class="bi bi-people"></i> Orang Tua
+                        <span class="klg-tab-badge" id="klg-badge-orangtua">0</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-klg-tab="wali" type="button"
+                            onclick="switchKelengkapanTab('wali')">
+                        <i class="bi bi-person-badge"></i> Wali & Akhir
+                        <span class="klg-tab-badge" id="klg-badge-wali">0</span>
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Daftar kolom (di-filter berdasarkan sub-tab aktif) -->
+            <div style="max-height: 480px; overflow-y: auto; padding-right: 4px; margin-top: 10px;"
+                 id="klgColumnList">
+                <div class="text-center text-muted py-4">
+                    <div class="spinner-border spinner-border-sm text-primary"></div>
+                    <div style="font-size: 0.8rem; margin-top: 8px;">Memuat kolom...</div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
         <!-- KANAN: Detail Santri yang Kosong -->
         <div class="col-lg-7">
@@ -10284,8 +10399,18 @@ window.refreshMonitoringIfActive = function() {
             if (typeof loadMonitoringIdentitas === 'function') loadMonitoringIdentitas();
         }
 
-        if (kelengkapanPane && kelengkapanPane.classList.contains('active')) {  // ⬅️ TAMBAHKAN
-            if (typeof loadKelengkapanKolom === 'function') loadKelengkapanKolom();
+        if (kelengkapanPane && kelengkapanPane.classList.contains('active')) {
+            // ✅ TAMBAHKAN: Simpan kolom terpilih, reload, lalu restore
+            const kolomTerpilih = kelengkapanSelectedColumn;
+
+            if (typeof loadKelengkapanKolom === 'function') {
+                loadKelengkapanKolom().then(() => {
+                    if (kolomTerpilih && 
+                        kelengkapanStatsCache.some(s => s.field === kolomTerpilih)) {
+                        pilihKolomKelengkapan(kolomTerpilih);
+                    }
+                });
+            }
         }
     }
 };
@@ -21202,6 +21327,11 @@ window.simpanEditData = async () => {
             updateDataSubTabBadges();
         }
 
+        // ✅ TAMBAHKAN: Refresh kelengkapan kolom jika sedang aktif
+        if (typeof refreshKelengkapanIfActive === 'function') {
+    refreshKelengkapanIfActive();
+        }
+
     } catch (error) {
         console.error("Error mengupdate data:", error);
         await showAlertModal({
@@ -22941,6 +23071,44 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
+
+// ============================================================
+// ===== AUTO REFRESH KELENGKAPAN SETELAH EDIT DATA =====
+// ============================================================
+const modalEditDataEl = document.getElementById('modalEditData');
+if (modalEditDataEl) {
+    modalEditDataEl.addEventListener('hidden.bs.modal', function() {
+        // Cek apakah kita perlu refresh kelengkapan
+        if (kelengkapanNeedRefresh) {
+            kelengkapanNeedRefresh = false;
+
+            // Cek apakah sub-tab kelengkapan sedang aktif
+            const kelengkapanPane = document.getElementById('sub-analisis-kelengkapan-pane');
+            const analisisTab = document.getElementById('tab-analisis');
+
+            if (analisisTab && analisisTab.classList.contains('active') &&
+                kelengkapanPane && kelengkapanPane.classList.contains('active')) {
+
+                // Simpan state kolom yang sedang dipilih
+                const kolomTerpilih = kelengkapanSelectedColumn;
+
+                // Reload data kelengkapan
+                setTimeout(async () => {
+                    await loadKelengkapanKolom();
+
+                    // ✅ Kembalikan pilihan kolom jika ada
+                    if (kolomTerpilih) {
+                        // Cek apakah kolom masih ada di stats cache
+                        const statExists = kelengkapanStatsCache.some(s => s.field === kolomTerpilih);
+                        if (statExists) {
+                            pilihKolomKelengkapan(kolomTerpilih);
+                        }
+                    }
+                }, 300);
+            }
+        }
+    });
+}
 });
 
 
@@ -23475,6 +23643,7 @@ document.querySelector('button[data-bs-target="#tab-analisis"]')?.addEventListen
     loadTabAnalisis();
 });
 
+
 // ===== REFRESH OTOMATIS SETELAH SIMPAN/EDIT DATA =====
 // Hook ke fungsi simpanDataBaru, simpanEditData, saveAllData
 // untuk refresh monitoring jika tab monitoring sedang aktif
@@ -23484,6 +23653,34 @@ function refreshMonitoringIfActive() {
         loadMonitoringIdentitas();
     }
 }
+
+
+// ============================================================
+// ===== REFRESH KELENGKAPAN JIKA SUB-TAB AKTIF =====
+// ============================================================
+window.refreshKelengkapanIfActive = function() {
+    const analisisTab = document.getElementById('tab-analisis');
+    const kelengkapanPane = document.getElementById('sub-analisis-kelengkapan-pane');
+
+    if (analisisTab && analisisTab.classList.contains('active') &&
+        kelengkapanPane && kelengkapanPane.classList.contains('active')) {
+
+        // Simpan state kolom yang sedang dipilih
+        const kolomTerpilih = kelengkapanSelectedColumn;
+
+        setTimeout(async () => {
+            await loadKelengkapanKolom();
+
+            // Kembalikan pilihan kolom
+            if (kolomTerpilih) {
+                const statExists = kelengkapanStatsCache.some(s => s.field === kolomTerpilih);
+                if (statExists) {
+                    pilihKolomKelengkapan(kolomTerpilih);
+                }
+            }
+        }, 200);
+    }
+};
 
 
 // ============================================================
@@ -25188,6 +25385,56 @@ const KELENGKAPAN_LABELS = {
     no_ijazah: 'No. Ijazah/Mutasi'
 };
 
+
+// ============================================================
+// ===== KONFIGURASI SUB-TAB KELENGKAPAN =====
+// ============================================================
+const KELENGKAPAN_TAB_CONFIG = {
+    pribadi: {
+        label: 'Pribadi',
+        icon: 'bi-person-circle',
+        fields: [
+            'kode_absen', 'nama', 'tmp_lahir', 'tgl_lahir', 'jk',
+            'stat_anak', 'anak_ke', 'nik',
+            'alamat', 'desa', 'kec', 'kab', 'prov', 'pos',
+            'nisn'
+        ]
+    },
+    akademik: {
+        label: 'Akademik',
+        icon: 'bi-book',
+        fields: [
+            'stat_awal', 'kls_awal', 'kls_now', 'sem_awal', 'tgl_masuk',
+            'program', 'jenjang', 'sekolah_asal',
+            'npsn_asal', 'nspp_asal', 'alamat_asal', 'stat_tinggal'
+        ]
+    },
+    orangtua: {
+        label: 'Orang Tua',
+        icon: 'bi-people',
+        fields: [
+            'no_kk',
+            'ayah', 'stat_ayah', 'nik_ayah', 'pen_ayah', 'pek_ayah',
+            'gaji_ayah', 'hp_ayah', 'thn_ayah',
+            'ibu', 'stat_ibu', 'nik_ibu', 'pen_ibu', 'pek_ibu',
+            'gaji_ibu', 'hp_ibu', 'thn_ibu',
+            'almt_ortu'
+        ]
+    },
+    wali: {
+        label: 'Wali & Akhir',
+        icon: 'bi-person-badge',
+        fields: [
+            'kk_wali', 'nik_wali', 'nama_wali', 'hub_wali',
+            'pen_wali', 'pek_wali', 'gaji_wali', 'hp_wali', 'thn_wali', 'almt_wali',
+            'ket', 'stat_akhir', 'tgl_akhir', 'no_ijazah'
+        ]
+    }
+};
+
+// State untuk sub-tab kelengkapan aktif
+let kelengkapanActiveTab = 'pribadi';
+
 // State
 let kelengkapanDataCache = [];       // Array data santri (mentah)
 let kelengkapanStatsCache = [];      // Statistik per kolom
@@ -25195,6 +25442,8 @@ let kelengkapanSelectedColumn = null; // Kolom yang dipilih
 let kelengkapanPage = 1;
 let kelengkapanPageSize = 25;
 let kelengkapanDetailList = [];      // Hasil filter untuk kolom terpilih
+let kelengkapanNeedRefresh = false;
+
 
 // ============================================================
 // ===== LOAD DATA KELENGKAPAN =====
@@ -25212,18 +25461,54 @@ window.loadKelengkapanKolom = async function() {
 
         // Hitung statistik per kolom
         hitungStatistikKelengkapan();
+
+        // ============================================================
+        // ===== RESET SUB-TAB KE "PRIBADI" =====
+        // ============================================================
+        kelengkapanActiveTab = 'pribadi';
+        document.querySelectorAll('#klgSubTab .nav-link').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.klgTab === 'pribadi');
+        });
+
+        // Render daftar kolom (sudah difilter per sub-tab)
         renderKelengkapanColumnList();
         updateKelengkapanSummary();
         updateKelengkapanBadge();
 
-        // Reset detail
+        // ============================================================
+        // ===== RESET DETAIL (PANEL KANAN) =====
+        // ============================================================
         kelengkapanSelectedColumn = null;
         kelengkapanDetailList = [];
+        kelengkapanPage = 1;
+
         renderKelengkapanDetail();
-        document.getElementById('klgDetailTitle').innerHTML =
-            '<i class="bi bi-info-circle me-1"></i> Pilih kolom di kiri untuk melihat detail';
-        document.getElementById('klgDetailSearchWrapper').style.display = 'none';
-        document.getElementById('klgDetailPagination').style.display = 'none';
+
+        // Kembalikan judul detail ke placeholder awal
+        const detailTitle = document.getElementById('klgDetailTitle');
+        if (detailTitle) {
+            detailTitle.innerHTML =
+                '<i class="bi bi-info-circle me-1"></i> Pilih kolom di kiri untuk melihat detail';
+        }
+
+        // Sembunyikan search & pagination
+        const searchWrapper = document.getElementById('klgDetailSearchWrapper');
+        if (searchWrapper) searchWrapper.style.display = 'none';
+
+        const paginationEl = document.getElementById('klgDetailPagination');
+        if (paginationEl) paginationEl.style.display = 'none';
+
+        // Kosongkan input search (jika ada)
+        const searchInput = document.getElementById('klgDetailSearch');
+        if (searchInput) searchInput.value = '';
+
+        // Reset scroll daftar kolom ke atas
+        const listEl = document.getElementById('klgColumnList');
+        if (listEl) listEl.scrollTop = 0;
+
+        // Reset scroll panel detail ke atas
+        const detailContent = document.getElementById('klgDetailContent');
+        if (detailContent) detailContent.scrollTop = 0;
 
     } catch (error) {
         console.error('Error load kelengkapan:', error);
@@ -25240,6 +25525,7 @@ window.loadKelengkapanKolom = async function() {
         if (loader) loader.style.display = 'none';
     }
 };
+
 
 // ============================================================
 // ===== HITUNG STATISTIK PER KOLOM =====
@@ -25304,24 +25590,47 @@ function updateKelengkapanSummary() {
     if (el('klgShowingInfo')) el('klgShowingInfo').textContent = totalKolom + ' kolom';
 }
 
+
 // ============================================================
-// ===== RENDER DAFTAR KOLOM (KIRI) =====
+// ===== RENDER DAFTAR KOLOM (KIRI) — DENGAN FILTER SUB-TAB =====
 // ============================================================
 function renderKelengkapanColumnList() {
     const container = document.getElementById('klgColumnList');
     if (!container) return;
 
-    if (kelengkapanStatsCache.length === 0) {
-        container.innerHTML = '<div class="text-center text-muted py-4">Tidak ada kolom untuk dicek.</div>';
+    // Ambil field untuk sub-tab yang aktif
+    const tabConfig = KELENGKAPAN_TAB_CONFIG[kelengkapanActiveTab];
+    if (!tabConfig) return;
+
+    // Filter stats hanya untuk field di tab ini
+    const statsTab = kelengkapanStatsCache.filter(s =>
+        tabConfig.fields.includes(s.field)
+    );
+
+    // Update badge per tab
+    updateKelengkapanTabBadges();
+
+    // Update info jumlah kolom
+    const infoEl = document.getElementById('klgShowingInfo');
+    if (infoEl) {
+        infoEl.textContent = `${statsTab.length} kolom • ${tabConfig.label}`;
+    }
+
+    if (statsTab.length === 0) {
+        container.innerHTML = `
+            <div class="text-center text-muted py-4">
+                <i class="bi bi-inbox fs-3 d-block mb-2" style="opacity: 0.3;"></i>
+                <div style="font-size: 0.85rem;">Tidak ada kolom untuk tab ini.</div>
+            </div>
+        `;
         return;
     }
 
     let html = '';
-    kelengkapanStatsCache.forEach((s, idx) => {
-        // Warna progress berdasarkan persen
-        let barColor = 'linear-gradient(90deg, #2ecc71, #27ae60)'; // hijau
-        if (s.persen < 50) barColor = 'linear-gradient(90deg, #e74c3c, #c0392b)'; // merah
-        else if (s.persen < 80) barColor = 'linear-gradient(90deg, #f39c12, #e67e22)'; // oranye
+    statsTab.forEach((s, idx) => {
+        let barColor = 'linear-gradient(90deg, #2ecc71, #27ae60)';
+        if (s.persen < 50) barColor = 'linear-gradient(90deg, #e74c3c, #c0392b)';
+        else if (s.persen < 80) barColor = 'linear-gradient(90deg, #f39c12, #e67e22)';
 
         const isActive = kelengkapanSelectedColumn === s.field;
 
@@ -25330,7 +25639,9 @@ function renderKelengkapanColumnList() {
                  onclick="pilihKolomKelengkapan('${s.field}')">
                 <div class="klg-col-name">
                     <span>
-                        <span style="color: var(--text-muted); font-size: 0.7rem; margin-right: 4px;">${idx + 1}.</span>
+                        <span style="color: var(--text-muted); font-size: 0.7rem; margin-right: 4px;">
+                            ${idx + 1}.
+                        </span>
                         ${s.label}
                     </span>
                     <span style="color: ${s.persen >= 80 ? '#2ecc71' : s.persen >= 50 ? '#f39c12' : '#e74c3c'};
@@ -25353,36 +25664,86 @@ function renderKelengkapanColumnList() {
 }
 
 // ============================================================
-// ===== PILIH KOLOM → TAMPILKAN DETAIL =====
+// ===== SWITCH SUB-TAB KELENGKAPAN =====
 // ============================================================
+window.switchKelengkapanTab = function(tabKey) {
+    if (!KELENGKAPAN_TAB_CONFIG[tabKey]) return;
+
+    kelengkapanActiveTab = tabKey;
+
+    // Update active state di nav-pills
+    document.querySelectorAll('#klgSubTab .nav-link').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.klgTab === tabKey);
+    });
+
+    // Re-render daftar kolom
+    renderKelengkapanColumnList();
+
+    // Scroll list ke atas
+    const listEl = document.getElementById('klgColumnList');
+    if (listEl) listEl.scrollTop = 0;
+};
+
+// ============================================================
+// ===== UPDATE BADGE JUMLAH KOLOM KURANG PER TAB =====
+// ============================================================
+function updateKelengkapanTabBadges() {
+    Object.keys(KELENGKAPAN_TAB_CONFIG).forEach(tabKey => {
+        const cfg = KELENGKAPAN_TAB_CONFIG[tabKey];
+        const badge = document.getElementById(`klg-badge-${tabKey}`);
+        if (!badge) return;
+
+        // Hitung kolom yang persennya < 100 di tab ini
+        const jumlahKurang = kelengkapanStatsCache.filter(s =>
+            cfg.fields.includes(s.field) && s.persen < 100
+        ).length;
+
+        badge.textContent = jumlahKurang;
+        badge.style.display = jumlahKurang > 0 ? 'inline-block' : 'none';
+    });
+}
+
+
 window.pilihKolomKelengkapan = function(field) {
     kelengkapanSelectedColumn = field;
     kelengkapanPage = 1;
 
-    // Update highlight di daftar kolom
+    // ✅ Auto-switch ke tab yang sesuai dengan field ini
+    let targetTab = null;
+    Object.keys(KELENGKAPAN_TAB_CONFIG).forEach(tabKey => {
+        if (KELENGKAPAN_TAB_CONFIG[tabKey].fields.includes(field)) {
+            targetTab = tabKey;
+        }
+    });
+    if (targetTab && targetTab !== kelengkapanActiveTab) {
+        kelengkapanActiveTab = targetTab;
+        document.querySelectorAll('#klgSubTab .nav-link').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.klgTab === targetTab);
+        });
+    }
+
+    // Update highlight
     renderKelengkapanColumnList();
 
-    // Cari label
     const stat = kelengkapanStatsCache.find(s => s.field === field);
     const label = stat ? stat.label : field;
 
-    // Update judul detail
     document.getElementById('klgDetailTitle').innerHTML =
         `<i class="bi bi-list-check me-1" style="color: var(--gold-color);"></i>
          Santri yang <strong style="color: #e74c3c;">belum mengisi</strong>: <strong>${label}</strong>`;
 
-    // Tampilkan search
     document.getElementById('klgDetailSearchWrapper').style.display = 'block';
     document.getElementById('klgDetailSearch').value = '';
 
-    // Bangun daftar santri yang kosong di kolom ini
     kelengkapanDetailList = kelengkapanDataCache.filter(d => {
-        const val = (d[field] !== undefined && d[field] !== null) ? String(d[field]).trim() : '';
+        const val = (d[field] !== undefined && d[field] !== null)
+            ? String(d[field]).trim() : '';
         return val === '' || val === '-';
     });
 
     renderKelengkapanDetail();
 };
+
 
 // ============================================================
 // ===== RENDER DETAIL (KANAN) =====
@@ -25511,10 +25872,14 @@ window.changeKelengkapanPage = function(direction) {
     if (container) container.scrollTop = 0;
 };
 
+
 // ============================================================
-// ===== EDIT SANTRI DARI KELENGKAPAN =====
+// ===== EDIT SANTRI DARI KELENGKAPAN (DENGAN AUTO REFRESH) =====
 // ============================================================
 window.editSantriDariKelengkapan = function(docId) {
+    // ✅ Set flag bahwa kita perlu refresh setelah edit selesai
+    kelengkapanNeedRefresh = true;
+
     // Cari baris di tabel utama
     const mainRow = document.querySelector(`#tbodySantri tr[data-id="${docId}"]`);
     if (mainRow) {
@@ -25531,26 +25896,69 @@ window.editSantriDariKelengkapan = function(docId) {
     }
 };
 
+
 // ============================================================
-// ===== RESET FILTER =====
+// ===== RESET FILTER KELENGKAPAN =====
 // ============================================================
 window.resetFilterKelengkapan = function() {
+    // ============================================================
+    // ===== RESET STATE =====
+    // ============================================================
     kelengkapanSelectedColumn = null;
     kelengkapanPage = 1;
     kelengkapanDetailList = [];
 
+    // ============================================================
+    // ===== RESET SUB-TAB KE "PRIBADI" =====
+    // ============================================================
+    kelengkapanActiveTab = 'pribadi';
+    document.querySelectorAll('#klgSubTab .nav-link').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.klgTab === 'pribadi');
+    });
+
+    // ============================================================
+    // ===== RE-RENDER DAFTAR KOLOM =====
+    // ============================================================
     renderKelengkapanColumnList();
+
+    // ============================================================
+    // ===== RESET PANEL DETAIL (KANAN) =====
+    // ============================================================
     renderKelengkapanDetail();
 
-    document.getElementById('klgDetailTitle').innerHTML =
-        '<i class="bi bi-info-circle me-1"></i> Pilih kolom di kiri untuk melihat detail';
-    document.getElementById('klgDetailSearchWrapper').style.display = 'none';
-    document.getElementById('klgDetailPagination').style.display = 'none';
+    // Kembalikan judul detail ke placeholder awal
+    const detailTitle = document.getElementById('klgDetailTitle');
+    if (detailTitle) {
+        detailTitle.innerHTML =
+            '<i class="bi bi-info-circle me-1"></i> Pilih kolom di kiri untuk melihat detail';
+    }
 
+    // Sembunyikan search & pagination
+    const searchWrapper = document.getElementById('klgDetailSearchWrapper');
+    if (searchWrapper) searchWrapper.style.display = 'none';
+
+    const paginationEl = document.getElementById('klgDetailPagination');
+    if (paginationEl) paginationEl.style.display = 'none';
+
+    // Kosongkan input search
+    const searchInput = document.getElementById('klgDetailSearch');
+    if (searchInput) searchInput.value = '';
+
+    // Reset scroll daftar kolom ke atas
+    const listEl = document.getElementById('klgColumnList');
+    if (listEl) listEl.scrollTop = 0;
+
+    // Reset scroll panel detail ke atas
+    const detailContent = document.getElementById('klgDetailContent');
+    if (detailContent) detailContent.scrollTop = 0;
+
+    // ============================================================
+    // ===== NOTIFIKASI =====
+    // ============================================================
     if (typeof showToast === 'function') {
         showToast({
             title: '🔄 Filter Direset',
-            message: 'Filter kelengkapan kolom berhasil dikembalikan.',
+            message: 'Filter kelengkapan kolom berhasil dikembalikan ke pengaturan awal.',
             type: 'success',
             duration: 2500,
             icon: 'bi-arrow-counterclockwise'
@@ -25558,8 +25966,9 @@ window.resetFilterKelengkapan = function() {
     }
 };
 
+
 // ============================================================
-// ===== EXPORT EXCEL =====
+// ===== EXPORT EXCEL (DENGAN KATEGORI SUB-TAB) =====
 // ============================================================
 window.exportKelengkapanKolom = function() {
     if (kelengkapanStatsCache.length === 0) {
@@ -25575,27 +25984,99 @@ window.exportKelengkapanKolom = function() {
         return;
     }
 
+    // ============================================================
+    // ===== HELPER: CARI KATEGORI SUB-TAB DARI FIELD =====
+    // ============================================================
+    function getKategoriField(field) {
+        if (typeof KELENGKAPAN_TAB_CONFIG === 'undefined') return '-';
+        for (const key of Object.keys(KELENGKAPAN_TAB_CONFIG)) {
+            if (KELENGKAPAN_TAB_CONFIG[key].fields.includes(field)) {
+                return KELENGKAPAN_TAB_CONFIG[key].label;
+            }
+        }
+        return 'Lainnya';
+    }
+
+    // ============================================================
+    // ===== HELPER: URUTAN KATEGORI UNTUK SORTING =====
+    // ============================================================
+    const KATEGORI_ORDER = ['Pribadi', 'Akademik', 'Orang Tua', 'Wali & Akhir', 'Lainnya'];
+    function getKategoriOrder(kategori) {
+        const idx = KATEGORI_ORDER.indexOf(kategori);
+        return idx === -1 ? 99 : idx;
+    }
+
     const wb = XLSX.utils.book_new();
 
-    // ===== SHEET 1: Statistik Per Kolom =====
-    const sheet1Data = [['No', 'Nama Kolom', 'Terisi', 'Kosong', 'Total', 'Persentase']];
-    kelengkapanStatsCache.forEach((s, idx) => {
+    // ============================================================
+    // ===== SHEET 1: Statistik Per Kolom (dengan Kategori) =====
+    // ============================================================
+    const sheet1Data = [[
+        'No', 'Kategori', 'Nama Kolom', 'Terisi', 'Kosong', 'Total', 'Persentase', 'Status'
+    ]];
+
+    // Sort stats berdasarkan kategori lalu urutan asli
+    const statsSorted = [...kelengkapanStatsCache].sort((a, b) => {
+        const katA = getKategoriField(a.field);
+        const katB = getKategoriField(b.field);
+        const ordA = getKategoriOrder(katA);
+        const ordB = getKategoriOrder(katB);
+        if (ordA !== ordB) return ordA - ordB;
+
+        // Jika kategori sama, urutkan sesuai urutan di KELENGKAPAN_TAB_CONFIG
+        const katKeyA = Object.keys(KELENGKAPAN_TAB_CONFIG).find(k =>
+            KELENGKAPAN_TAB_CONFIG[k].label === katA);
+        const katKeyB = Object.keys(KELENGKAPAN_TAB_CONFIG).find(k =>
+            KELENGKAPAN_TAB_CONFIG[k].label === katB);
+
+        if (katKeyA && katKeyB) {
+            const idxA = KELENGKAPAN_TAB_CONFIG[katKeyA].fields.indexOf(a.field);
+            const idxB = KELENGKAPAN_TAB_CONFIG[katKeyB].fields.indexOf(b.field);
+            return idxA - idxB;
+        }
+        return 0;
+    });
+
+    statsSorted.forEach((s, idx) => {
+        const kategori = getKategoriField(s.field);
+        let statusText = '✅ Lengkap';
+        if (s.persen < 50) statusText = '❌ Kritis';
+        else if (s.persen < 80) statusText = '⚠️ Perlu Perbaikan';
+        else if (s.persen < 100) statusText = '🟡 Hampir Lengkap';
+
         sheet1Data.push([
             idx + 1,
+            kategori,
             s.label,
             s.terisi,
             s.kosong,
             s.total,
-            s.persen + '%'
+            s.persen + '%',
+            statusText
         ]);
     });
+
     const ws1 = XLSX.utils.aoa_to_sheet(sheet1Data);
-    ws1['!cols'] = [{ wch: 5 }, { wch: 30 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 12 }];
+    ws1['!cols'] = [
+        { wch: 5 },   // No
+        { wch: 16 },  // Kategori
+        { wch: 30 },  // Nama Kolom
+        { wch: 10 },  // Terisi
+        { wch: 10 },  // Kosong
+        { wch: 10 },  // Total
+        { wch: 12 },  // Persentase
+        { wch: 20 }   // Status
+    ];
     XLSX.utils.book_append_sheet(wb, ws1, 'Statistik_Per_Kolom');
 
+    // ============================================================
     // ===== SHEET 2: Detail Santri Kosong Per Kolom =====
-    // Format: satu baris per (santri, kolom kosong)
-    const sheet2Data = [['No', 'Nama Santri', 'Kelas', 'Jenjang', 'NIK', 'NISN', 'Kolom yang Kosong']];
+    // Format: satu baris per santri, kolom kosong digabung
+    // ============================================================
+    const sheet2Data = [[
+        'No', 'Nama Santri', 'Kelas', 'Jenjang', 'NIK', 'NISN',
+        'Jml Kosong', 'Kolom yang Kosong'
+    ]];
     let counter = 1;
 
     kelengkapanDataCache.forEach(d => {
@@ -25605,13 +26086,14 @@ window.exportKelengkapanKolom = function() {
         const nik = d.nik || '';
         const nisn = d.nisn || '';
 
-        // Kumpulkan kolom kosong
+        // Kumpulkan kolom kosong (dengan prefix kategori)
         const kolomKosong = [];
-        kelengkapanStatsCache.forEach(s => {
+        statsSorted.forEach(s => {
             const val = (d[s.field] !== undefined && d[s.field] !== null)
                 ? String(d[s.field]).trim() : '';
             if (val === '' || val === '-') {
-                kolomKosong.push(s.label);
+                const kategori = getKategoriField(s.field);
+                kolomKosong.push(`[${kategori}] ${s.label}`);
             }
         });
 
@@ -25619,33 +26101,55 @@ window.exportKelengkapanKolom = function() {
             sheet2Data.push([
                 counter++,
                 nama, kelas, jenjang, nik, nisn,
+                kolomKosong.length,
                 kolomKosong.join(', ')
             ]);
         }
     });
 
-    const ws2 = XLSX.utils.aoa_to_sheet(sheet2Data);
+    // Sort berdasarkan jumlah kolom kosong (terbanyak di atas)
+    const header2 = sheet2Data[0];
+    const rows2 = sheet2Data.slice(1);
+    rows2.sort((a, b) => b[6] - a[6]); // index 6 = Jml Kosong
+    // Re-number
+    rows2.forEach((r, i) => r[0] = i + 1);
+
+    const ws2 = XLSX.utils.aoa_to_sheet([header2, ...rows2]);
     ws2['!cols'] = [
-        { wch: 5 }, { wch: 28 }, { wch: 8 }, { wch: 10 },
-        { wch: 18 }, { wch: 14 }, { wch: 60 }
+        { wch: 5 },   // No
+        { wch: 28 },  // Nama Santri
+        { wch: 8 },   // Kelas
+        { wch: 10 },  // Jenjang
+        { wch: 18 },  // NIK
+        { wch: 14 },  // NISN
+        { wch: 10 },  // Jml Kosong
+        { wch: 80 }   // Kolom yang Kosong
     ];
     XLSX.utils.book_append_sheet(wb, ws2, 'Detail_Santri_Kosong');
 
+    // ============================================================
     // ===== SHEET 3: Detail Per Kolom (Transpose) =====
     // Format: satu baris per (kolom, santri yang kosong)
-    const sheet3Data = [['No', 'Nama Kolom', 'Nama Santri', 'Kelas', 'NIK', 'NISN']];
+    // ============================================================
+    const sheet3Data = [[
+        'No', 'Kategori', 'Nama Kolom', 'Nama Santri',
+        'Kelas', 'Jenjang', 'NIK', 'NISN'
+    ]];
     let counter3 = 1;
 
-    kelengkapanStatsCache.forEach(s => {
+    statsSorted.forEach(s => {
+        const kategori = getKategoriField(s.field);
         kelengkapanDataCache.forEach(d => {
             const val = (d[s.field] !== undefined && d[s.field] !== null)
                 ? String(d[s.field]).trim() : '';
             if (val === '' || val === '-') {
                 sheet3Data.push([
                     counter3++,
+                    kategori,
                     s.label,
                     d.nama || 'Tanpa Nama',
                     d.kls_now || '-',
+                    d.jenjang || '-',
                     d.nik || '',
                     d.nisn || ''
                 ]);
@@ -25655,13 +26159,87 @@ window.exportKelengkapanKolom = function() {
 
     const ws3 = XLSX.utils.aoa_to_sheet(sheet3Data);
     ws3['!cols'] = [
-        { wch: 5 }, { wch: 28 }, { wch: 28 }, { wch: 8 },
-        { wch: 18 }, { wch: 14 }
+        { wch: 5 },   // No
+        { wch: 16 },  // Kategori
+        { wch: 28 },  // Nama Kolom
+        { wch: 28 },  // Nama Santri
+        { wch: 8 },   // Kelas
+        { wch: 10 },  // Jenjang
+        { wch: 18 },  // NIK
+        { wch: 14 }   // NISN
     ];
     XLSX.utils.book_append_sheet(wb, ws3, 'Detail_Per_Kolom');
 
+    // ============================================================
+    // ===== SHEET 4 (BARU): Ringkasan Per Kategori =====
+    // ============================================================
+    const sheet4Data = [[
+        'No', 'Kategori', 'Jml Kolom', 'Kolom Lengkap',
+        'Kolom Kurang', 'Total Sel Kosong', 'Rata-rata Kelengkapan'
+    ]];
+
+    let counter4 = 1;
+    KATEGORI_ORDER.forEach(kat => {
+        if (kat === 'Lainnya') return; // skip kategori fallback
+
+        const statsKat = kelengkapanStatsCache.filter(s =>
+            getKategoriField(s.field) === kat);
+
+        if (statsKat.length === 0) return;
+
+        const jmlKolom = statsKat.length;
+        const kolomLengkap = statsKat.filter(s => s.persen === 100).length;
+        const kolomKurang = jmlKolom - kolomLengkap;
+        const totalSelKosong = statsKat.reduce((sum, s) => sum + s.kosong, 0);
+        const rataPersen = jmlKolom > 0
+            ? Math.round(statsKat.reduce((sum, s) => sum + s.persen, 0) / jmlKolom)
+            : 0;
+
+        sheet4Data.push([
+            counter4++,
+            kat,
+            jmlKolom,
+            kolomLengkap,
+            kolomKurang,
+            totalSelKosong,
+            rataPersen + '%'
+        ]);
+    });
+
+    // Baris TOTAL
+    const totalKolom = sheet4Data.slice(1).reduce((s, r) => s + r[2], 0);
+    const totalLengkap = sheet4Data.slice(1).reduce((s, r) => s + r[3], 0);
+    const totalKurang = sheet4Data.slice(1).reduce((s, r) => s + r[4], 0);
+    const totalKosong = sheet4Data.slice(1).reduce((s, r) => s + r[5], 0);
+
+    sheet4Data.push([
+        '',
+        'TOTAL',
+        totalKolom,
+        totalLengkap,
+        totalKurang,
+        totalKosong,
+        '' // rata-rata total tidak dihitung (beda bobot)
+    ]);
+
+    const ws4 = XLSX.utils.aoa_to_sheet(sheet4Data);
+    ws4['!cols'] = [
+        { wch: 5 },   // No
+        { wch: 20 },  // Kategori
+        { wch: 12 },  // Jml Kolom
+        { wch: 14 },  // Kolom Lengkap
+        { wch: 14 },  // Kolom Kurang
+        { wch: 18 },  // Total Sel Kosong
+        { wch: 22 }   // Rata-rata Kelengkapan
+    ];
+    XLSX.utils.book_append_sheet(wb, ws4, 'Ringkasan_Per_Kategori');
+
+    // ============================================================
+    // ===== SAVE FILE =====
+    // ============================================================
     const tanggal = new Date().toISOString().slice(0, 10);
-    XLSX.writeFile(wb, `Monitoring_Kelengkapan_${tanggal}.xlsx`);
+    const namaFile = `Monitoring_Kelengkapan_${tanggal}.xlsx`;
+    XLSX.writeFile(wb, namaFile);
 
     if (typeof showToast === 'function') {
         showToast({
@@ -25673,6 +26251,7 @@ window.exportKelengkapanKolom = function() {
         });
     }
 };
+
 
 // ============================================================
 // ===== UPDATE BADGE SUB-TAB =====
