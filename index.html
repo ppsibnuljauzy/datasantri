@@ -6191,6 +6191,94 @@ div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
         box-shadow: 0 0 0 6px rgba(243, 156, 18, 0); 
     }
 }
+
+
+/* ===== MONITORING KELENGKAPAN KOLOM ===== */
+.klg-column-item {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--bg-card);
+}
+.klg-column-item:hover {
+    border-color: var(--accent-color);
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.klg-column-item.active {
+    border-color: var(--accent-color);
+    background: linear-gradient(135deg, rgba(52,152,219,0.08), rgba(52,152,219,0.02));
+    box-shadow: 0 0 0 2px rgba(52,152,219,0.15);
+}
+.klg-column-item .klg-col-name {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.klg-column-item .klg-col-stats {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.klg-progress {
+    height: 6px;
+    border-radius: 4px;
+    background: var(--bg-body);
+    overflow: hidden;
+}
+.klg-progress .bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+}
+.klg-santri-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 6px;
+    background: var(--bg-card);
+    transition: all 0.2s;
+}
+.klg-santri-row:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-color);
+}
+.klg-badge-perfect {
+    background: linear-gradient(135deg, #d4edda, #b7e4c7);
+    color: #155724;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+.klg-badge-warning {
+    background: linear-gradient(135deg, #fff3cd, #ffe69b);
+    color: #856404;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+.klg-badge-danger {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
 </style>
 </head>
 <body>
@@ -7229,6 +7317,14 @@ div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
                     <span class="badge bg-danger ms-1" id="badge-count-vervalpd" style="font-size: 0.6rem;">0</span>
                 </button>
             </li>
+            <li class="nav-item">
+                <button class="nav-link" id="sub-analisis-kelengkapan" data-bs-toggle="tab" 
+                        data-bs-target="#sub-analisis-kelengkapan-pane" type="button" 
+                        onclick="switchAnalisisSubTab('kelengkapan')">
+                    <i class="bi bi-clipboard-data me-1"></i> Kelengkapan Kolom
+                    <span class="badge bg-warning text-dark ms-1" id="badge-count-kelengkapan" style="font-size: 0.6rem;">0</span>
+                </button>
+            </li>
         </ul>
 
         <!-- CONTENT SUB TAB -->
@@ -7757,32 +7853,26 @@ div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
     </div>
 
     <!-- Kartu Ringkasan -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="stat-mini-box" style="border-left: 4px solid #3498db;">
-                <div class="stat-mini-number" id="vpd-total" style="color: #3498db;">0</div>
-                <div class="stat-mini-label">Total Santri Aktif</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-mini-box" style="border-left: 4px solid #e74c3c;">
-                <div class="stat-mini-number" id="vpd-nisn-ganda" style="color: #e74c3c;">0</div>
-                <div class="stat-mini-label">NISN Ganda / Tidak Sesuai</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-mini-box" style="border-left: 4px solid #f39c12;">
-                <div class="stat-mini-number" id="vpd-nik-belum" style="color: #f39c12;">0</div>
-                <div class="stat-mini-label">NIK Belum Padan Dukcapil</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-mini-box" style="border-left: 4px solid #9b59b6;">
-                <div class="stat-mini-number" id="vpd-nama-tidak-padan" style="color: #9b59b6;">0</div>
-                <div class="stat-mini-label">Nama Tidak Padan Dukcapil</div>
-            </div>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-mini-box" style="border-left: 4px solid #3498db;">
+            <div class="stat-mini-number" id="vpd-total" style="color: #3498db;">0</div>
+            <div class="stat-mini-label">Total Santri Aktif</div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="stat-mini-box" style="border-left: 4px solid #2ecc71;">
+            <div class="stat-mini-number" id="vpd-tidak-bermasalah" style="color: #2ecc71;">0</div>
+            <div class="stat-mini-label">Total Tidak Bermasalah VervalPD</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-mini-box" style="border-left: 4px solid #e74c3c;">
+            <div class="stat-mini-number" id="vpd-bermasalah" style="color: #e74c3c;">0</div>
+            <div class="stat-mini-label">Total Bermasalah VervalPD</div>
+        </div>
+    </div>
+</div>
 
     <!-- Tombol Toggle Filter -->
     <button class="filter-toggle-btn mb-2" id="vervalpdFilterToggleBtn" onclick="toggleFilterVervalPD()">
@@ -8013,6 +8103,130 @@ div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
                     <button class="btn btn-sm btn-outline-primary" onclick="changeVervalPDPage(1)" id="vpdNextBtn">
                         <i class="bi bi-chevron-right"></i>
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- ============================================================ -->
+            <!-- ===== SUB TAB 5: MONITORING KELENGKAPAN PER KOLOM ===== -->
+            <!-- ============================================================ -->
+<div class="tab-pane fade" id="sub-analisis-kelengkapan-pane" role="tabpanel">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h5 class="fw-bold mb-0" style="color: var(--text-primary);">
+            <i class="bi bi-clipboard-data me-2" style="color: var(--gold-color);"></i>
+            Monitoring Kelengkapan Data Santri
+        </h5>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <button class="btn btn-sm btn-success" onclick="exportKelengkapanKolom()">
+                <i class="bi bi-file-earmark-excel"></i> Export Excel
+            </button>
+            <button class="btn btn-sm btn-warning text-white" onclick="resetFilterKelengkapan()">
+                <i class="bi bi-arrow-counterclockwise"></i> Reset Filter
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="loadKelengkapanKolom()">
+                <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Kartu Ringkasan -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="stat-mini-box" style="border-left: 4px solid #3498db;">
+                <div class="stat-mini-number" id="klg-total-santri" style="color: #3498db;">0</div>
+                <div class="stat-mini-label">Total Santri Aktif</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-mini-box" style="border-left: 4px solid #2ecc71;">
+                <div class="stat-mini-number" id="klg-total-kolom" style="color: #2ecc71;">0</div>
+                <div class="stat-mini-label">Total Kolom Dicek</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-mini-box" style="border-left: 4px solid #e74c3c;">
+                <div class="stat-mini-number" id="klg-total-kosong" style="color: #e74c3c;">0</div>
+                <div class="stat-mini-label">Total Sel Kosong</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-mini-box" style="border-left: 4px solid #f39c12;">
+                <div class="stat-mini-number" id="klg-persen" style="color: #f39c12;">0%</div>
+                <div class="stat-mini-label">Persentase Kelengkapan</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout 2 Kolom: Kiri = Daftar Kolom, Kanan = Detail -->
+    <div class="row g-3">
+        <!-- KIRI: Daftar Kolom -->
+        <div class="col-lg-5">
+            <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card); height: 100%;">
+                <div class="card-body" style="padding: 16px 18px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="stat-label" style="color: var(--text-muted); margin-bottom: 0;">
+                            <i class="bi bi-list-columns me-1"></i> Daftar Kolom
+                        </div>
+                        <span class="badge bg-secondary" id="klgShowingInfo" style="font-size: 0.65rem;">
+                            0 kolom
+                        </span>
+                    </div>
+                    <div style="max-height: 520px; overflow-y: auto; padding-right: 4px;"
+                         id="klgColumnList">
+                        <div class="text-center text-muted py-4">
+                            <div class="spinner-border spinner-border-sm text-primary"></div>
+                            <div style="font-size: 0.8rem; margin-top: 8px;">Memuat kolom...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KANAN: Detail Santri yang Kosong -->
+        <div class="col-lg-7">
+            <div class="card-dashboard-premium card-gradient-white" style="background: var(--bg-card); height: 100%;">
+                <div class="card-body" style="padding: 16px 18px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="stat-label" style="color: var(--text-muted); margin-bottom: 0;" id="klgDetailTitle">
+                            <i class="bi bi-info-circle me-1"></i> Pilih kolom di kiri untuk melihat detail
+                        </div>
+                    </div>
+
+                    <!-- Search box (muncul saat kolom dipilih) -->
+                    <div id="klgDetailSearchWrapper" style="display: none; margin-bottom: 10px;">
+                        <input type="text" id="klgDetailSearch" class="form-control form-control-sm"
+                               placeholder="🔍 Cari nama santri..."
+                               oninput="renderKelengkapanDetail()"
+                               style="border-radius: 8px;">
+                    </div>
+
+                    <div style="max-height: 520px; overflow-y: auto;" id="klgDetailContent">
+                        <div class="text-center text-muted py-5">
+                            <i class="bi bi-arrow-left-circle fs-2 d-block mb-2" style="opacity: 0.3;"></i>
+                            <div style="font-size: 0.85rem;">
+                                Klik salah satu kolom di sebelah kiri<br>
+                                untuk melihat santri yang belum lengkap
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="klgDetailPagination" style="display: none; margin-top: 10px;"
+                         class="d-flex justify-content-between align-items-center">
+                        <span class="small text-muted" id="klgPageInfo">-</span>
+                        <div class="d-flex gap-1">
+                            <button class="btn btn-sm btn-outline-primary" onclick="changeKelengkapanPage(-1)" id="klgPrevBtn">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="changeKelengkapanPage(1)" id="klgNextBtn">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -8301,7 +8515,7 @@ div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">NPSN Asal</label>
-                                                <input type="text" class="form-control form-control-sm" id="tdNpsnAsal" placeholder="NPSN Asal">
+                                                <input type="text" class="form-control form-control-sm" id="tdNpsnAsal" placeholder="8 digit atau P+7 digit (cth: 20123456 / P2012345)">
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">NSPP Asal</label>
@@ -8873,7 +9087,7 @@ div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">NPSN Asal</label>
-                                                <input type="text" class="form-control form-control-sm" id="edNpsnAsal" placeholder="NPSN Asal">
+                                                <input type="text" class="form-control form-control-sm" id="edNpsnAsal" placeholder="8 digit atau P+7 digit (cth: 20123456 / P2012345)">
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">NSPP Asal</label>
@@ -10060,17 +10274,22 @@ div:has(> #tableVervalPD)::-webkit-scrollbar-thumb:hover {
 
 
 window.refreshMonitoringIfActive = function() {
-    // Cek apakah sub-tab monitoring sedang aktif
-    const monitoringPane = document.getElementById('sub-analisis-monitoring-pane');
     const analisisTab = document.getElementById('tab-analisis');
-    
-    if (analisisTab && analisisTab.classList.contains('active') && 
-        monitoringPane && monitoringPane.classList.contains('active')) {
-        if (typeof loadMonitoringIdentitas === 'function') {
-            loadMonitoringIdentitas();
+
+    if (analisisTab && analisisTab.classList.contains('active')) {
+        const monitoringPane = document.getElementById('sub-analisis-monitoring-pane');
+        const kelengkapanPane = document.getElementById('sub-analisis-kelengkapan-pane');
+
+        if (monitoringPane && monitoringPane.classList.contains('active')) {
+            if (typeof loadMonitoringIdentitas === 'function') loadMonitoringIdentitas();
+        }
+
+        if (kelengkapanPane && kelengkapanPane.classList.contains('active')) {  // ⬅️ TAMBAHKAN
+            if (typeof loadKelengkapanKolom === 'function') loadKelengkapanKolom();
         }
     }
 };
+
 
         // ===== FUNGSI UPDATE TEKS SKBB =====
         window.updateSKBBText = function() {
@@ -12678,11 +12897,10 @@ window.loadTabAnalisis = function() {
 };
 
 
-// ===== SWITCH SUB TAB ANALISIS =====
 window.switchAnalisisSubTab = async function(tab) {
     const loader = document.getElementById('loader');
     if (loader) loader.style.display = 'flex';
-    
+
     try {
         if (tab === 'pertumbuhan') {
             await loadTrenTahunan();
@@ -12692,18 +12910,12 @@ window.switchAnalisisSubTab = async function(tab) {
             await loadMonitoringIdentitas();
         } else if (tab === 'vervalpd') {
             await loadVervalPD();
-            
-            // ✅ JANGAN hapus hide-elements — cukup paksa tampilkan filter VervalPD
             const wrapper = document.getElementById('vervalpdFilterWrapper');
             const btn = document.getElementById('vervalpdFilterToggleBtn');
-            if (wrapper) {
-                wrapper.style.display = 'block';
-                wrapper.style.visibility = 'visible';
-            }
-            if (btn) {
-                btn.style.display = 'inline-flex';
-                btn.style.visibility = 'visible';
-            }
+            if (wrapper) { wrapper.style.display = 'block'; wrapper.style.visibility = 'visible'; }
+            if (btn) { btn.style.display = 'inline-flex'; btn.style.visibility = 'visible'; }
+        } else if (tab === 'kelengkapan') {           // ⬅️ TAMBAHKAN INI
+            await loadKelengkapanKolom();
         }
     } catch (error) {
         console.error("Error switching analisis sub-tab:", error);
@@ -14547,7 +14759,7 @@ window.saveAllData = async () => {
     }
 
     // ============================================================
-    // ===== VALIDASI KODE ABSEN (HARUS 4 DIGIT) =====
+    // ===== VALIDASI 1: KODE ABSEN (HARUS 4 DIGIT) =====
     // ============================================================
     for (const row of rows) {
         const kodeAbsenInput = row.querySelector('[data-field="kode_absen"]');
@@ -14556,7 +14768,7 @@ window.saveAllData = async () => {
 
         if (kodeAbsenClean && kodeAbsenClean.length !== 4) {
             const namaSantri = row.querySelector('[data-field="nama"]')?.value || 'Tanpa Nama';
-            
+
             await showAlertModal({
                 title: 'Kode Absen Tidak Valid',
                 message: `Kode Absen untuk santri "${namaSantri}" harus terdiri dari tepat 4 digit angka.`,
@@ -14595,7 +14807,19 @@ window.saveAllData = async () => {
         }
     }
 
-    // ===== VALIDASI NIK/NISN SEBELUM SIMPAN =====
+    // ============================================================
+    // ===== ✅ VALIDASI 2: KODE ABSEN UNIK PER KELAS =====
+    // ============================================================
+    const cekKodeAbsen = await cekWajibKodeAbsenUnikPerKelas({
+        rows: rows,
+        collName: 'data_santri'
+    });
+    if (!cekKodeAbsen.valid) return;
+    // ===== SELESAI VALIDASI KODE ABSEN =====
+
+    // ============================================================
+    // ===== VALIDASI 3: NIK/NISN WAJIB SALAH SATU =====
+    // ============================================================
     const rowsTanpaIdentitas = [];
     rows.forEach(row => {
         const nik = (row.querySelector('[data-field="nik"]')?.value || '').trim();
@@ -14606,19 +14830,19 @@ window.saveAllData = async () => {
             rowsTanpaIdentitas.push(`${nama} (Kelas ${kelas})`);
         }
     });
-    
+
     if (rowsTanpaIdentitas.length > 0) {
         const maxShow = 8;
-        const showList = rowsTanpaIdentitas.slice(0, maxShow).map(n => 
+        const showList = rowsTanpaIdentitas.slice(0, maxShow).map(n =>
             `<div style="display: flex; align-items: center; gap: 6px; padding: 3px 0;">
                 <i class="bi bi-exclamation-circle-fill" style="color: #f39c12; font-size: 0.8rem;"></i>
                 <span style="font-size: 0.8rem;">${n}</span>
             </div>`
         ).join('');
-        const moreHtml = rowsTanpaIdentitas.length > maxShow 
-            ? `<div style="text-align: center; color: #6c757d; font-size: 0.75rem; padding-top: 6px; font-style: italic;">... dan ${rowsTanpaIdentitas.length - maxShow} santri lainnya</div>` 
+        const moreHtml = rowsTanpaIdentitas.length > maxShow
+            ? `<div style="text-align: center; color: #6c757d; font-size: 0.75rem; padding-top: 6px; font-style: italic;">... dan ${rowsTanpaIdentitas.length - maxShow} santri lainnya</div>`
             : '';
-        
+
         await showAlertModal({
             title: 'Tidak Dapat Menyimpan Data',
             message: `${rowsTanpaIdentitas.length} data santri belum memiliki NIK atau NISN. Minimal salah satu harus diisi.`,
@@ -14639,7 +14863,7 @@ window.saveAllData = async () => {
             okText: 'OK, Saya Perbaiki',
             icon: 'bi-exclamation-triangle-fill'
         });
-        
+
         for (const row of rows) {
             const nik = (row.querySelector('[data-field="nik"]')?.value || '').trim();
             const nisn = (row.querySelector('[data-field="nisn"]')?.value || '').trim();
@@ -14657,7 +14881,9 @@ window.saveAllData = async () => {
         return;
     }
 
-    // ===== VALIDASI FORMAT NISN (10 DIGIT) & NIK/KK (16 DIGIT) =====
+    // ============================================================
+    // ===== VALIDASI 4: FORMAT NISN (10 DIGIT) & NIK/KK (16 DIGIT) =====
+    // ============================================================
     const numericRegexNISN = /^\d{10}$/;
     const numericRegexNIK  = /^\d{16}$/;
 
@@ -14666,7 +14892,7 @@ window.saveAllData = async () => {
         row.querySelectorAll('[data-field]').forEach(input => {
             rowData[input.dataset.field] = input.value || '';
         });
-        
+
         const namaSantri = rowData.nama || 'Tanpa Nama';
 
         if (rowData.nisn && !numericRegexNISN.test(rowData.nisn.trim())) {
@@ -14750,52 +14976,97 @@ window.saveAllData = async () => {
         }
     }
 
-    // ===== VALIDASI FORMAT NPSN (8 DIGIT) & NSPP (12 DIGIT) =====
-    const numericRegexNPSN = /^\d{8}$/;
-    const numericRegexNSPP = /^\d{12}$/;
+    // ============================================================
+    // ============================================================
+    // ===== VALIDASI 5: FORMAT NPSN (8 DIGIT / P+7 DIGIT) & NSPP (12 DIGIT) =====
+    // ============================================================
+    // NPSN boleh: 8 digit angka murni ATAU "P" + 7 digit angka
+    const patternNPSNAngkaMurni = /^\d{8}$/;
+    const patternNPSNPDigit     = /^P\d{7}$/;
+    const numericRegexNSPP      = /^\d{12}$/;
 
     for (const row of rows) {
         const rowData = {};
         row.querySelectorAll('[data-field]').forEach(input => {
             rowData[input.dataset.field] = input.value || '';
         });
-        
+
         const namaSantri = rowData.nama || 'Tanpa Nama';
 
-        if (rowData.npsn_asal && !numericRegexNPSN.test(rowData.npsn_asal.trim())) {
-            const nilai = rowData.npsn_asal.trim();
-            const pesanMasalah = /\D/.test(nilai)
-                ? 'Mengandung karakter non-angka (huruf/simbol)'
-                : `Jumlah digit tidak sesuai (${nilai.length} digit)`;
+        if (rowData.npsn_asal && rowData.npsn_asal.trim() !== '') {
+            const nilai = rowData.npsn_asal.trim().toUpperCase();
 
-            await showAlertModal({
-                title: 'Format NPSN Tidak Valid',
-                message: `NPSN Asal untuk santri "${namaSantri}" harus terdiri dari 8 digit angka.`,
-                details: `
-                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px;">
-                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
-                        <span style="font-weight: 600;">Field</span><span>: NPSN Asal</span>
-                        <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${nilai}"</span>
-                        <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
-                        <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 8 digit angka</span>
-                    </div>
-                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
-                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                        <strong>Contoh benar:</strong> 20123456, 10203040
-                    </div>
-                `,
-                type: 'danger',
-                okText: 'OK, Saya Perbaiki',
-                icon: 'bi-building'
-            });
-            const inputEl = row.querySelector('[data-field="npsn_asal"]');
-            if (inputEl) {
-                inputEl.focus();
-                inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            const isAngkaMurni = patternNPSNAngkaMurni.test(nilai);
+            const isPDigit     = patternNPSNPDigit.test(nilai);
+
+            if (!isAngkaMurni && !isPDigit) {
+                // Tentukan pesan masalah spesifik
+                let pesanMasalah = '';
+
+                if (nilai.startsWith('P')) {
+                    const sisa = nilai.substring(1);
+                    if (!/^\d+$/.test(sisa)) {
+                        pesanMasalah = 'Setelah huruf "P" harus berupa angka murni';
+                    } else if (sisa.length !== 7) {
+                        pesanMasalah = `Setelah huruf "P" harus tepat 7 digit angka (saat ini ${sisa.length} digit)`;
+                    } else {
+                        pesanMasalah = 'Format tidak sesuai standar NPSN';
+                    }
+                } else if (/^\d+$/.test(nilai)) {
+                    pesanMasalah = `Jumlah digit tidak sesuai (${nilai.length} digit). Harus 8 digit angka, atau "P" + 7 digit angka`;
+                } else {
+                    pesanMasalah = 'Mengandung karakter yang tidak diizinkan';
+                }
+
+                await showAlertModal({
+                    title: 'Format NPSN Tidak Valid',
+                    message: `NPSN Asal untuk santri "${namaSantri}" harus berupa salah satu dari: 8 digit angka, atau huruf "P" diikuti 7 digit angka.`,
+                    details: `
+                        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 8px 12px;">
+                            <span style="font-weight: 600;">Nama Santri</span>
+                            <span>: ${namaSantri}</span>
+                            <span style="font-weight: 600;">Field</span>
+                            <span>: NPSN Asal</span>
+                            <span style="font-weight: 600;">Nilai Input</span>
+                            <span style="color: #e74c3c; font-family: 'Courier New', monospace; font-weight: 600;">: "${nilai}"</span>
+                            <span style="font-weight: 600;">Masalah</span>
+                            <span style="color: #e74c3c;">: ${pesanMasalah}</span>
+                        </div>
+
+                        <div style="margin-top: 12px; padding: 12px 14px; background: #e8f4fd; border-radius: 10px; border-left: 4px solid #3498db;">
+                            <div style="font-weight: 700; font-size: 0.82rem; color: #1a5276; margin-bottom: 8px;">
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                                Format yang Diterima:
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div style="padding: 8px 10px; background: white; border-radius: 6px; text-align: center;">
+                                    <div style="font-size: 0.7rem; color: #6c757d; margin-bottom: 4px;">Format 1</div>
+                                    <div style="font-family: 'Courier New', monospace; font-weight: 700; color: #2ecc71; font-size: 0.9rem;">20123456</div>
+                                    <div style="font-size: 0.65rem; color: #6c757d; margin-top: 2px;">8 digit angka</div>
+                                </div>
+                                <div style="padding: 8px 10px; background: white; border-radius: 6px; text-align: center;">
+                                    <div style="font-size: 0.7rem; color: #6c757d; margin-bottom: 4px;">Format 2</div>
+                                    <div style="font-family: 'Courier New', monospace; font-weight: 700; color: #9b59b6; font-size: 0.9rem;">P2012345</div>
+                                    <div style="font-size: 0.65rem; color: #6c757d; margin-top: 2px;">"P" + 7 digit angka</div>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    type: 'danger',
+                    okText: 'OK, Saya Perbaiki',
+                    icon: 'bi-building'
+                });
+
+                const inputEl = row.querySelector('[data-field="npsn_asal"]');
+                if (inputEl) {
+                    inputEl.focus();
+                    inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                }
+                return;
             }
-            return;
         }
 
+        // Validasi NSPP tetap: 12 digit angka
         if (rowData.nspp_asal && !numericRegexNSPP.test(rowData.nspp_asal.trim())) {
             const nilai = rowData.nspp_asal.trim();
             const pesanMasalah = /\D/.test(nilai)
@@ -14813,10 +15084,6 @@ window.saveAllData = async () => {
                         <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
                         <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 12 digit angka</span>
                     </div>
-                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
-                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                        <strong>Contoh benar:</strong> 510012050049, 123456789012
-                    </div>
                 `,
                 type: 'danger',
                 okText: 'OK, Saya Perbaiki',
@@ -14831,7 +15098,9 @@ window.saveAllData = async () => {
         }
     }
 
-    // ===== ✅ VALIDASI WAJIB ISI NO. IJAZAH/MUTASI PER BARIS =====
+    // ============================================================
+    // ===== VALIDASI 6: WAJIB ISI NO. IJAZAH/MUTASI =====
+    // ============================================================
     for (const row of rows) {
         const rowData = {};
         row.querySelectorAll('[data-field]').forEach(input => {
@@ -14856,16 +15125,17 @@ window.saveAllData = async () => {
             return;
         }
     }
-    // ===== SELESAI VALIDASI NO. IJAZAH =====
 
-    // Tampilkan modal konfirmasi
+    // ============================================================
+    // ===== KONFIRMASI SIMPAN =====
+    // ============================================================
     const konfirmasi = await showKonfirmasiSimpan();
     if (!konfirmasi) return;
 
     const loader = document.getElementById('loader');
     loader.style.display = 'flex';
     const batch = writeBatch(db);
-    
+
     const allData = [];
     const fotoToSave = [];
 
@@ -14896,27 +15166,27 @@ window.saveAllData = async () => {
         }
 
         data.updated_at = serverTimestamp();
-        
+
         const fotoInput = row.querySelector('[data-field="foto"]');
         const fotoPreview = row.querySelector('.photo-preview');
         let fotoData = '';
-        
+
         if (fotoInput && fotoInput.value && fotoInput.value.startsWith('data:image')) {
             fotoData = fotoInput.value;
         } else if (fotoPreview && fotoPreview.src && fotoPreview.src.startsWith('data:image')) {
             fotoData = fotoPreview.src;
         }
-        
+
         if (fotoData) {
             fotoToSave.push({ rowId: row.dataset.id, foto: fotoData, row: row });
         }
-        
+
         allData.push({ row, data });
     });
 
     try {
         let savedCount = 0;
-        
+
         for (const item of allData) {
             if (item.row.dataset.id) {
                 batch.update(doc(db, "data_santri", item.row.dataset.id), item.data);
@@ -14933,11 +15203,11 @@ window.saveAllData = async () => {
         let fotoSavedCount = 0;
         for (const fotoItem of fotoToSave) {
             let santriId = fotoItem.rowId;
-            
+
             if (!santriId && fotoItem.row) {
                 santriId = fotoItem.row.dataset.id;
             }
-            
+
             if (santriId) {
                 try {
                     await simpanFotoKeKoleksi(santriId, fotoItem.foto);
@@ -14947,7 +15217,7 @@ window.saveAllData = async () => {
                 }
             }
         }
-        
+
         showToast({
             title: '✅ Data Berhasil Disimpan',
             message: `${savedCount} data tersimpan${fotoSavedCount > 0 ? `, ${fotoSavedCount} foto tersimpan` : ''}.`,
@@ -14955,11 +15225,11 @@ window.saveAllData = async () => {
             duration: 4000,
             icon: 'bi-check-circle-fill'
         });
-        
+
         loadDataPaging('data_santri', 'tbodySantri', 0, currentPage['tbodySantri']);
         refreshMonitoringIfActive();
         updateDataSubTabBadges();
-        
+
     } catch (error) {
         console.error("Error saving data: ", error);
         await showAlertModal({
@@ -14986,7 +15256,7 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
     if (rows.length === 0) return;
 
     // ============================================================
-    // ===== VALIDASI KODE ABSEN (HARUS 4 DIGIT) =====
+    // ===== VALIDASI 1: KODE ABSEN (HARUS 4 DIGIT) =====
     // ============================================================
     for (const row of rows) {
         const kodeAbsenInput = row.querySelector('[data-field="kode_absen"]');
@@ -14995,7 +15265,7 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
 
         if (kodeAbsenClean && kodeAbsenClean.length !== 4) {
             const namaSantri = row.querySelector('[data-field="nama"]')?.value || 'Tanpa Nama';
-            
+
             await showAlertModal({
                 title: 'Kode Absen Tidak Valid',
                 message: `Kode Absen untuk santri "${namaSantri}" harus terdiri dari tepat 4 digit angka.`,
@@ -15034,7 +15304,19 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
         }
     }
 
-    // ===== VALIDASI NIK/NISN SEBELUM SIMPAN =====
+    // ============================================================
+    // ===== ✅ VALIDASI 2: KODE ABSEN UNIK PER KELAS =====
+    // ============================================================
+    const cekKodeAbsen = await cekWajibKodeAbsenUnikPerKelas({
+        rows: rows,
+        collName: collectionName
+    });
+    if (!cekKodeAbsen.valid) return;
+    // ===== SELESAI VALIDASI KODE ABSEN =====
+
+    // ============================================================
+    // ===== VALIDASI 3: NIK/NISN WAJIB SALAH SATU =====
+    // ============================================================
     const rowsTanpaIdentitas = [];
     rows.forEach(row => {
         const nik = (row.querySelector('[data-field="nik"]')?.value || '').trim();
@@ -15045,19 +15327,19 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
             rowsTanpaIdentitas.push(`${nama} (Kelas ${kelas})`);
         }
     });
-    
+
     if (rowsTanpaIdentitas.length > 0) {
         const maxShow = 8;
-        const showList = rowsTanpaIdentitas.slice(0, maxShow).map(n => 
+        const showList = rowsTanpaIdentitas.slice(0, maxShow).map(n =>
             `<div style="display: flex; align-items: center; gap: 6px; padding: 3px 0;">
                 <i class="bi bi-exclamation-circle-fill" style="color: #f39c12; font-size: 0.8rem;"></i>
                 <span style="font-size: 0.8rem;">${n}</span>
             </div>`
         ).join('');
-        const moreHtml = rowsTanpaIdentitas.length > maxShow 
-            ? `<div style="text-align: center; color: #6c757d; font-size: 0.75rem; padding-top: 6px; font-style: italic;">... dan ${rowsTanpaIdentitas.length - maxShow} santri lainnya</div>` 
+        const moreHtml = rowsTanpaIdentitas.length > maxShow
+            ? `<div style="text-align: center; color: #6c757d; font-size: 0.75rem; padding-top: 6px; font-style: italic;">... dan ${rowsTanpaIdentitas.length - maxShow} santri lainnya</div>`
             : '';
-        
+
         await showAlertModal({
             title: 'Tidak Dapat Menyimpan Data',
             message: `${rowsTanpaIdentitas.length} data santri belum memiliki NIK atau NISN. Minimal salah satu harus diisi.`,
@@ -15081,7 +15363,9 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
         return;
     }
 
-    // ===== VALIDASI FORMAT NISN (10 DIGIT) & NIK/KK (16 DIGIT) =====
+    // ============================================================
+    // ===== VALIDASI 4: FORMAT NISN (10 DIGIT) & NIK/KK (16 DIGIT) =====
+    // ============================================================
     const numericRegexNISN = /^\d{10}$/;
     const numericRegexNIK  = /^\d{16}$/;
 
@@ -15090,7 +15374,7 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
         row.querySelectorAll('[data-field]').forEach(input => {
             rowData[input.dataset.field] = input.value || '';
         });
-        
+
         const namaSantri = rowData.nama || 'Tanpa Nama';
 
         if (rowData.nisn && !numericRegexNISN.test(rowData.nisn.trim())) {
@@ -15108,10 +15392,6 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
                         <span style="font-weight: 600;">Nilai NISN</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${nilai}"</span>
                         <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
                         <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 10 digit angka</span>
-                    </div>
-                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
-                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                        <strong>Contoh benar:</strong> 0012345678, 1234567890
                     </div>
                 `,
                 type: 'danger',
@@ -15155,10 +15435,6 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
                             <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
                             <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 16 digit angka</span>
                         </div>
-                        <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
-                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                            <strong>Contoh benar:</strong> 1234567890123456, 3201012345678901
-                        </div>
                     `,
                     type: 'danger',
                     okText: 'OK, Saya Perbaiki',
@@ -15174,52 +15450,107 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
         }
     }
 
-    // ===== VALIDASI FORMAT NPSN (8 DIGIT) & NSPP (12 DIGIT) =====
-    const numericRegexNPSN = /^\d{8}$/;
-    const numericRegexNSPP = /^\d{12}$/;
+    // ============================================================
+    // ===== ✅ VALIDASI 5: NPSN (8 DIGIT / P+7 DIGIT) & NSPP (12 DIGIT) =====
+    // ============================================================
+    // NPSN menerima 2 format:
+    //   1. 8 digit angka murni       → contoh: 20123456
+    //   2. "P" + 7 digit angka murni → contoh: P2012345
+    const patternNPSNAngkaMurni = /^\d{8}$/;
+    const patternNPSNPDigit     = /^P\d{7}$/;
+    const numericRegexNSPP      = /^\d{12}$/;
 
     for (const row of rows) {
         const rowData = {};
         row.querySelectorAll('[data-field]').forEach(input => {
             rowData[input.dataset.field] = input.value || '';
         });
-        
+
         const namaSantri = rowData.nama || 'Tanpa Nama';
 
-        if (rowData.npsn_asal && !numericRegexNPSN.test(rowData.npsn_asal.trim())) {
-            const nilai = rowData.npsn_asal.trim();
-            const pesanMasalah = /\D/.test(nilai)
-                ? 'Mengandung karakter non-angka (huruf/simbol)'
-                : `Jumlah digit tidak sesuai (${nilai.length} digit)`;
+        // ===== VALIDASI NPSN =====
+        if (rowData.npsn_asal && rowData.npsn_asal.trim() !== '') {
+            const nilai = rowData.npsn_asal.trim().toUpperCase();
 
-            await showAlertModal({
-                title: 'Format NPSN Tidak Valid',
-                message: `NPSN Asal untuk santri "${namaSantri}" harus terdiri dari 8 digit angka.`,
-                details: `
-                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px;">
-                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
-                        <span style="font-weight: 600;">Field</span><span>: NPSN Asal</span>
-                        <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${nilai}"</span>
-                        <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
-                        <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 8 digit angka</span>
-                    </div>
-                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
-                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                        <strong>Contoh benar:</strong> 20123456, 10203040
-                    </div>
-                `,
-                type: 'danger',
-                okText: 'OK, Saya Perbaiki',
-                icon: 'bi-building'
-            });
-            const inputEl = row.querySelector('[data-field="npsn_asal"]');
-            if (inputEl) {
-                inputEl.focus();
-                inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            const isAngkaMurni = patternNPSNAngkaMurni.test(nilai);
+            const isPDigit     = patternNPSNPDigit.test(nilai);
+
+            if (!isAngkaMurni && !isPDigit) {
+                // Tentukan pesan masalah spesifik
+                let pesanMasalah = '';
+
+                if (nilai.startsWith('P')) {
+                    const sisa = nilai.substring(1);
+                    if (!/^\d+$/.test(sisa)) {
+                        pesanMasalah = 'Setelah huruf "P" harus berupa angka murni';
+                    } else if (sisa.length !== 7) {
+                        pesanMasalah = `Setelah huruf "P" harus tepat 7 digit angka (saat ini ${sisa.length} digit)`;
+                    } else {
+                        pesanMasalah = 'Format tidak sesuai standar NPSN';
+                    }
+                } else if (/^\d+$/.test(nilai)) {
+                    pesanMasalah = `Jumlah digit tidak sesuai (${nilai.length} digit). Harus 8 digit angka, atau "P" + 7 digit angka`;
+                } else {
+                    pesanMasalah = 'Mengandung karakter yang tidak diizinkan';
+                }
+
+                await showAlertModal({
+                    title: 'Format NPSN Tidak Valid',
+                    message: `NPSN Asal untuk santri "${namaSantri}" harus berupa salah satu dari: 8 digit angka, atau huruf "P" diikuti 7 digit angka.`,
+                    details: `
+                        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 8px 12px;">
+                            <span style="font-weight: 600;">Nama Santri</span>
+                            <span>: ${namaSantri}</span>
+                            <span style="font-weight: 600;">Field</span>
+                            <span>: NPSN Asal</span>
+                            <span style="font-weight: 600;">Nilai Input</span>
+                            <span style="color: #e74c3c; font-family: 'Courier New', monospace; font-weight: 600;">: "${nilai}"</span>
+                            <span style="font-weight: 600;">Masalah</span>
+                            <span style="color: #e74c3c;">: ${pesanMasalah}</span>
+                        </div>
+
+                        <div style="margin-top: 12px; padding: 12px 14px; background: #e8f4fd; border-radius: 10px; border-left: 4px solid #3498db;">
+                            <div style="font-weight: 700; font-size: 0.82rem; color: #1a5276; margin-bottom: 8px;">
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                                Format yang Diterima:
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div style="padding: 8px 10px; background: white; border-radius: 6px; text-align: center;">
+                                    <div style="font-size: 0.7rem; color: #6c757d; margin-bottom: 4px;">Format 1</div>
+                                    <div style="font-family: 'Courier New', monospace; font-weight: 700; color: #2ecc71; font-size: 0.9rem;">20123456</div>
+                                    <div style="font-size: 0.65rem; color: #6c757d; margin-top: 2px;">8 digit angka</div>
+                                </div>
+                                <div style="padding: 8px 10px; background: white; border-radius: 6px; text-align: center;">
+                                    <div style="font-size: 0.7rem; color: #6c757d; margin-bottom: 4px;">Format 2</div>
+                                    <div style="font-family: 'Courier New', monospace; font-weight: 700; color: #9b59b6; font-size: 0.9rem;">P2012345</div>
+                                    <div style="font-size: 0.65rem; color: #6c757d; margin-top: 2px;">"P" + 7 digit angka</div>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    type: 'danger',
+                    okText: 'OK, Saya Perbaiki',
+                    icon: 'bi-building'
+                });
+
+                const inputEl = row.querySelector('[data-field="npsn_asal"]');
+                if (inputEl) {
+                    inputEl.focus();
+                    inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                }
+                return;
             }
-            return;
+
+            // Normalisasi: jika ada huruf "P", pastikan kapital
+            if (isPDigit) {
+                const inputEl = row.querySelector('[data-field="npsn_asal"]');
+                if (inputEl && inputEl.value !== nilai) {
+                    inputEl.value = nilai;
+                }
+            }
         }
 
+        // ===== VALIDASI NSPP (tetap: 12 digit angka) =====
         if (rowData.nspp_asal && !numericRegexNSPP.test(rowData.nspp_asal.trim())) {
             const nilai = rowData.nspp_asal.trim();
             const pesanMasalah = /\D/.test(nilai)
@@ -15237,10 +15568,6 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
                         <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: ${pesanMasalah}</span>
                         <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 12 digit angka</span>
                     </div>
-                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
-                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                        <strong>Contoh benar:</strong> 510012050049, 123456789012
-                    </div>
                 `,
                 type: 'danger',
                 okText: 'OK, Saya Perbaiki',
@@ -15255,7 +15582,9 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
         }
     }
 
-    // ===== ✅ VALIDASI WAJIB ISI NO. IJAZAH/MUTASI PER BARIS =====
+    // ============================================================
+    // ===== VALIDASI 6: WAJIB ISI NO. IJAZAH/MUTASI =====
+    // ============================================================
     for (const row of rows) {
         const rowData = {};
         row.querySelectorAll('[data-field]').forEach(input => {
@@ -15280,9 +15609,10 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
             return;
         }
     }
-    // ===== SELESAI VALIDASI NO. IJAZAH =====
 
-    // ===== KONFIRMASI SIMPAN DENGAN MODAL KUSTOM =====
+    // ============================================================
+    // ===== KONFIRMASI SIMPAN =====
+    // ============================================================
     const labelTabel = collectionName === 'data_santri_lulus' ? 'Data Lulus'
                      : collectionName === 'data_santri_mutasi' ? 'Data Mutasi'
                      : 'Data Aktif';
@@ -15338,21 +15668,21 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
             if (input.dataset.field === 'foto') return;
             data[input.dataset.field] = input.value || input.innerText || '';
         });
-        
+
         const fotoInput = row.querySelector('[data-field="foto"]');
         const fotoPreview = row.querySelector('.photo-preview');
         let fotoData = '';
-        
+
         if (fotoInput && fotoInput.value && fotoInput.value.startsWith('data:image')) {
             fotoData = fotoInput.value;
         } else if (fotoPreview && fotoPreview.src && fotoPreview.src.startsWith('data:image')) {
             fotoData = fotoPreview.src;
         }
-        
+
         if (fotoData) {
             fotoToSave.push({ rowId: row.dataset.id, foto: fotoData, row: row });
         }
-        
+
         Object.keys(data).forEach(fieldName => {
             if (fieldName.includes('tgl') || fieldName.includes('tanggal')) {
                 if (data[fieldName] && /^\d{2}\/\d{2}\/\d{4}$/.test(data[fieldName])) {
@@ -15389,7 +15719,7 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
     try {
         if (count > 0) {
             await batch.commit();
-            
+
             let fotoSavedCount = 0;
             for (const fotoItem of fotoToSave) {
                 let santriId = fotoItem.rowId;
@@ -15405,7 +15735,7 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
                     }
                 }
             }
-            
+
             showToast({
                 title: '✅ Data Berhasil Disimpan',
                 message: `Berhasil menyimpan ${count} data${fotoSavedCount > 0 ? `, ${fotoSavedCount} foto tersimpan` : ''}.`,
@@ -19199,34 +19529,90 @@ window.validateNIK = async function(nikValue, fieldLabel = 'NIK', fieldId = null
 };
 
 
-// ===== VALIDASI NPSN (8 DIGIT ANGKA) =====
+// ===== VALIDASI NPSN (8 DIGIT ANGKA ATAU "P" + 7 DIGIT ANGKA) =====
 window.validateNPSN = async function(npsnValue, fieldLabel = 'NPSN', fieldId = null) {
     if (!npsnValue || npsnValue.trim() === '') {
         return true;
     }
 
-    const value = npsnValue.trim();
+    const value = npsnValue.trim().toUpperCase();
 
-    if (!/^\d+$/.test(value)) {
+    // ===== POLA VALIDASI NPSN =====
+    // 1. 8 digit angka murni       → contoh: 20123456
+    // 2. "P" + 7 digit angka murni → contoh: P2012345
+    const patternAngkaMurni = /^\d{8}$/;
+    const patternPDigit     = /^P\d{7}$/;
+
+    const isAngkaMurni = patternAngkaMurni.test(value);
+    const isPDigit     = patternPDigit.test(value);
+
+    // ===== JIKA TIDAK COCOK KEDUA POLA =====
+    if (!isAngkaMurni && !isPDigit) {
+
+        // Tentukan pesan masalah spesifik
+        let pesanMasalah = '';
+        let contohBenar = '20123456 atau P2012345';
+
+        // Cek apakah mengandung karakter non-angka selain 'P' di awal
+        if (value.startsWith('P')) {
+            const sisa = value.substring(1);
+            if (!/^\d+$/.test(sisa)) {
+                pesanMasalah = 'Setelah huruf "P" harus berupa angka murni';
+            } else if (sisa.length !== 7) {
+                pesanMasalah = `Setelah huruf "P" harus tepat 7 digit angka (saat ini ${sisa.length} digit)`;
+            } else {
+                pesanMasalah = 'Format tidak sesuai standar NPSN';
+            }
+        } else if (/^\d+$/.test(value)) {
+            // Hanya angka, tapi jumlah digit salah
+            if (value.length === 7) {
+                pesanMasalah = `Jumlah digit kurang 1 (${value.length} digit). Harus 8 digit, atau tambahkan "P" di depan`;
+            } else if (value.length === 9) {
+                pesanMasalah = `Jumlah digit lebih 1 (${value.length} digit). Harus 8 digit, atau tambahkan "P" di depan`;
+            } else {
+                pesanMasalah = `Jumlah digit tidak sesuai (${value.length} digit). Harus 8 digit angka`;
+            }
+        } else {
+            pesanMasalah = 'Mengandung karakter yang tidak diizinkan';
+        }
+
         await showAlertModal({
             title: 'Format NPSN Tidak Valid',
-            message: `Kolom ${fieldLabel} hanya boleh berisi angka, tidak boleh huruf atau simbol.`,
+            message: `Kolom ${fieldLabel} harus berupa salah satu dari: 8 digit angka, atau huruf "P" diikuti 7 digit angka.`,
             details: `
-                <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
-                    <span style="font-weight: 600;">Field</span><span>: ${fieldLabel}</span>
-                    <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${value}"</span>
-                    <span style="font-weight: 600;">Masalah</span><span style="color: #e74c3c;">: Mengandung karakter non-angka</span>
-                    <span style="font-weight: 600;">Format Benar</span><span style="color: #2ecc71;">: 8 digit angka</span>
+                <div style="display: grid; grid-template-columns: 160px 1fr; gap: 8px 12px;">
+                    <span style="font-weight: 600;">Field</span>
+                    <span>: ${fieldLabel}</span>
+                    <span style="font-weight: 600;">Nilai Input</span>
+                    <span style="color: #e74c3c; font-family: 'Courier New', monospace; font-weight: 600;">: "${value}"</span>
+                    <span style="font-weight: 600;">Masalah</span>
+                    <span style="color: #e74c3c;">: ${pesanMasalah}</span>
                 </div>
-                <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
-                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                    <strong>Contoh benar:</strong> 20123456, 10203040
+
+                <div style="margin-top: 12px; padding: 12px 14px; background: #e8f4fd; border-radius: 10px; border-left: 4px solid #3498db;">
+                    <div style="font-weight: 700; font-size: 0.82rem; color: #1a5276; margin-bottom: 8px;">
+                        <i class="bi bi-check-circle-fill me-1"></i>
+                        Format yang Diterima:
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div style="padding: 8px 10px; background: white; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 0.7rem; color: #6c757d; margin-bottom: 4px;">Format 1</div>
+                            <div style="font-family: 'Courier New', monospace; font-weight: 700; color: #2ecc71; font-size: 0.9rem;">20123456</div>
+                            <div style="font-size: 0.65rem; color: #6c757d; margin-top: 2px;">8 digit angka</div>
+                        </div>
+                        <div style="padding: 8px 10px; background: white; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 0.7rem; color: #6c757d; margin-bottom: 4px;">Format 2</div>
+                            <div style="font-family: 'Courier New', monospace; font-weight: 700; color: #9b59b6; font-size: 0.9rem;">P2012345</div>
+                            <div style="font-size: 0.65rem; color: #6c757d; margin-top: 2px;">"P" + 7 digit angka</div>
+                        </div>
+                    </div>
                 </div>
             `,
             type: 'danger',
             okText: 'OK, Saya Perbaiki',
             icon: 'bi-building'
         });
+
         if (fieldId) {
             const el = document.getElementById(fieldId);
             if (el) { el.focus(); el.select(); }
@@ -19234,31 +19620,13 @@ window.validateNPSN = async function(npsnValue, fieldLabel = 'NPSN', fieldId = n
         return false;
     }
 
-    if (value.length !== 8) {
-        await showAlertModal({
-            title: 'Panjang NPSN Tidak Sesuai',
-            message: `Kolom ${fieldLabel} harus terdiri dari tepat 8 digit angka.`,
-            details: `
-                <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
-                    <span style="font-weight: 600;">Field</span><span>: ${fieldLabel}</span>
-                    <span style="font-weight: 600;">Nilai Input</span><span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${value}"</span>
-                    <span style="font-weight: 600;">Jumlah Digit</span><span style="color: #e74c3c;">: ${value.length} digit</span>
-                    <span style="font-weight: 600;">Seharusnya</span><span style="color: #2ecc71;">: 8 digit</span>
-                </div>
-                <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
-                    <i class="bi bi-lightbulb-fill me-1"></i>
-                    <strong>Contoh:</strong> 20123456 (8 digit)
-                </div>
-            `,
-            type: 'warning',
-            okText: 'OK, Saya Perbaiki',
-            icon: 'bi-building'
-        });
-        if (fieldId) {
-            const el = document.getElementById(fieldId);
-            if (el) { el.focus(); el.select(); }
+    // ===== LOLOS VALIDASI =====
+    // Normalisasi: pastikan huruf "P" menjadi kapital
+    if (fieldId) {
+        const el = document.getElementById(fieldId);
+        if (el && el.value !== value) {
+            el.value = value; // update tampilan agar "P" kapital
         }
-        return false;
     }
 
     return true;
@@ -19397,6 +19765,176 @@ window.cekWajibNoIjazah = async function(options = {}) {
     }
 
     return { valid: false };
+};
+
+
+// ============================================================
+// ===== VALIDASI KODE ABSEN DUPLIKAT PER KELAS =====
+// Kode absen boleh sama ASALKAN beda kelas.
+// Dalam kelas yang sama, kode absen harus unik.
+// ============================================================
+window.cekWajibKodeAbsenUnikPerKelas = async function(options = {}) {
+    const {
+        rows = [],
+        collName = 'data_santri'
+    } = options;
+
+    // ============================================================
+    // ===== 1. CEK DUPLIKAT DALAM TABEL YANG SAMA =====
+    // ============================================================
+    const map = {};  // { "kelas||kode": [ {nama, kelas, kode, docId} ] }
+
+    for (const row of rows) {
+        const kodeAbsenRaw = (row.querySelector('[data-field="kode_absen"]')?.value || '').trim();
+        const kelasNow     = (row.querySelector('[data-field="kls_now"]')?.value || '').trim();
+        const nama         = (row.querySelector('[data-field="nama"]')?.value || '').trim() || 'Tanpa Nama';
+        const docId        = row.dataset.id || '';
+
+        // Skip jika kode absen atau kelas kosong
+        if (!kodeAbsenRaw || !kelasNow) continue;
+
+        // Normalisasi: pad ke 4 digit
+        const kodeClean = kodeAbsenRaw.padStart(4, '0');
+        const key = `${kelasNow}||${kodeClean}`;
+
+        if (!map[key]) map[key] = [];
+        map[key].push({ nama, kelas: kelasNow, kode: kodeClean, docId });
+    }
+
+    // Cari duplikat DALAM tabel
+    const duplikatDalamTabel = [];
+    Object.entries(map).forEach(([key, list]) => {
+        // Cek apakah ada lebih dari 1 baris dengan kode+kelas yang sama
+        // KECUALI jika baris-baris itu adalah dokumen yang sama (docId sama, tidak mungkin)
+        const uniqueDocIds = new Set(list.map(x => x.docId).filter(id => id !== ''));
+        
+        // Duplikat sejati: >1 baris
+        if (list.length > 1) {
+            duplikatDalamTabel.push({
+                kelas: list[0].kelas,
+                kode: list[0].kode,
+                namaList: list.map(x => x.nama)
+            });
+        }
+    });
+
+    // ============================================================
+    // ===== 2. CEK DUPLIKAT DENGAN DATA DI FIRESTORE =====
+    // ============================================================
+    const duplikatDiServer = [];
+    try {
+        const snapshot = await getDocs(collection(db, collName));
+
+        // Bangun map dari data server: { "kelas||kode": { docId, nama } }
+        const serverMap = {};
+        snapshot.forEach(docSnap => {
+            const d = docSnap.data();
+            const kode = (d.kode_absen || '').toString().trim();
+            const kelas = (d.kls_now || '').toString().trim();
+            if (!kode || !kelas) return;
+
+            const kodeClean = kode.padStart(4, '0');
+            const key = `${kelas}||${kodeClean}`;
+
+            if (!serverMap[key]) {
+                serverMap[key] = { docId: docSnap.id, nama: d.nama || 'Tanpa Nama' };
+            }
+        });
+
+        // Cek setiap baris terhadap data di server
+        for (const row of rows) {
+            const kodeAbsenRaw = (row.querySelector('[data-field="kode_absen"]')?.value || '').trim();
+            const kelasNow     = (row.querySelector('[data-field="kls_now"]')?.value || '').trim();
+            const nama         = (row.querySelector('[data-field="nama"]')?.value || '').trim() || 'Tanpa Nama';
+            const docId        = row.dataset.id || '';
+
+            if (!kodeAbsenRaw || !kelasNow) continue;
+
+            const kodeClean = kodeAbsenRaw.padStart(4, '0');
+            const key = `${kelasNow}||${kodeClean}`;
+
+            // Jika ada di server DAN docId-nya BEDA (bukan dirinya sendiri)
+            if (serverMap[key] && serverMap[key].docId !== docId) {
+                duplikatDiServer.push({
+                    nama: nama,
+                    kelas: kelasNow,
+                    kode: kodeClean,
+                    bentrokDengan: serverMap[key].nama
+                });
+            }
+        }
+    } catch (err) {
+        console.warn('Gagal cek duplikasi kode absen ke server:', err);
+    }
+
+    // ============================================================
+    // ===== 3. TAMPILKAN MODAL JIKA ADA DUPLIKAT =====
+    // ============================================================
+    if (duplikatDalamTabel.length > 0 || duplikatDiServer.length > 0) {
+        let detailHtml = '';
+
+        if (duplikatDalamTabel.length > 0) {
+            const maxShow = 6;
+            const showList = duplikatDalamTabel.slice(0, maxShow).map(d =>
+                `<div style="padding: 4px 0;">
+                    <i class="bi bi-exclamation-circle-fill me-1" style="color: #e74c3c; font-size: 0.8rem;"></i>
+                    Kelas <strong>${d.kelas}</strong> — Kode <strong>${d.kode}</strong>:
+                    <span style="color: #721c24;">${d.namaList.join(', ')}</span>
+                </div>`
+            ).join('');
+            const moreHtml = duplikatDalamTabel.length > maxShow
+                ? `<div style="text-align: center; color: #6c757d; font-size: 0.75rem; padding-top: 4px; font-style: italic;">... dan ${duplikatDalamTabel.length - maxShow} duplikat lainnya</div>`
+                : '';
+
+            detailHtml += `
+                <div style="padding: 10px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.82rem; color: #721c24; margin-bottom: 10px; max-height: 180px; overflow-y: auto;">
+                    <strong><i class="bi bi-exclamation-triangle-fill me-1"></i> Duplikat dalam tabel yang sama:</strong><br>
+                    ${showList}
+                    ${moreHtml}
+                </div>
+            `;
+        }
+
+        if (duplikatDiServer.length > 0) {
+            const maxShow = 6;
+            const showList = duplikatDiServer.slice(0, maxShow).map(d =>
+                `<div style="padding: 4px 0;">
+                    <i class="bi bi-database-fill-exclamation me-1" style="color: #f39c12; font-size: 0.8rem;"></i>
+                    <strong>${d.nama}</strong> (Kelas ${d.kelas}) — Kode <strong>${d.kode}</strong>
+                    <br><span style="margin-left: 20px; opacity: 0.85;">Sudah dipakai oleh: <strong>${d.bentrokDengan}</strong></span>
+                </div>`
+            ).join('');
+            const moreHtml = duplikatDiServer.length > maxShow
+                ? `<div style="text-align: center; color: #6c757d; font-size: 0.75rem; padding-top: 4px; font-style: italic;">... dan ${duplikatDiServer.length - maxShow} duplikat lainnya</div>`
+                : '';
+
+            detailHtml += `
+                <div style="padding: 10px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.82rem; color: #856404; max-height: 180px; overflow-y: auto;">
+                    <strong><i class="bi bi-database-fill-exclamation me-1"></i> Kode sudah dipakai di database:</strong><br>
+                    ${showList}
+                    ${moreHtml}
+                </div>
+            `;
+        }
+
+        await showAlertModal({
+            title: 'Kode Absen Duplikat Per Kelas',
+            message: 'Ditemukan kode absen yang sama dalam kelas yang sama. Setiap santri dalam satu kelas harus memiliki kode absen yang unik.',
+            details: detailHtml + `
+                <div style="margin-top: 10px; padding: 8px 12px; background: #e8f4fd; border-radius: 8px; border-left: 3px solid #3498db; font-size: 0.8rem; color: #1a5276;">
+                    <i class="bi bi-lightbulb-fill me-1"></i>
+                    <strong>Solusi:</strong> Ubah kode absen santri yang duplikat. Kode absen boleh sama <strong>asalkan beda kelas</strong>.
+                </div>
+            `,
+            type: 'warning',
+            okText: 'OK, Saya Perbaiki',
+            icon: 'bi-123'
+        });
+
+        return { valid: false };
+    }
+
+    return { valid: true };
 };
 
 
@@ -19553,7 +20091,7 @@ window.simpanDataBaru = async () => {
     // ===== HANDLE FOTO =====
     const fotoInput = document.getElementById('tdFoto');
     let fotoBaru = '';
-    
+
     if (fotoInput && fotoInput.files && fotoInput.files[0]) {
         const file = fotoInput.files[0];
         if (file.size > 500000) {
@@ -19676,6 +20214,51 @@ window.simpanDataBaru = async () => {
 
     const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'tdNsppAsal');
     if (!isNsppValid) return;
+
+    // ============================================================
+    // ===== ✅ CEK DUPLIKASI KODE ABSEN PER KELAS (MODAL TAMBAH) =====
+    // ============================================================
+    if (data.kode_absen && data.kls_now) {
+        try {
+            const snapCek = await getDocs(
+                query(
+                    collection(db, "data_santri"),
+                    where("kls_now", "==", data.kls_now),
+                    where("kode_absen", "==", data.kode_absen)
+                )
+            );
+
+            if (!snapCek.empty) {
+                const existing = snapCek.docs[0].data();
+                await showAlertModal({
+                    title: 'Kode Absen Sudah Dipakai',
+                    message: `Kode absen "${data.kode_absen}" sudah dipakai di Kelas ${data.kls_now}.`,
+                    details: `
+                        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                            <span style="font-weight: 600;">Kode Absen</span>
+                            <span style="font-family: 'Courier New', monospace;">: ${data.kode_absen}</span>
+                            <span style="font-weight: 600;">Kelas</span>
+                            <span>: ${data.kls_now}</span>
+                            <span style="font-weight: 600;">Sudah Dipakai Oleh</span>
+                            <span style="color: #e74c3c;">: ${existing.nama || 'Tanpa Nama'}</span>
+                        </div>
+                        <div style="margin-top: 10px; padding: 8px 12px; background: #e8f4fd; border-radius: 8px; border-left: 3px solid #3498db; font-size: 0.8rem; color: #1a5276;">
+                            <i class="bi bi-lightbulb-fill me-1"></i>
+                            <strong>Tips:</strong> Gunakan kode absen lain, atau pilih kelas yang berbeda.
+                        </div>
+                    `,
+                    type: 'warning',
+                    okText: 'OK, Saya Perbaiki',
+                    icon: 'bi-123'
+                });
+                document.getElementById('tdKodeAbsen')?.focus();
+                return;
+            }
+        } catch (err) {
+            console.warn('Gagal cek duplikasi kode absen:', err);
+        }
+    }
+    // ===== SELESAI CEK DUPLIKASI KODE ABSEN =====
 
     // ===== VALIDASI WAJIB ISI NO. IJAZAH/MUTASI =====
     const cekNoIjazah = await cekWajibNoIjazah({
@@ -20262,7 +20845,7 @@ window.simpanEditData = async () => {
     const fotoInput = document.getElementById('edFoto');
     const fotoPreview = document.getElementById('edFotoPreview');
     let fotoBaru = '';
-    
+
     if (fotoInput.files && fotoInput.files[0]) {
         const file = fotoInput.files[0];
         if (file.size > 500000) {
@@ -20361,6 +20944,61 @@ window.simpanEditData = async () => {
     const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'edNsppAsal');
     if (!isNsppValid) return;
 
+    // ============================================================
+    // ===== ✅ CEK DUPLIKASI KODE ABSEN PER KELAS (KECUALI DIRI SENDIRI) =====
+    // ============================================================
+    if (data.kode_absen && data.kls_now) {
+        try {
+            const snapCek = await getDocs(
+                query(
+                    collection(db, "data_santri"),
+                    where("kls_now", "==", data.kls_now),
+                    where("kode_absen", "==", data.kode_absen)
+                )
+            );
+
+            let bentrok = null;
+            snapCek.forEach(docSnap => {
+                // ✅ EXCLUDE dirinya sendiri
+                if (docSnap.id !== docId) {
+                    const d = docSnap.data();
+                    if (!bentrok) {
+                        bentrok = { id: docSnap.id, nama: d.nama || 'Tanpa Nama' };
+                    }
+                }
+            });
+
+            if (bentrok) {
+                await showAlertModal({
+                    title: 'Kode Absen Sudah Dipakai',
+                    message: `Kode absen "${data.kode_absen}" sudah dipakai di Kelas ${data.kls_now}.`,
+                    details: `
+                        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                            <span style="font-weight: 600;">Kode Absen</span>
+                            <span style="font-family: 'Courier New', monospace;">: ${data.kode_absen}</span>
+                            <span style="font-weight: 600;">Kelas</span>
+                            <span>: ${data.kls_now}</span>
+                            <span style="font-weight: 600;">Sudah Dipakai Oleh</span>
+                            <span style="color: #e74c3c;">: ${bentrok.nama}</span>
+                        </div>
+                        <div style="margin-top: 10px; padding: 8px 12px; background: #e8f4fd; border-radius: 8px; border-left: 3px solid #3498db; font-size: 0.8rem; color: #1a5276;">
+                            <i class="bi bi-lightbulb-fill me-1"></i>
+                            <strong>Tips:</strong> Gunakan kode absen lain, atau pilih kelas yang berbeda.
+                        </div>
+                    `,
+                    type: 'warning',
+                    okText: 'OK, Saya Perbaiki',
+                    icon: 'bi-123'
+                });
+                document.getElementById('edKodeAbsen')?.focus();
+                return;
+            }
+        } catch (err) {
+            console.warn('Gagal cek duplikasi kode absen:', err);
+        }
+    }
+    // ===== SELESAI CEK DUPLIKASI KODE ABSEN =====
+
     // ===== VALIDASI WAJIB ISI NO. IJAZAH/MUTASI =====
     const cekNoIjazah = await cekWajibNoIjazah({
         statAkhir: data.stat_akhir,
@@ -20395,7 +21033,7 @@ window.simpanEditData = async () => {
         }
     }
 
-    // ===== CEK DUPLIKASI =====
+    // ===== CEK DUPLIKASI NIK/NISN =====
     const duplicates = [];
     let duplicateNames = [];
 
@@ -20500,7 +21138,7 @@ window.simpanEditData = async () => {
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditData'));
         if (modal) modal.hide();
 
-        const tbodyId = collName === 'data_santri' ? 'tbodySantri' : 
+        const tbodyId = collName === 'data_santri' ? 'tbodySantri' :
                         (collName === 'data_santri_lulus' ? 'tbodyLulus' : 'tbodyMutasi');
 
         const namaYangDiedit = data.nama;
@@ -20875,84 +21513,111 @@ document.querySelectorAll('#dataSubTab button[data-bs-toggle="pill"]').forEach(s
     }
 
     // ===== AUTO-FILTER INPUT HANYA ANGKA DI TABEL =====
-    const numericFields = [
-        'kode_absen',
-        'nisn', 
-        'nik', 'nik_ayah', 'nik_ibu', 'nik_wali', 
-        'no_kk', 'kk_wali', 
-        'npsn_asal', 'nspp_asal'
-    ];
+const numericFields = [
+    'kode_absen',
+    'nisn', 
+    'nik', 'nik_ayah', 'nik_ibu', 'nik_wali', 
+    'no_kk', 'kk_wali', 
+    'npsn_asal', 'nspp_asal'
+];
+
+// Field yang mengizinkan huruf "P" di awal (khusus NPSN)
+const pDigitFields = ['npsn_asal'];
     
-    ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(tbodyId => {
-        const tbody = document.getElementById(tbodyId);
-        if (!tbody) return;
-        
-        tbody.addEventListener('input', function(e) {
-            const field = e.target.dataset?.field;
-            if (numericFields.includes(field)) {
-                const cleaned = e.target.value.replace(/\D/g, '');
-                let maxLen = 16;
-                if (field === 'kode_absen') maxLen = 4;
-                else if (field === 'nisn') maxLen = 10;
-                else if (field === 'npsn_asal') maxLen = 8;
-                else if (field === 'nspp_asal') maxLen = 12;
-                e.target.value = cleaned.slice(0, maxLen);
-            }
-        });
-    });
+['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(tbodyId => {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
     
-    ['tbodySantri', 'tbodyLulus', 'tbodyMutasi'].forEach(tbodyId => {
-        const tbody = document.getElementById(tbodyId);
-        if (!tbody) return;
-        
-        tbody.addEventListener('input', function(e) {
-            const field = e.target.dataset?.field;
-            if (numericFields.includes(field)) {
-                const cleaned = e.target.value.replace(/\D/g, '');
-                let maxLen = 16;
-                if (field === 'nisn') maxLen = 10;
-                else if (field === 'npsn_asal') maxLen = 8;
-                else if (field === 'nspp_asal') maxLen = 12;
-                e.target.value = cleaned.slice(0, maxLen);
+    tbody.addEventListener('input', function(e) {
+        const field = e.target.dataset?.field;
+        if (!numericFields.includes(field)) return;
+
+        // ===== KHUSUS NPSN: izinkan "P" + 7 digit angka =====
+        if (pDigitFields.includes(field)) {
+            let val = e.target.value.toUpperCase().replace(/[^P0-9]/g, '');
+            
+            // Jika ada "P" di posisi selain awal, hapus semua "P" kecuali yang di awal
+            if (val.includes('P')) {
+                const startsWithP = val.startsWith('P');
+                val = val.replace(/P/g, '');
+                if (startsWithP) val = 'P' + val;
             }
-        });
+            
+            // Batasi panjang: jika diawali "P" max 8 karakter, jika angka murni max 8 karakter
+            const maxLen = 8;
+            e.target.value = val.slice(0, maxLen);
+            return;
+        }
+
+        // ===== FIELD NUMERIK BIASA =====
+        const cleaned = e.target.value.replace(/\D/g, '');
+        let maxLen = 16;
+        if (field === 'kode_absen') maxLen = 4;
+        else if (field === 'nisn') maxLen = 10;
+        else if (field === 'nspp_asal') maxLen = 12;
+        e.target.value = cleaned.slice(0, maxLen);
     });
+});
 
     // ===== AUTO-FILTER INPUT HANYA ANGKA UNTUK MODAL TAMBAH & EDIT =====
-    const modalNumericFields = [
-        'tdNisn', 
-        'tdNik', 'tdNikAyah', 'tdNikIbu', 'tdNikWali', 
-        'tdNoKk', 'tdKkWali',
-        'tdNpsnAsal', 'tdNsppAsal',
-        'edNisn', 
-        'edNik', 'edNikAyah', 'edNikIbu', 'edNikWali', 
-        'edNoKk', 'edKkWali',
-        'edNpsnAsal', 'edNsppAsal'
-    ];
+const modalNumericFields = [
+    'tdNisn', 
+    'tdNik', 'tdNikAyah', 'tdNikIbu', 'tdNikWali', 
+    'tdNoKk', 'tdKkWali',
+    'tdNpsnAsal', 'tdNsppAsal',
+    'edNisn', 
+    'edNik', 'edNikAyah', 'edNikIbu', 'edNikWali', 
+    'edNoKk', 'edKkWali',
+    'edNpsnAsal', 'edNsppAsal'
+];
+
+// Field modal yang mengizinkan huruf "P" di awal
+const modalPDigitFields = ['tdNpsnAsal', 'edNpsnAsal'];
     
-    modalNumericFields.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('input', function() {
-                const idLower = id.toLowerCase();
-                let maxLen = 16;
-                if (idLower.includes('nisn')) maxLen = 10;
-                else if (idLower.includes('npsn')) maxLen = 8;
-                else if (idLower.includes('nspp')) maxLen = 12;
-                
-                this.value = this.value.replace(/\D/g, '').slice(0, maxLen);
-            });
+modalNumericFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const isPDigitField = modalPDigitFields.includes(id);
+    const idLower = id.toLowerCase();
+
+    // ===== EVENT INPUT: filter karakter =====
+    el.addEventListener('input', function() {
+        if (isPDigitField) {
+            // Khusus NPSN: izinkan "P" + digit angka
+            let val = this.value.toUpperCase().replace(/[^P0-9]/g, '');
             
-            const idLower = id.toLowerCase();
-            let maxLen = 16;
-            if (idLower.includes('nisn')) maxLen = 10;
-            else if (idLower.includes('npsn')) maxLen = 8;
-            else if (idLower.includes('nspp')) maxLen = 12;
+            if (val.includes('P')) {
+                const startsWithP = val.startsWith('P');
+                val = val.replace(/P/g, '');
+                if (startsWithP) val = 'P' + val;
+            }
             
-            el.setAttribute('maxlength', maxLen);
-            el.setAttribute('inputmode', 'numeric');
+            this.value = val.slice(0, 8);
+            return;
         }
+
+        // Field numerik biasa
+        let maxLen = 16;
+        if (idLower.includes('nisn')) maxLen = 10;
+        else if (idLower.includes('nspp')) maxLen = 12;
+        this.value = this.value.replace(/\D/g, '').slice(0, maxLen);
     });
+
+    // ===== SET ATTRIBUTE maxlength & inputmode =====
+    if (isPDigitField) {
+        el.setAttribute('maxlength', 8);
+        el.setAttribute('inputmode', 'text'); // text karena bisa ada huruf "P"
+        el.setAttribute('placeholder', 'Contoh: 20123456 atau P2012345');
+    } else {
+        let maxLen = 16;
+        if (idLower.includes('nisn')) maxLen = 10;
+        else if (idLower.includes('nspp')) maxLen = 12;
+
+        el.setAttribute('maxlength', maxLen);
+        el.setAttribute('inputmode', 'numeric');
+    }
+});
 
     // ⬇️⬇️⬇️ ===== SOLUSI 4: EVENT LISTENER AUTO-GENERATE NIS/NISM ===== ⬇️⬇️⬇️
     // ============================================================
@@ -24194,22 +24859,52 @@ window.updateVervalPDPageSize = function(value) {
 function updateVervalPDSummary() {
     const total = vervalpdMergedList.length;
 
-    // ✅ Hitung berdasarkan LOGIKA MASALAH yang benar
-    let nisnGanda = 0;
-    let nikBelum = 0;
-    let namaTidakPadan = 0;
+    // ============================================================
+    // ===== HITUNG BERMASALAH & TIDAK BERMASALAH =====
+    // ============================================================
+    let totalBermasalah = 0;
+    let totalTidakBermasalah = 0;
 
     vervalpdMergedList.forEach(d => {
-        if (isVervalPDProblem('nisn_masalah', d.nisn_masalah)) nisnGanda++;
-        if (isVervalPDProblem('nik_dukcapil', d.nik_dukcapil)) nikBelum++;
-        if (isVervalPDProblem('nama_padan', d.nama_padan)) namaTidakPadan++;
+        // Kumpulkan semua field vervalpd (standar + custom)
+        const fieldsToCheck = [
+            { key: 'sekolah',         value: d.sekolah },
+            { key: 'rombel',          value: d.rombel },
+            { key: 'nisn_masalah',    value: d.nisn_masalah },
+            { key: 'nik_dukcapil',    value: d.nik_dukcapil },
+            { key: 'nik_ganda',       value: d.nik_ganda },
+            { key: 'nama_padan',      value: d.nama_padan },
+            { key: 'tmp_lahir_padan', value: d.tmp_lahir_padan },
+            { key: 'tgl_lahir_padan', value: d.tgl_lahir_padan },
+            { key: 'nama_ibu_padan',  value: d.nama_ibu_padan },
+            { key: 'jk_padan',        value: d.jk_padan },
+            { key: 'desa',            value: d.desa }
+        ];
+
+        // Tambahkan custom fields
+        window.vpdCustomColumns.forEach(col => {
+            fieldsToCheck.push({ key: col.key, value: d[col.key] || '' });
+        });
+
+        // Hitung jumlah masalah menggunakan isVervalPDProblem
+        const problemCount = fieldsToCheck.filter(f =>
+            isVervalPDProblem(f.key, f.value)
+        ).length;
+
+        if (problemCount > 0) {
+            totalBermasalah++;
+        } else {
+            totalTidakBermasalah++;
+        }
     });
 
+    // ============================================================
+    // ===== UPDATE TAMPILAN =====
+    // ============================================================
     const el = (id) => document.getElementById(id);
     if (el('vpd-total')) el('vpd-total').textContent = total;
-    if (el('vpd-nisn-ganda')) el('vpd-nisn-ganda').textContent = nisnGanda;
-    if (el('vpd-nik-belum')) el('vpd-nik-belum').textContent = nikBelum;
-    if (el('vpd-nama-tidak-padan')) el('vpd-nama-tidak-padan').textContent = namaTidakPadan;
+    if (el('vpd-tidak-bermasalah')) el('vpd-tidak-bermasalah').textContent = totalTidakBermasalah;
+    if (el('vpd-bermasalah')) el('vpd-bermasalah').textContent = totalBermasalah;
 }
 
 
@@ -24413,6 +25108,584 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+// ============================================================
+// ===== MONITORING KELENGKAPAN PER KOLOM =====
+// ============================================================
+
+// Daftar kolom yang dicek (URUTAN SAMA DENGAN TABEL di columnMapping)
+// Kita KECUALIKAN kolom yang memang tidak wajib / auto-generated
+const KELENGKAPAN_EXCLUDED_FIELDS = [
+    'foto',           // foto opsional
+    'umur',           // auto-generate dari tgl_lahir
+    'nis',            // auto-generate
+    'nism',           // auto-generate
+    'updated_at',     // sistem
+    'created_at'      // sistem
+];
+
+// Label ramah untuk setiap kolom (sesuai header tabel)
+const KELENGKAPAN_LABELS = {
+    kode_absen: 'Kode Absen',
+    nama: 'Nama Lengkap Santri',
+    tmp_lahir: 'Tempat Lahir',
+    tgl_lahir: 'Tanggal Lahir',
+    jk: 'Jenis Kelamin',
+    stat_anak: 'Status Anak',
+    anak_ke: 'Anak Ke',
+    nik: 'NIK Santri',
+    alamat: 'Alamat',
+    desa: 'Desa/Kel.',
+    kec: 'Kecamatan',
+    kab: 'Kab./Kota',
+    prov: 'Provinsi',
+    pos: 'Kode Pos',
+    nisn: 'NISN',
+    stat_awal: 'Status Awal',
+    kls_awal: 'Kelas Awal',
+    kls_now: 'Kelas Berjalan',
+    sem_awal: 'Semester Awal',
+    tgl_masuk: 'Tanggal Masuk',
+    program: 'Program',
+    jenjang: 'Jenjang',
+    sekolah_asal: 'Sekolah Asal',
+    npsn_asal: 'NPSN Asal',
+    nspp_asal: 'NSPP Asal',
+    alamat_asal: 'Alamat Asal',
+    stat_tinggal: 'Status Tinggal',
+    no_kk: 'No. KK',
+    ayah: 'Nama Ayah',
+    stat_ayah: 'Status Ayah',
+    nik_ayah: 'NIK Ayah',
+    pen_ayah: 'Pend. Ayah',
+    pek_ayah: 'Pek. Ayah',
+    gaji_ayah: 'Gaji Ayah',
+    hp_ayah: 'HP Ayah',
+    thn_ayah: 'Tahun Ayah',
+    ibu: 'Nama Ibu',
+    stat_ibu: 'Status Ibu',
+    nik_ibu: 'NIK Ibu',
+    pen_ibu: 'Pend. Ibu',
+    pek_ibu: 'Pek. Ibu',
+    gaji_ibu: 'Gaji Ibu',
+    hp_ibu: 'HP Ibu',
+    thn_ibu: 'Tahun Ibu',
+    almt_ortu: 'Alamat Orangtua',
+    kk_wali: 'KK Wali',
+    nik_wali: 'NIK Wali',
+    nama_wali: 'Nama Wali',
+    hub_wali: 'Hub. Wali',
+    pen_wali: 'Pend. Wali',
+    pek_wali: 'Pek. Wali',
+    gaji_wali: 'Gaji Wali',
+    hp_wali: 'HP Wali',
+    thn_wali: 'Tahun Wali',
+    almt_wali: 'Alamat Wali',
+    ket: 'Keterangan',
+    stat_akhir: 'Status Akhir',
+    tgl_akhir: 'Tgl Akhir',
+    no_ijazah: 'No. Ijazah/Mutasi'
+};
+
+// State
+let kelengkapanDataCache = [];       // Array data santri (mentah)
+let kelengkapanStatsCache = [];      // Statistik per kolom
+let kelengkapanSelectedColumn = null; // Kolom yang dipilih
+let kelengkapanPage = 1;
+let kelengkapanPageSize = 25;
+let kelengkapanDetailList = [];      // Hasil filter untuk kolom terpilih
+
+// ============================================================
+// ===== LOAD DATA KELENGKAPAN =====
+// ============================================================
+window.loadKelengkapanKolom = async function() {
+    const loader = document.getElementById('loader');
+    if (loader) loader.style.display = 'flex';
+
+    try {
+        const snap = await getDocs(collection(db, 'data_santri'));
+        kelengkapanDataCache = [];
+        snap.forEach(docSnap => {
+            kelengkapanDataCache.push({ docId: docSnap.id, ...docSnap.data() });
+        });
+
+        // Hitung statistik per kolom
+        hitungStatistikKelengkapan();
+        renderKelengkapanColumnList();
+        updateKelengkapanSummary();
+        updateKelengkapanBadge();
+
+        // Reset detail
+        kelengkapanSelectedColumn = null;
+        kelengkapanDetailList = [];
+        renderKelengkapanDetail();
+        document.getElementById('klgDetailTitle').innerHTML =
+            '<i class="bi bi-info-circle me-1"></i> Pilih kolom di kiri untuk melihat detail';
+        document.getElementById('klgDetailSearchWrapper').style.display = 'none';
+        document.getElementById('klgDetailPagination').style.display = 'none';
+
+    } catch (error) {
+        console.error('Error load kelengkapan:', error);
+        if (typeof showToast === 'function') {
+            showToast({
+                title: '⚠️ Gagal Memuat Data',
+                message: 'Gagal memuat data kelengkapan: ' + error.message,
+                type: 'error',
+                duration: 4000,
+                icon: 'bi-exclamation-circle-fill'
+            });
+        }
+    } finally {
+        if (loader) loader.style.display = 'none';
+    }
+};
+
+// ============================================================
+// ===== HITUNG STATISTIK PER KOLOM =====
+// ============================================================
+function hitungStatistikKelengkapan() {
+    // Ambil daftar field yang akan dicek (dari columnMapping, kecuali yang di-exclude)
+    const fieldsToCheck = columnMapping.filter(f => !KELENGKAPAN_EXCLUDED_FIELDS.includes(f));
+
+    kelengkapanStatsCache = fieldsToCheck.map(field => {
+        let terisi = 0;
+        let kosong = 0;
+
+        kelengkapanDataCache.forEach(d => {
+            const val = (d[field] !== undefined && d[field] !== null) ? String(d[field]).trim() : '';
+            if (val === '' || val === '-') {
+                kosong++;
+            } else {
+                terisi++;
+            }
+        });
+
+        const total = kelengkapanDataCache.length;
+        const persen = total > 0 ? Math.round((terisi / total) * 100) : 0;
+
+        return {
+            field: field,
+            label: KELENGKAPAN_LABELS[field] || field,
+            terisi: terisi,
+            kosong: kosong,
+            total: total,
+            persen: persen
+        };
+    });
+}
+
+// ============================================================
+// ===== UPDATE RINGKASAN =====
+// ============================================================
+function updateKelengkapanSummary() {
+    const totalSantri = kelengkapanDataCache.length;
+    const totalKolom = kelengkapanStatsCache.length;
+    let totalSelKosong = 0;
+    let totalSelSemua = 0;
+
+    kelengkapanStatsCache.forEach(s => {
+        totalSelKosong += s.kosong;
+        totalSelSemua += s.total;
+    });
+
+    const persen = totalSelSemua > 0
+        ? Math.round(((totalSelSemua - totalSelKosong) / totalSelSemua) * 100)
+        : 0;
+
+    const el = (id) => document.getElementById(id);
+    if (el('klg-total-santri')) el('klg-total-santri').textContent = totalSantri;
+    if (el('klg-total-kolom')) el('klg-total-kolom').textContent = totalKolom;
+    if (el('klg-total-kosong')) el('klg-total-kosong').textContent = totalSelKosong;
+    if (el('klg-persen')) {
+        el('klg-persen').textContent = persen + '%';
+        el('klg-persen').style.color = persen >= 80 ? '#2ecc71' : persen >= 50 ? '#f39c12' : '#e74c3c';
+    }
+    if (el('klgShowingInfo')) el('klgShowingInfo').textContent = totalKolom + ' kolom';
+}
+
+// ============================================================
+// ===== RENDER DAFTAR KOLOM (KIRI) =====
+// ============================================================
+function renderKelengkapanColumnList() {
+    const container = document.getElementById('klgColumnList');
+    if (!container) return;
+
+    if (kelengkapanStatsCache.length === 0) {
+        container.innerHTML = '<div class="text-center text-muted py-4">Tidak ada kolom untuk dicek.</div>';
+        return;
+    }
+
+    let html = '';
+    kelengkapanStatsCache.forEach((s, idx) => {
+        // Warna progress berdasarkan persen
+        let barColor = 'linear-gradient(90deg, #2ecc71, #27ae60)'; // hijau
+        if (s.persen < 50) barColor = 'linear-gradient(90deg, #e74c3c, #c0392b)'; // merah
+        else if (s.persen < 80) barColor = 'linear-gradient(90deg, #f39c12, #e67e22)'; // oranye
+
+        const isActive = kelengkapanSelectedColumn === s.field;
+
+        html += `
+            <div class="klg-column-item ${isActive ? 'active' : ''}"
+                 onclick="pilihKolomKelengkapan('${s.field}')">
+                <div class="klg-col-name">
+                    <span>
+                        <span style="color: var(--text-muted); font-size: 0.7rem; margin-right: 4px;">${idx + 1}.</span>
+                        ${s.label}
+                    </span>
+                    <span style="color: ${s.persen >= 80 ? '#2ecc71' : s.persen >= 50 ? '#f39c12' : '#e74c3c'};
+                                 font-weight: 800; font-size: 0.75rem;">
+                        ${s.persen}%
+                    </span>
+                </div>
+                <div class="klg-col-stats">
+                    <span>✅ Terisi: <strong style="color: #2ecc71;">${s.terisi}</strong></span>
+                    <span>❌ Kosong: <strong style="color: #e74c3c;">${s.kosong}</strong></span>
+                </div>
+                <div class="klg-progress">
+                    <div class="bar" style="width: ${s.persen}%; background: ${barColor};"></div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+// ============================================================
+// ===== PILIH KOLOM → TAMPILKAN DETAIL =====
+// ============================================================
+window.pilihKolomKelengkapan = function(field) {
+    kelengkapanSelectedColumn = field;
+    kelengkapanPage = 1;
+
+    // Update highlight di daftar kolom
+    renderKelengkapanColumnList();
+
+    // Cari label
+    const stat = kelengkapanStatsCache.find(s => s.field === field);
+    const label = stat ? stat.label : field;
+
+    // Update judul detail
+    document.getElementById('klgDetailTitle').innerHTML =
+        `<i class="bi bi-list-check me-1" style="color: var(--gold-color);"></i>
+         Santri yang <strong style="color: #e74c3c;">belum mengisi</strong>: <strong>${label}</strong>`;
+
+    // Tampilkan search
+    document.getElementById('klgDetailSearchWrapper').style.display = 'block';
+    document.getElementById('klgDetailSearch').value = '';
+
+    // Bangun daftar santri yang kosong di kolom ini
+    kelengkapanDetailList = kelengkapanDataCache.filter(d => {
+        const val = (d[field] !== undefined && d[field] !== null) ? String(d[field]).trim() : '';
+        return val === '' || val === '-';
+    });
+
+    renderKelengkapanDetail();
+};
+
+// ============================================================
+// ===== RENDER DETAIL (KANAN) =====
+// ============================================================
+window.renderKelengkapanDetail = function() {
+    const container = document.getElementById('klgDetailContent');
+    const paginationEl = document.getElementById('klgDetailPagination');
+    if (!container) return;
+
+    if (!kelengkapanSelectedColumn) {
+        container.innerHTML = `
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-arrow-left-circle fs-2 d-block mb-2" style="opacity: 0.3;"></i>
+                <div style="font-size: 0.85rem;">
+                    Klik salah satu kolom di sebelah kiri<br>
+                    untuk melihat santri yang belum lengkap
+                </div>
+            </div>
+        `;
+        if (paginationEl) paginationEl.style.display = 'none';
+        return;
+    }
+
+    // Filter berdasarkan search
+    const searchEl = document.getElementById('klgDetailSearch');
+    const searchTerm = searchEl ? searchEl.value.toLowerCase().trim() : '';
+
+    let filtered = kelengkapanDetailList;
+    if (searchTerm) {
+        filtered = filtered.filter(d => (d.nama || '').toLowerCase().includes(searchTerm));
+    }
+
+    const totalData = filtered.length;
+
+    // Update judul dengan jumlah
+    const stat = kelengkapanStatsCache.find(s => s.field === kelengkapanSelectedColumn);
+    if (stat) {
+        const label = stat.label;
+        document.getElementById('klgDetailTitle').innerHTML =
+            `<i class="bi bi-list-check me-1" style="color: var(--gold-color);"></i>
+             Kolom: <strong>${label}</strong> —
+             <span style="color: #e74c3c; font-weight: 700;">${totalData} santri</span> belum mengisi`;
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-5" style="color: #2ecc71;">
+                <i class="bi bi-check-circle-fill fs-2 d-block mb-2"></i>
+                <div style="font-size: 0.9rem; font-weight: 600;">
+                    ${searchTerm ? 'Tidak ada santri yang cocok dengan pencarian' : 'Semua santri sudah mengisi kolom ini! 🎉'}
+                </div>
+            </div>
+        `;
+        if (paginationEl) paginationEl.style.display = 'none';
+        return;
+    }
+
+    // Pagination
+    const totalPages = Math.max(1, Math.ceil(totalData / kelengkapanPageSize));
+    if (kelengkapanPage > totalPages) kelengkapanPage = totalPages;
+    if (kelengkapanPage < 1) kelengkapanPage = 1;
+
+    const start = (kelengkapanPage - 1) * kelengkapanPageSize;
+    const end = Math.min(start + kelengkapanPageSize, totalData);
+    const pageData = filtered.slice(start, end);
+
+    // Update pagination UI
+    if (paginationEl) {
+        paginationEl.style.display = 'flex';
+        document.getElementById('klgPageInfo').textContent =
+            `Halaman ${kelengkapanPage} dari ${totalPages} (${totalData} santri)`;
+        document.getElementById('klgPrevBtn').disabled = kelengkapanPage <= 1;
+        document.getElementById('klgNextBtn').disabled = kelengkapanPage >= totalPages;
+    }
+
+    // Render rows
+    let html = '';
+    pageData.forEach((d, idx) => {
+        const globalIdx = start + idx + 1;
+        const nama = d.nama || 'Tanpa Nama';
+        const kelas = d.kls_now || '-';
+        const jenjang = d.jenjang || '-';
+        const nik = d.nik || '';
+        const nisn = d.nisn || '';
+
+        html += `
+            <div class="klg-santri-row">
+                <div style="width: 28px; text-align: center; font-weight: 700;
+                            color: var(--text-muted); font-size: 0.75rem;">
+                    ${globalIdx}
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-weight: 600; font-size: 0.85rem;
+                                color: var(--text-primary); white-space: nowrap;
+                                overflow: hidden; text-overflow: ellipsis;">
+                        <i class="bi bi-person-fill me-1" style="color: var(--gold-color); font-size: 0.7rem;"></i>
+                        ${nama}
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
+                        Kelas ${kelas} (${jenjang})
+                        ${nik ? ` • NIK: ${nik}` : ''}
+                        ${nisn ? ` • NISN: ${nisn}` : ''}
+                    </div>
+                </div>
+                <button class="btn btn-sm btn-outline-primary"
+                        onclick="editSantriDariKelengkapan('${d.docId}')"
+                        title="Edit data santri ini"
+                        style="font-size: 0.7rem; padding: 4px 10px; border-radius: 6px; white-space: nowrap;">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </button>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+};
+
+// ============================================================
+// ===== PAGINATION DETAIL =====
+// ============================================================
+window.changeKelengkapanPage = function(direction) {
+    kelengkapanPage += direction;
+    renderKelengkapanDetail();
+
+    const container = document.getElementById('klgDetailContent');
+    if (container) container.scrollTop = 0;
+};
+
+// ============================================================
+// ===== EDIT SANTRI DARI KELENGKAPAN =====
+// ============================================================
+window.editSantriDariKelengkapan = function(docId) {
+    // Cari baris di tabel utama
+    const mainRow = document.querySelector(`#tbodySantri tr[data-id="${docId}"]`);
+    if (mainRow) {
+        const editBtn = mainRow.querySelector('.btn-edit-row');
+        if (editBtn) {
+            openEditModal(editBtn, 'data_santri');
+            return;
+        }
+    }
+
+    // Jika tidak ada di halaman aktif, buka modal langsung
+    if (typeof bukaModalEditDariMonitoring === 'function') {
+        bukaModalEditDariMonitoring(docId);
+    }
+};
+
+// ============================================================
+// ===== RESET FILTER =====
+// ============================================================
+window.resetFilterKelengkapan = function() {
+    kelengkapanSelectedColumn = null;
+    kelengkapanPage = 1;
+    kelengkapanDetailList = [];
+
+    renderKelengkapanColumnList();
+    renderKelengkapanDetail();
+
+    document.getElementById('klgDetailTitle').innerHTML =
+        '<i class="bi bi-info-circle me-1"></i> Pilih kolom di kiri untuk melihat detail';
+    document.getElementById('klgDetailSearchWrapper').style.display = 'none';
+    document.getElementById('klgDetailPagination').style.display = 'none';
+
+    if (typeof showToast === 'function') {
+        showToast({
+            title: '🔄 Filter Direset',
+            message: 'Filter kelengkapan kolom berhasil dikembalikan.',
+            type: 'success',
+            duration: 2500,
+            icon: 'bi-arrow-counterclockwise'
+        });
+    }
+};
+
+// ============================================================
+// ===== EXPORT EXCEL =====
+// ============================================================
+window.exportKelengkapanKolom = function() {
+    if (kelengkapanStatsCache.length === 0) {
+        if (typeof showToast === 'function') {
+            showToast({
+                title: 'Tidak Ada Data',
+                message: 'Tidak ada data kelengkapan untuk diexport.',
+                type: 'warning',
+                duration: 3000,
+                icon: 'bi-info-circle-fill'
+            });
+        }
+        return;
+    }
+
+    const wb = XLSX.utils.book_new();
+
+    // ===== SHEET 1: Statistik Per Kolom =====
+    const sheet1Data = [['No', 'Nama Kolom', 'Terisi', 'Kosong', 'Total', 'Persentase']];
+    kelengkapanStatsCache.forEach((s, idx) => {
+        sheet1Data.push([
+            idx + 1,
+            s.label,
+            s.terisi,
+            s.kosong,
+            s.total,
+            s.persen + '%'
+        ]);
+    });
+    const ws1 = XLSX.utils.aoa_to_sheet(sheet1Data);
+    ws1['!cols'] = [{ wch: 5 }, { wch: 30 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, ws1, 'Statistik_Per_Kolom');
+
+    // ===== SHEET 2: Detail Santri Kosong Per Kolom =====
+    // Format: satu baris per (santri, kolom kosong)
+    const sheet2Data = [['No', 'Nama Santri', 'Kelas', 'Jenjang', 'NIK', 'NISN', 'Kolom yang Kosong']];
+    let counter = 1;
+
+    kelengkapanDataCache.forEach(d => {
+        const nama = d.nama || 'Tanpa Nama';
+        const kelas = d.kls_now || '-';
+        const jenjang = d.jenjang || '-';
+        const nik = d.nik || '';
+        const nisn = d.nisn || '';
+
+        // Kumpulkan kolom kosong
+        const kolomKosong = [];
+        kelengkapanStatsCache.forEach(s => {
+            const val = (d[s.field] !== undefined && d[s.field] !== null)
+                ? String(d[s.field]).trim() : '';
+            if (val === '' || val === '-') {
+                kolomKosong.push(s.label);
+            }
+        });
+
+        if (kolomKosong.length > 0) {
+            sheet2Data.push([
+                counter++,
+                nama, kelas, jenjang, nik, nisn,
+                kolomKosong.join(', ')
+            ]);
+        }
+    });
+
+    const ws2 = XLSX.utils.aoa_to_sheet(sheet2Data);
+    ws2['!cols'] = [
+        { wch: 5 }, { wch: 28 }, { wch: 8 }, { wch: 10 },
+        { wch: 18 }, { wch: 14 }, { wch: 60 }
+    ];
+    XLSX.utils.book_append_sheet(wb, ws2, 'Detail_Santri_Kosong');
+
+    // ===== SHEET 3: Detail Per Kolom (Transpose) =====
+    // Format: satu baris per (kolom, santri yang kosong)
+    const sheet3Data = [['No', 'Nama Kolom', 'Nama Santri', 'Kelas', 'NIK', 'NISN']];
+    let counter3 = 1;
+
+    kelengkapanStatsCache.forEach(s => {
+        kelengkapanDataCache.forEach(d => {
+            const val = (d[s.field] !== undefined && d[s.field] !== null)
+                ? String(d[s.field]).trim() : '';
+            if (val === '' || val === '-') {
+                sheet3Data.push([
+                    counter3++,
+                    s.label,
+                    d.nama || 'Tanpa Nama',
+                    d.kls_now || '-',
+                    d.nik || '',
+                    d.nisn || ''
+                ]);
+            }
+        });
+    });
+
+    const ws3 = XLSX.utils.aoa_to_sheet(sheet3Data);
+    ws3['!cols'] = [
+        { wch: 5 }, { wch: 28 }, { wch: 28 }, { wch: 8 },
+        { wch: 18 }, { wch: 14 }
+    ];
+    XLSX.utils.book_append_sheet(wb, ws3, 'Detail_Per_Kolom');
+
+    const tanggal = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(wb, `Monitoring_Kelengkapan_${tanggal}.xlsx`);
+
+    if (typeof showToast === 'function') {
+        showToast({
+            title: '✅ Export Berhasil',
+            message: `Data kelengkapan (${kelengkapanStatsCache.length} kolom, ${kelengkapanDataCache.length} santri) berhasil diexport.`,
+            type: 'success',
+            duration: 4000,
+            icon: 'bi-file-earmark-excel'
+        });
+    }
+};
+
+// ============================================================
+// ===== UPDATE BADGE SUB-TAB =====
+// ============================================================
+function updateKelengkapanBadge() {
+    const badge = document.getElementById('badge-count-kelengkapan');
+    if (!badge) return;
+
+    // Tampilkan jumlah kolom yang persennya < 100%
+    const kolomKurang = kelengkapanStatsCache.filter(s => s.persen < 100).length;
+    badge.textContent = kolomKurang;
+    badge.style.display = kolomKurang > 0 ? 'inline-block' : 'none';
+}
     </script>
 </body>
 </html>
