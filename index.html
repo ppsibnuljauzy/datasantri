@@ -15191,7 +15191,7 @@ window.saveAllData = async () => {
             }
         }
 
-        // Validasi NSPP tetap: 12 digit angka
+        // ===== VALIDASI NSPP tetap: 12 digit angka =====
         if (rowData.nspp_asal && !numericRegexNSPP.test(rowData.nspp_asal.trim())) {
             const nilai = rowData.nspp_asal.trim();
             const pesanMasalah = /\D/.test(nilai)
@@ -15215,6 +15215,55 @@ window.saveAllData = async () => {
                 icon: 'bi-building'
             });
             const inputEl = row.querySelector('[data-field="nspp_asal"]');
+            if (inputEl) {
+                inputEl.focus();
+                inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
+            return;
+        }
+    }
+
+    // ============================================================
+    // ===== VALIDASI 5b: KODE POS (5 DIGIT ANGKA) =====
+    // ============================================================
+    for (const row of rows) {
+        const rowData = {};
+        row.querySelectorAll('[data-field]').forEach(input => {
+            rowData[input.dataset.field] = input.value || '';
+        });
+
+        const namaSantri = rowData.nama || 'Tanpa Nama';
+        const posValue = (rowData.pos || '').trim();
+
+        if (posValue !== '' && !/^\d{5}$/.test(posValue)) {
+            const pesanMasalah = /\D/.test(posValue)
+                ? 'Mengandung karakter non-angka (huruf/simbol)'
+                : `Jumlah digit tidak sesuai (${posValue.length} digit)`;
+
+            await showAlertModal({
+                title: 'Format Kode Pos Tidak Valid',
+                message: `Kode Pos untuk santri "${namaSantri}" harus terdiri dari tepat 5 digit angka.`,
+                details: `
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px;">
+                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
+                        <span style="font-weight: 600;">Kode Pos</span>
+                        <span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${posValue}"</span>
+                        <span style="font-weight: 600;">Masalah</span>
+                        <span style="color: #e74c3c;">: ${pesanMasalah}</span>
+                        <span style="font-weight: 600;">Format Benar</span>
+                        <span style="color: #2ecc71;">: 5 digit angka</span>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                        <i class="bi bi-lightbulb-fill me-1"></i>
+                        <strong>Contoh:</strong> 12345, 40123, 20811
+                    </div>
+                `,
+                type: 'danger',
+                okText: 'OK, Saya Perbaiki',
+                icon: 'bi-mailbox'
+            });
+
+            const inputEl = row.querySelector('[data-field="pos"]');
             if (inputEl) {
                 inputEl.focus();
                 inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
@@ -15699,6 +15748,55 @@ window.saveTabSpecificData = async (collectionName, tbodyId) => {
                 icon: 'bi-building'
             });
             const inputEl = row.querySelector('[data-field="nspp_asal"]');
+            if (inputEl) {
+                inputEl.focus();
+                inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
+            return;
+        }
+    }
+
+    // ============================================================
+    // ===== VALIDASI 5b: KODE POS (5 DIGIT ANGKA) =====
+    // ============================================================
+    for (const row of rows) {
+        const rowData = {};
+        row.querySelectorAll('[data-field]').forEach(input => {
+            rowData[input.dataset.field] = input.value || '';
+        });
+
+        const namaSantri = rowData.nama || 'Tanpa Nama';
+        const posValue = (rowData.pos || '').trim();
+
+        if (posValue !== '' && !/^\d{5}$/.test(posValue)) {
+            const pesanMasalah = /\D/.test(posValue)
+                ? 'Mengandung karakter non-angka (huruf/simbol)'
+                : `Jumlah digit tidak sesuai (${posValue.length} digit)`;
+
+            await showAlertModal({
+                title: 'Format Kode Pos Tidak Valid',
+                message: `Kode Pos untuk santri "${namaSantri}" harus terdiri dari tepat 5 digit angka.`,
+                details: `
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px;">
+                        <span style="font-weight: 600;">Nama Santri</span><span>: ${namaSantri}</span>
+                        <span style="font-weight: 600;">Kode Pos</span>
+                        <span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${posValue}"</span>
+                        <span style="font-weight: 600;">Masalah</span>
+                        <span style="color: #e74c3c;">: ${pesanMasalah}</span>
+                        <span style="font-weight: 600;">Format Benar</span>
+                        <span style="color: #2ecc71;">: 5 digit angka</span>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                        <i class="bi bi-lightbulb-fill me-1"></i>
+                        <strong>Contoh:</strong> 12345, 40123, 20811
+                    </div>
+                `,
+                type: 'danger',
+                okText: 'OK, Saya Perbaiki',
+                icon: 'bi-mailbox'
+            });
+
+            const inputEl = row.querySelector('[data-field="pos"]');
             if (inputEl) {
                 inputEl.focus();
                 inputEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
@@ -17344,90 +17442,378 @@ window.bulkBatalNaikKelas = async () => {
             if (container) container.scrollBy({ left: amount, behavior: 'smooth' });
         };
 
-        // ===== EXPORT =====
-        function formatDateToIndonesian(dateValue) {
-            if (!dateValue) return "";
-            try {
-                let date;
-                if (dateValue && dateValue.toDate) date = dateValue.toDate();
-                else if (typeof dateValue === 'string' && dateValue.includes('/')) {
-                    const parts = dateValue.split('/');
-                    if (parts.length === 3) date = new Date(parts[2], parts[1] - 1, parts[0]);
-                    else date = new Date(dateValue);
-                } else if (dateValue instanceof Date) date = dateValue;
-                else date = new Date(dateValue);
-                if (isNaN(date.getTime())) return dateValue || "";
-                return `${String(date.getDate()).padStart(2, '0')} ${date.toLocaleDateString('id-ID', { month: 'long' })} ${date.getFullYear()}`;
-            } catch (e) { return dateValue || ""; }
+
+// ============================================================
+// ✅ BARU — Menghasilkan "15/05/2010" (KOMPATIBEL DENGAN IMPORT UPDATE)
+// ============================================================
+function formatDateForExport(dateValue) {
+    if (!dateValue) return "";
+
+    try {
+        // Kasus 1: String yang sudah format dd/mm/yyyy
+        if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue.trim())) {
+            return dateValue.trim();
         }
 
-        window.exportExcel = (tableId, fileName) => {
-            const table = document.getElementById(tableId);
-            const rows = table.querySelectorAll('tr');
-            const exportData = [];
-            const headers = [];
-            const headerCells = rows[0].querySelectorAll('th');
+        // Kasus 2: Firebase Timestamp
+        if (dateValue && typeof dateValue === 'object' && dateValue.toDate) {
+            const d = dateValue.toDate();
+            return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+        }
+
+        // Kasus 3: Date object
+        if (dateValue instanceof Date && !isNaN(dateValue.getTime())) {
+            return `${String(dateValue.getDate()).padStart(2, '0')}/${String(dateValue.getMonth() + 1).padStart(2, '0')}/${dateValue.getFullYear()}`;
+        }
+
+        // Kasus 4: String ISO (yyyy-mm-dd atau yyyy-mm-ddThh:mm:ss)
+        if (typeof dateValue === 'string') {
+            const trimmed = dateValue.trim();
             
-            for (let i = 3; i < headerCells.length; i++) {
-                headers.push(headerCells[i].innerText);
-            }
-            exportData.push(headers);
-
-            const bodyRows = table.querySelectorAll('tbody tr');
-            bodyRows.forEach(row => {
-                if (row.style.display !== 'none') {
-                    const rowData = [];
-                    const cells = row.querySelectorAll('td');
-                    for (let i = 3; i < cells.length; i++) {
-                        const input = cells[i].querySelector('input, select');
-                        let value = input ? input.value : cells[i].innerText;
-                        const headerName = headers[i - 3]?.toLowerCase() || "";
-                        if ((headerName.includes('tgl') || headerName.includes('tanggal')) && value) {
-                            rowData.push(formatDateToIndonesian(value));
-                        } else {
-                            rowData.push(value);
-                        }
-                    }
-                    exportData.push(rowData);
+            // Format yyyy-mm-dd
+            if (/^\d{4}-\d{1,2}-\d{1,2}/.test(trimmed)) {
+                const datePart = trimmed.split('T')[0].split(' ')[0];
+                const parts = datePart.split('-');
+                if (parts.length === 3) {
+                    return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
                 }
-            });
-
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(exportData);
-            ws['!cols'] = headers.map(() => ({ wch: 20 }));
-            XLSX.utils.book_append_sheet(wb, ws, "Data");
-            XLSX.writeFile(wb, `${fileName}_${new Date().toISOString().slice(0,10)}.xlsx`);
-        };
-
-        window.exportAllFromFirestore = async (collName, fileName) => {
-            if (!confirm("Export seluruh database?")) return;
-            document.getElementById('loader').style.display = 'flex';
-            try {
-                const querySnapshot = await getDocs(collection(db, collName));
-                const allData = [columnMapping];
-                querySnapshot.forEach((doc) => {
-                    const d = doc.data();
-                    const row = columnMapping.map(field => {
-                        if (field.toLowerCase() === 'foto' || field.toLowerCase() === 'foto_santri') return "";
-                        let value = d[field] || "";
-                        if ((field.toLowerCase().includes('tgl') || field.toLowerCase().includes('tanggal')) && value) {
-                            return formatDateToIndonesian(value);
-                        }
-                        return value;
-                    });
-                    allData.push(row);
-                });
-
-                const wb = XLSX.utils.book_new();
-                const ws = XLSX.utils.aoa_to_sheet(allData);
-                ws['!cols'] = columnMapping.map(() => ({ wch: 18 }));
-                XLSX.utils.book_append_sheet(wb, ws, "Full_Data");
-                XLSX.writeFile(wb, `${fileName}_${new Date().toISOString().slice(0,10)}.xlsx`);
-            } catch (e) {
-                alert("Gagal export: " + e.message);
             }
-            document.getElementById('loader').style.display = 'none';
-        };
+            
+            // Format dd-mm-yyyy
+            if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(trimmed)) {
+                const parts = trimmed.split('-');
+                return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
+            }
+        }
+
+        // Kasus 5: Number (Excel serial date)
+        if (typeof dateValue === 'number' && dateValue > 0 && dateValue < 100000) {
+            const excelEpochOffset = dateValue < 60 ? 25568 : 25569;
+            const jsDate = new Date((dateValue - excelEpochOffset) * 86400 * 1000);
+            if (!isNaN(jsDate.getTime())) {
+                return `${String(jsDate.getUTCDate()).padStart(2, '0')}/${String(jsDate.getUTCMonth() + 1).padStart(2, '0')}/${jsDate.getUTCFullYear()}`;
+            }
+        }
+
+        // Kasus 6: Fallback — coba parse dengan Date
+        const fallback = new Date(dateValue);
+        if (!isNaN(fallback.getTime())) {
+            return `${String(fallback.getDate()).padStart(2, '0')}/${String(fallback.getMonth() + 1).padStart(2, '0')}/${fallback.getFullYear()}`;
+        }
+
+        // Gagal parse → kembalikan nilai asli sebagai string
+        return String(dateValue);
+    } catch (e) {
+        console.warn('Gagal format tanggal untuk export:', dateValue, e);
+        return dateValue || "";
+    }
+}
+
+
+// ===== EXPORT TABEL KE EXCEL (DENGAN TANGGAL dd/mm/yyyy) =====
+window.exportExcel = (tableId, fileName) => {
+    const table = document.getElementById(tableId);
+    if (!table) {
+        alert('Tabel tidak ditemukan!');
+        return;
+    }
+
+    const rows = table.querySelectorAll('tr');
+    if (rows.length === 0) {
+        alert('Tidak ada data untuk diexport!');
+        return;
+    }
+
+    const exportData = [];
+    const headers = [];
+    const headerCells = rows[0].querySelectorAll('th');
+    
+    // ============================================================
+    // ✅ AMBIL HEADER DARI TABEL (SUDAH RAMAH / FRIENDLY)
+    // Lewati 3 kolom pertama: checkbox, aksi, no
+    // ============================================================
+    for (let i = 3; i < headerCells.length; i++) {
+        let headerText = headerCells[i].innerText.trim();
+        
+        // Bersihkan dari icon, chevron, atau karakter emoji
+        headerText = headerText
+            .replace(/[\u{1F300}-\u{1F9FF}]/gu, '')   // emoji
+            .replace(/[\u2190-\u21FF]/g, '')           // arrow
+            .replace(/\s+/g, ' ')
+            .trim();
+        
+        headers.push(headerText);
+    }
+    exportData.push(headers);
+
+    // ============================================================
+    // ✅ AMBIL DATA DARI BARIS TABEL
+    // ============================================================
+    const bodyRows = table.querySelectorAll('tbody tr');
+    bodyRows.forEach(row => {
+        // Skip baris yang disembunyikan (jika ada filter)
+        if (row.style.display === 'none') return;
+
+        const rowData = [];
+        const cells = row.querySelectorAll('td');
+        
+        // Lewati 3 kolom pertama: checkbox, aksi, no
+        for (let i = 3; i < cells.length; i++) {
+            const input = cells[i].querySelector('input, select');
+            let value = input ? input.value : cells[i].innerText.trim();
+
+            // ✅ Format tanggal ke dd/mm/yyyy
+            const headerName = headers[i - 3]?.toLowerCase() || '';
+            if ((headerName.includes('tgl') || 
+                 headerName.includes('tanggal') || 
+                 headerName.includes('tanggal lahir') || 
+                 headerName.includes('tanggal masuk') ||
+                 headerName.includes('tgl akhir')) 
+                && value) {
+                value = formatDateForExport(value);
+            }
+
+            // Bersihkan karakter newline
+            if (typeof value === 'string') {
+                value = value.replace(/\s+/g, ' ').trim();
+            }
+
+            rowData.push(value);
+        }
+        exportData.push(rowData);
+    });
+
+    // ============================================================
+    // ✅ BUAT & SIMPAN FILE EXCEL
+    // ============================================================
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(exportData);
+    
+    // Set lebar kolom
+    ws['!cols'] = headers.map(() => ({ wch: 22 }));
+    
+    XLSX.utils.book_append_sheet(wb, ws, "Data");
+    XLSX.writeFile(wb, `${fileName}_${new Date().toISOString().slice(0,10)}.xlsx`);
+
+    // Toast sukses
+    if (typeof showToast === 'function') {
+        showToast({
+            title: '✅ Export Berhasil',
+            message: `${exportData.length - 1} data berhasil diexport ke Excel.`,
+            type: 'success',
+            duration: 3000,
+            icon: 'bi-file-earmark-excel'
+        });
+    }
+};
+
+
+window.exportAllFromFirestore = async (collName, fileName) => {
+    if (!confirm("Export seluruh database?")) return;
+    
+    const loader = document.getElementById('loader');
+    if (loader) loader.style.display = 'flex';
+
+    try {
+        // ============================================================
+        // 1. DEFINISI friendlyHeaders (64 entri)
+        // ============================================================
+        const friendlyHeaders = [
+            'KODE ABSEN', 'FOTO', 'NAMA LENGKAP SANTRI', 'TEMPAT LAHIR', 'TANGGAL LAHIR',
+            'UMUR', 'JENIS KELAMIN', 'STATUS ANAK', 'ANAK KE', 'NIK SANTRI',
+            'ALAMAT', 'DESA/KEL.', 'KEC.', 'KAB./KOTA', 'PROV.', 'KODE POS',
+            'NISN', 'STATUS AWAL', 'KELAS AWAL', 'KELAS BERJALAN', 'SEM AWAL',
+            'TANGGAL MASUK', 'NIS', 'NISM', 'PROGRAM', 'JENJANG',
+            'SEKOLAH ASAL', 'NPSN ASAL', 'NSPP ASAL', 'ALAMAT ASAL', 'STATUS TINGGAL',
+            'NO. KK', 'AYAH', 'STATUS AYAH', 'NIK AYAH', 'PEND. AYAH', 'PEK. AYAH',
+            'GAJI AYAH', 'HP AYAH', 'THN AYAH', 'IBU', 'STATUS IBU', 'NIK IBU',
+            'PEND. IBU', 'PEK. IBU', 'GAJI IBU', 'HP IBU', 'THN IBU', 'ALAMAT ORANGTUA',
+            'KK WALI', 'NIK WALI', 'NAMA WALI', 'HUB. WALI', 'PEND. WALI', 'PEK. WALI',
+            'GAJI WALI', 'HP WALI', 'THN WALI', 'ALAMAT WALI',
+            'KETERANGAN', 'STATUS AKHIR', 'TGL AKHIR', 'NO. IJAZAH/MUTASI', 'TIMESTAMP'
+        ];
+
+        // ============================================================
+        // 2. ✅ LETAKKAN VALIDASI DI SINI  ⬇️⬇️⬇️
+        // ============================================================
+        if (friendlyHeaders.length !== columnMapping.length) {
+            console.error(`❌ MISMATCH! columnMapping: ${columnMapping.length}, friendlyHeaders: ${friendlyHeaders.length}`);
+            
+            if (typeof showAlertModal === 'function') {
+                await showAlertModal({
+                    title: 'Konfigurasi Header Tidak Sesuai',
+                    message: `Jumlah header (${friendlyHeaders.length}) tidak sama dengan jumlah field (${columnMapping.length}).`,
+                    details: `
+                        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                            <span style="font-weight: 600;">columnMapping</span>
+                            <span>: ${columnMapping.length} field</span>
+                            <span style="font-weight: 600;">friendlyHeaders</span>
+                            <span style="color: #e74c3c;">: ${friendlyHeaders.length} header</span>
+                            <span style="font-weight: 600;">Selisih</span>
+                            <span style="color: #e74c3c;">: ${Math.abs(friendlyHeaders.length - columnMapping.length)}</span>
+                        </div>
+                        <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                            <strong>Solusi:</strong> Periksa kembali definisi friendlyHeaders dan columnMapping. Jumlah keduanya harus sama.
+                        </div>
+                    `,
+                    type: 'danger',
+                    okText: 'OK, Saya Periksa',
+                    icon: 'bi-x-circle-fill'
+                });
+            } else {
+                alert(`⚠️ Header mismatch!\ncolumnMapping: ${columnMapping.length}\nfriendlyHeaders: ${friendlyHeaders.length}`);
+            }
+            return;  // ← batalkan export
+        }
+
+        const querySnapshot = await getDocs(collection(db, collName));
+        const allData = [friendlyHeaders];  // ← pakai header ramah
+
+        querySnapshot.forEach((doc) => {
+            const d = doc.data();
+            const row = columnMapping.map(field => {
+                // Skip foto
+                if (field.toLowerCase() === 'foto' || field.toLowerCase() === 'foto_santri') {
+                    return "";
+                }
+
+                let value = d[field] || "";
+
+                // ✅ Format tanggal ke dd/mm/yyyy (kompatibel dengan import update)
+                if ((field.includes('tgl') || field.includes('tanggal')) && value) {
+                    return formatDateForExport(value);
+                }
+
+                return value;
+            });
+            allData.push(row);
+        });
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(allData);
+        
+        // Set lebar kolom
+        ws['!cols'] = friendlyHeaders.map(() => ({ wch: 22 }));
+        
+        XLSX.utils.book_append_sheet(wb, ws, "Full_Data");
+        XLSX.writeFile(wb, `${fileName}_${new Date().toISOString().slice(0,10)}.xlsx`);
+
+        // Toast sukses
+        if (typeof showToast === 'function') {
+            showToast({
+                title: '✅ Export Berhasil',
+                message: `${querySnapshot.size} data berhasil diexport ke Excel.`,
+                type: 'success',
+                duration: 3000,
+                icon: 'bi-file-earmark-excel'
+            });
+        }
+    } catch (e) {
+        console.error("Gagal export:", e);
+        if (typeof showAlertModal === 'function') {
+            await showAlertModal({
+                title: 'Gagal Export',
+                message: 'Terjadi kesalahan saat export data.',
+                details: `Error: ${e.message}`,
+                type: 'danger',
+                okText: 'OK',
+                icon: 'bi-x-circle-fill'
+            });
+        } else {
+            alert("Gagal export: " + e.message);
+        }
+    } finally {
+        if (loader) loader.style.display = 'none';
+    }
+};
+
+
+// ============================================================
+// ===== VALIDASI KODE POS (5 DIGIT ANGKA) =====
+// ============================================================
+window.validateKodePos = async function(kodePosValue, fieldLabel = 'Kode Pos', fieldId = null) {
+    // Kosong = tidak apa-apa (opsional)
+    if (!kodePosValue || kodePosValue.trim() === '') {
+        return true;
+    }
+
+    const value = kodePosValue.trim();
+
+    // ============================================================
+    // ===== CEK HANYA ANGKA =====
+    // ============================================================
+    if (!/^\d+$/.test(value)) {
+        await showAlertModal({
+            title: 'Format Kode Pos Tidak Valid',
+            message: `Kolom ${fieldLabel} hanya boleh berisi angka, tidak boleh huruf atau simbol.`,
+            details: `
+                <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                    <span style="font-weight: 600;">Field</span><span>: ${fieldLabel}</span>
+                    <span style="font-weight: 600;">Nilai Input</span>
+                    <span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${value}"</span>
+                    <span style="font-weight: 600;">Masalah</span>
+                    <span style="color: #e74c3c;">: Mengandung karakter non-angka</span>
+                    <span style="font-weight: 600;">Format Benar</span>
+                    <span style="color: #2ecc71;">: 5 digit angka</span>
+                </div>
+                <div style="margin-top: 10px; padding: 8px 12px; background: #fff5f5; border-radius: 8px; border-left: 3px solid #e74c3c; font-size: 0.8rem; color: #721c24;">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                    <strong>Contoh benar:</strong> 12345, 40123, 20811
+                </div>
+            `,
+            type: 'danger',
+            okText: 'OK, Saya Perbaiki',
+            icon: 'bi-mailbox'
+        });
+
+        if (fieldId) {
+            const el = document.getElementById(fieldId);
+            if (el) { el.focus(); el.select(); }
+        }
+        return false;
+    }
+
+    // ============================================================
+    // ===== CEK PANJANG HARUS 5 DIGIT =====
+    // ============================================================
+    if (value.length !== 5) {
+        await showAlertModal({
+            title: 'Panjang Kode Pos Tidak Sesuai',
+            message: `Kolom ${fieldLabel} harus terdiri dari tepat 5 digit angka.`,
+            details: `
+                <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px;">
+                    <span style="font-weight: 600;">Field</span><span>: ${fieldLabel}</span>
+                    <span style="font-weight: 600;">Nilai Input</span>
+                    <span style="color: #e74c3c; font-family: 'Courier New', monospace;">: "${value}"</span>
+                    <span style="font-weight: 600;">Jumlah Digit</span>
+                    <span style="color: #e74c3c;">: ${value.length} digit</span>
+                    <span style="font-weight: 600;">Seharusnya</span>
+                    <span style="color: #2ecc71;">: 5 digit</span>
+                </div>
+                <div style="margin-top: 10px; padding: 8px 12px; background: #fff8e1; border-radius: 8px; border-left: 3px solid #f39c12; font-size: 0.8rem; color: #856404;">
+                    <i class="bi bi-lightbulb-fill me-1"></i>
+                    <strong>Contoh:</strong> 12345 (5 digit)
+                </div>
+            `,
+            type: 'warning',
+            okText: 'OK, Saya Perbaiki',
+            icon: 'bi-mailbox'
+        });
+
+        if (fieldId) {
+            const el = document.getElementById(fieldId);
+            if (el) { el.focus(); el.select(); }
+        }
+        return false;
+    }
+
+    // ============================================================
+    // ===== LOLOS VALIDASI =====
+    // ============================================================
+    return true;
+};
+
 
         // ===== LOGO =====
         window.uploadLogoToFirestore = async (event) => {
@@ -20340,6 +20726,10 @@ window.simpanDataBaru = async () => {
     const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'tdNsppAsal');
     if (!isNsppValid) return;
 
+    // ===== VALIDASI KODE POS =====
+    const isKodePosValid = await validateKodePos(data.pos, 'Kode Pos', 'tdPos');
+    if (!isKodePosValid) return;
+
     // ============================================================
     // ===== ✅ CEK DUPLIKASI KODE ABSEN PER KELAS (MODAL TAMBAH) =====
     // ============================================================
@@ -21069,6 +21459,10 @@ window.simpanEditData = async () => {
     const isNsppValid = await validateNSPP(data.nspp_asal, 'NSPP Asal', 'edNsppAsal');
     if (!isNsppValid) return;
 
+    // ===== VALIDASI KODE POS =====
+    const isKodePosValid = await validateKodePos(data.pos, 'Kode Pos', 'edPos');
+    if (!isKodePosValid) return;
+
     // ============================================================
     // ===== ✅ CEK DUPLIKASI KODE ABSEN PER KELAS (KECUALI DIRI SENDIRI) =====
     // ============================================================
@@ -21648,7 +22042,8 @@ const numericFields = [
     'nisn', 
     'nik', 'nik_ayah', 'nik_ibu', 'nik_wali', 
     'no_kk', 'kk_wali', 
-    'npsn_asal', 'nspp_asal'
+    'npsn_asal', 'nspp_asal',
+    'pos'
 ];
 
 // Field yang mengizinkan huruf "P" di awal (khusus NPSN)
@@ -21689,16 +22084,18 @@ const pDigitFields = ['npsn_asal'];
     });
 });
 
-    // ===== AUTO-FILTER INPUT HANYA ANGKA UNTUK MODAL TAMBAH & EDIT =====
+// ===== AUTO-FILTER INPUT HANYA ANGKA UNTUK MODAL TAMBAH & EDIT =====
 const modalNumericFields = [
     'tdNisn', 
     'tdNik', 'tdNikAyah', 'tdNikIbu', 'tdNikWali', 
     'tdNoKk', 'tdKkWali',
     'tdNpsnAsal', 'tdNsppAsal',
+    'tdPos',
     'edNisn', 
     'edNik', 'edNikAyah', 'edNikIbu', 'edNikWali', 
     'edNoKk', 'edKkWali',
-    'edNpsnAsal', 'edNsppAsal'
+    'edNpsnAsal', 'edNsppAsal',
+    'edPos'
 ];
 
 // Field modal yang mengizinkan huruf "P" di awal
@@ -22697,7 +23094,7 @@ document.getElementById('importUpdateExcel').addEventListener('change', async fu
 });
 
 
-// ===== MAP HEADER KE FIELD (VERSI PINTAR - FUZZY MATCHING) =====
+// ===== MAP HEADER KE FIELD (VERSI PINTAR - FUZZY MATCHING + FIX KK WALI) =====
 function mapHeaderToField(header) {
     const h = String(header).toLowerCase().trim()
         .replace(/[._\-]+/g, ' ')      // normalisasi pemisah
@@ -22710,9 +23107,13 @@ function mapHeaderToField(header) {
     // NISN
     if (h === 'nisn') return 'nisn';
     
-    // NIK / KK — urutan penting! Cek yang paling spesifik dulu
-    if (h.includes('no') && h.includes('kk') && h.includes('wali')) return 'kk_wali';
+    // ============================================================
+    // ✅ PERBAIKAN: KK WALI HARUS DICEK SEBELUM 'NO KK' UMUM
+    // ============================================================
+    if (h.includes('kk') && h.includes('wali')) return 'kk_wali';
     if (h.includes('no') && h.includes('kk')) return 'no_kk';
+    
+    // NIK (urutan penting!)
     if (h.includes('nik') && h.includes('wali')) return 'nik_wali';
     if (h.includes('nik') && h.includes('ayah')) return 'nik_ayah';
     if (h.includes('nik') && h.includes('ibu'))  return 'nik_ibu';
